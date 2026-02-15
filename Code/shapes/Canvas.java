@@ -29,7 +29,7 @@ public class Canvas{
     public static Canvas getCanvas(){
         // Antes longitudes eran de 300
         if(canvasSingleton == null) {
-            canvasSingleton = new Canvas("BlueJ Shapes Demo", 700, 800, 
+            canvasSingleton = new Canvas("BlueJ Shapes Demo", 400, 400, 
                                          Color.white);
         }
         canvasSingleton.setVisible(true);
@@ -63,7 +63,7 @@ public class Canvas{
         frame.pack();
         objects = new ArrayList <Object>();
         shapes = new HashMap <Object,ShapeDescription>();
-        frame.setLocationRelativeTo(null);
+        //frame.setLocationRelativeTo(null);
     }
 
     /**
