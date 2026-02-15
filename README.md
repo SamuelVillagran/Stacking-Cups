@@ -29,17 +29,7 @@
 - 🏗️ **Torre**: Apilamiento vertical con alineación central
 - 🔗 **Vínculo**: Cuando una taza está tapada, ambas se mueven juntas
 
-### 🖼️ Ejemplo Visual
-
-<div align="center">
-
-![Ejemplo de Torre](docs/tower-example.png)
-
-*Ejemplo: Torre de altura 9 con tazas de alturas 7, 3, 5, 1 (en ese orden)*
-
-</div>
-
-> 💡 **Nota**: En el ejemplo se muestran tazas de diferentes colores apiladas verticalmente. Cada taza tiene su propia altura (1, 3, 5, 7 cm) y pueden acomodar tazas más pequeñas en su interior debido a sus diámetros crecientes.
+> 💡 **Referencia visual**: Consulta el documento [J-stackingcups.pdf](docs/J-stackingcups.pdf) para ver el ejemplo ilustrado de una torre con altura 9.
 
 ---
 
