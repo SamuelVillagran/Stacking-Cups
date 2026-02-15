@@ -1,5 +1,3 @@
-# Stacking-Cups
-Este es el primer proyecto de DOPO 2026 - 1 
 # 🥤 StackingItems - Torre de Tazas y Tapas
 
 <div align="center">
@@ -30,6 +28,18 @@ Este es el primer proyecto de DOPO 2026 - 1
 - 🎩 **Tapas**: Cada taza tiene su tapa correspondiente (1 cm de alto)
 - 🏗️ **Torre**: Apilamiento vertical con alineación central
 - 🔗 **Vínculo**: Cuando una taza está tapada, ambas se mueven juntas
+
+### 🖼️ Ejemplo Visual
+
+<div align="center">
+
+![Ejemplo de Torre](docs/tower-example.png)
+
+*Ejemplo: Torre de altura 9 con tazas de alturas 7, 3, 5, 1 (en ese orden)*
+
+</div>
+
+> 💡 **Nota**: En el ejemplo se muestran tazas de diferentes colores apiladas verticalmente. Cada taza tiene su propia altura (1, 3, 5, 7 cm) y pueden acomodar tazas más pequeñas en su interior debido a sus diámetros crecientes.
 
 ---
 
@@ -77,7 +87,7 @@ Este es el primer proyecto de DOPO 2026 - 1
 
 ---
 
-## 🎯 Requisitos Funcionales primer ciclo
+## 🎯 Requisitos Funcionales
 
 | # | Función | Descripción |
 |---|---------|-------------|
@@ -245,8 +255,8 @@ stackingItems/
 
 ## ⚠️ Nota Importante
 
-> 🚫 Este simulador **NO** resuelve el problema completo de la maratón ICPC  
-> ✅ Solo implementa la **visualización y manipulación** de torres también parte de operaciones del problema de la maratón  
+> 🚫 Este simulador **NO** resuelve el problema de la maratón ICPC  
+> ✅ Solo implementa la **visualización y manipulación** de torres
 
 ---
 
