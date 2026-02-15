@@ -1,7 +1,5 @@
 package shapes;
 
-import java.awt.*;
-
 /**
  * A rectangle that can be manipulated and that draws itself on a canvas.
  * 
@@ -25,6 +23,16 @@ public class Rectangle extends Figure{
         super(50, 50, "magenta");
         height = 40;
         width = 40;
+        isVisible = false;
+    }
+    
+    /**
+     * Create a specific rectangle
+     */
+    public Rectangle(int xPos,int yPos, int width, int height, String color){
+        super(xPos, yPos, color);
+        this.height = height;
+        this.width = width;
         isVisible = false;
     }
     
