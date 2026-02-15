@@ -24,8 +24,8 @@
 
 ### 🎪 Concepto
 
-- 🥤 **Tazas**: Elementos cilíndricos de diferentes alturas (potencias de 2: 1cm, 3cm, 5cm, 7cm...)
-- 🎩 **Tapas**: Cada taza tiene su tapa correspondiente (1 cm de alto)
+- 🥤 **Tazas**: Elementos cilíndricos de diferentes alturas 
+- 🎩 **Tapas**: Cada taza tiene su tapa correspondiente 
 - 🏗️ **Torre**: Apilamiento vertical con alineación central
 - 🔗 **Vínculo**: Cuando una taza está tapada, ambas se mueven juntas
 
