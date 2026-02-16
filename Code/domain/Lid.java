@@ -1,28 +1,64 @@
 package domain;
 import java.util.ArrayList;
+import shapes.Rectangle;
 
 
 /**
- * Write a description of class Lid here.
+ * It represents the lid of the cup
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * The lid is not created in the Cup constructor; it only exists after calling addLid(),
+ * and from then on the cup takes care of showing, hiding, and moving it along with itself
+ * 
+ * @author Sanchez-Villagran
  */
 public class Lid
 {
-    private int idCup;
+    public static final int PIXELS_PER_CM = 10;
+    private int id;
     private int height;
     private int width;
-    private int color;
+    private String color;
     private int xPosition;
     private int yPosition;
-    private ArrayList<Square> shape;
+    private Rectangle shape;
 
     /**
      * Constructor for objects of class Lid
      */
-    public Lid() {
+    public Lid(int id, int xPos, int yPos, String color) {
+        this.id = id;
+        this.color = color;
+        width = getSize();
+        height = 1;
+        xPosition = xPos;
+        yPosition = yPos;
+        createShape();
+    }
     
+    /**
+     * Move the lid 'x' units horizontal and 'y' units vertical
+     */
+    public void move(int x, int y) {
+        int dx = x - xPosition;
+        int dy = y - yPosition;
+        xPosition = x;
+        yPosition = y;
+        shape.moveHorizontal(dx);
+        shape.moveVertical(dy);
+    }
+    
+    /**
+     * Draw the lid
+     */
+    public void makeVisible(){
+        shape.makeVisible();
+    }
+    
+    /**
+     * Hide the lid
+     */
+    public void makeInvisible(){
+        shape.makeInvisible();
     }
     
     /**
@@ -39,10 +75,16 @@ public class Lid
         return width;
     }
     
+    public int getSize(){
+         return 2 * (id - 1);
+    }
+    
     /**
-     * 
+     * Create a rectangle with 
      */
-    public void move(int x, int y) {
-        
+    private void createShape(){
+        int widthPixels = width * PIXELS_PER_CM;
+        int heightPixels = height * PIXELS_PER_CM;
+        shape = new Rectangle(xPosition, yPosition, widthPixels, heightPixels, color);
     }
 }
