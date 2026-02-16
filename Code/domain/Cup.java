@@ -4,10 +4,12 @@ import shapes.Rectangle;
 
 
 /**
- * Write a description of class Cup here.
+ * It represents a cup drawn with rectangles
+ * It is constructed with an arraylist of three triangles;
+ * one left, one right and one bottom, forming a “U” shape
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Sanchez-Villagran 
+ * 
  */
 public class Cup
 {
@@ -20,6 +22,7 @@ public class Cup
     private int xPosition; //pixels
     private int yPosition; //pixels
     private boolean visible;
+    private Lid lid;
     
     /**
      * Constructor for objects of class Cup
@@ -36,28 +39,45 @@ public class Cup
         visible = true;
         shape = new ArrayList<>();
         makeCup();
+        makeVisible();
     }
     
     /**
-     * Draw the cup in canvas
+     * Draw the cup
      */
     public void makeVisible(){
         for(Rectangle r : shape){
             r.makeVisible();
         }
+        if(lid != null){
+            lid.makeVisible();
+        }
     }
     
     /**
-     * Erase the cup in canvas
+     * Hide the cup
      */
     public void makeInvisible(){
         for(Rectangle r : shape){
             r.makeInvisible();
         }
+        
+        if(lid != null){
+            lid.makeInvisible();
+        }
     }
     
+    /**
+     * Add a lip in the top of the cup
+     */
+    public void addLid(){
+        if(lid == null){
+            lid = new Lid(id, xPosition, yPosition, color);
+        }
+    }
+
     public int getSize(){
-        return 2 * (id - 1);
+         return 2 * (id - 1);
     }
     
     /**
@@ -75,19 +95,52 @@ public class Cup
     }
     
     /**
+     * 
+     */
+    public String getColor(){
+        return color;
+    }
+    
+    /**
+     * 
+     */
+    public int getXPosition(){
+        return xPosition;
+    }
+    
+    /**
+     * 
+     */
+    public int getYPosition(){
+        return yPosition;
+    }
+    
+    /**
      * Move the cup newX pixels horizontal and newY vertical
      */
     public void move(int newX, int newY) {
         int dx = newX - xPosition;
         int dy = newY - yPosition;
+        xPosition = newX;
+        yPosition = newY;
         for(Rectangle r : shape){
             r.moveHorizontal(dx);
             r.moveVertical(dy);
         }
+        
+        if(lid != null){
+            lid.move(newX, newY);
+        }
+    }
+    
+    public int getId(){
+        return id;
     }
     
     /**
      * Build the cup with Rectangles
+     * To take way cup it makes three Rectangles
+     * 
      */
     private void makeCup(){
         int heightPixels = PIXELS_PER_CM * height;
@@ -98,6 +151,7 @@ public class Cup
         PIXELS_PER_CM, heightPixels, color);
         Rectangle down = new Rectangle(xPosition, yPosition + heightPixels - PIXELS_PER_CM,
         widthPixels , PIXELS_PER_CM, color);
+        
         shape.add(left);
         shape.add(right);
         shape.add(down);

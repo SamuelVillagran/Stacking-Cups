@@ -1,5 +1,7 @@
 package domain;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 
 /**
@@ -10,46 +12,91 @@ import java.util.ArrayList;
  */
 public class Tower
 {
-    // instance variables - replace the example below with your own
+    public final static ArrayList<String> COLORS = new ArrayList<>(Arrays.asList("red", "black", 
+        "blue", "yellow", "magenta", "white", "orange", "pink",
+        "cyan", "gray", "lightGray", "darkGray", "brown", "maroon"));
     private int width;
     private int maxHeight;
     private boolean lastOK;
     private ArrayList<Cup> cups;
-    private ArrayList<Lid> lids;
 
     /**
      * Constructor for objects of class Tower
      */
-    public Tower() {
-        
+    public Tower(int width, int maxHeight) {
+        this.width = width;
+        this.maxHeight = maxHeight;
+        cups = new ArrayList<>();
     }
 
     /**
+     * Add a cup if is possible
+     */
+    public void pushCup(int number) {
+        Cup newCup = new Cup(number, getRandColor());
+        if(heightUsed() + newCup.getHeight() < maxHeight){
+            cups.add(newCup);
+        } else{
+            return;
+        }
+    }
+    
+    /**
      *
      */
-    public void pushCup(int i) {
-        
+    public void popCup(){
+        if(!cups.isEmpty()){
+            Cup removed = cups.remove(cups.size() - 1);
+            removed.makeInvisible();
+        }
     }
     
     /**
      * 
      */
-    public void popCup() {
-        
+    public void removeCup(int j){
+        for(int i = 0; i< cups.size(); i++){
+            if(cups.get(i).getId() == j){
+                Cup removed = cups.remove(i);
+                removed.makeInvisible();
+            }
+        }
+    }
+    
+    private String getRandColor(){
+        Random random = new Random();
+        int randIndexColor = random.nextInt(COLORS.size());
+        String color = COLORS.get(randIndexColor);
+        COLORS.remove(color);
+        return color;
     }
     
     /**
-     * 
+     * Get the height used
      */
-    public void removeCup(int i) {
-        
+    public int heightUsed(){
+        int total = 0;
+        for(Cup c : cups){
+            total += c.getHeight();
+        }
+        return total;
     }
     
     /**
      * 
      */
     public void pushLid(int i) {
-        
+        for(int j = 0; j< cups.size(); j++){
+            if(cups.get(j).getId() == i){
+                cups.get(j).addLid();
+            }
+        }
+    }
+    
+    public void popLid(){
+        if(!cups.isEmpty()){
+            
+        }
     }
     
     /**
