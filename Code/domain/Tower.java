@@ -38,9 +38,8 @@ public class Tower
         Cup newCup = new Cup(number, getRandColor());
         if(heightUsed() + newCup.getHeight() < maxHeight){
             cups.add(newCup);
-        } else{
-            return;
-        }
+        } 
+        return;
     }
     
     /**
@@ -148,7 +147,9 @@ public class Tower
      * 
      */
     public void makeVisible() {
-        
+        for (Cup c : cups) {
+            c.makeVisible();
+        }
     }
     
     /**
