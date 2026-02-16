@@ -2,13 +2,13 @@
 dependency1.from=Circle
 dependency1.to=Canvas
 dependency1.type=UsesDependency
-dependency2.from=Rectangle
+dependency2.from=Triangle
 dependency2.to=Canvas
 dependency2.type=UsesDependency
-dependency3.from=Triangle
+dependency3.from=Figure
 dependency3.to=Canvas
 dependency3.type=UsesDependency
-dependency4.from=Figure
+dependency4.from=Rectangle
 dependency4.to=Canvas
 dependency4.type=UsesDependency
 objectbench.height=94

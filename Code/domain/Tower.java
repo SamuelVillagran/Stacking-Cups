@@ -14,7 +14,9 @@ public class Tower
 {
     public final static ArrayList<String> COLORS = new ArrayList<>(Arrays.asList("red", "black", 
         "blue", "yellow", "magenta", "white", "orange", "pink",
-        "cyan", "gray", "lightGray", "darkGray", "brown", "maroon"));
+        "cyan", "gray", "lightGray", "darkGray", "brown", "maroon", 
+        "gold", "darkYellow", "greenTint", "salmon", "darkRed",
+        "hardGray", "softGray"));
     private int width;
     private int maxHeight;
     private boolean lastOK;
