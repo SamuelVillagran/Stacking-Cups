@@ -1,9 +1,17 @@
 #BlueJ package file
+<<<<<<< Updated upstream
 editor.fx.0.height=822
 editor.fx.0.width=780
 editor.fx.0.x=760
 editor.fx.0.y=0
 objectbench.height=104
+=======
+editor.fx.0.height=0
+editor.fx.0.width=0
+editor.fx.0.x=0
+editor.fx.0.y=0
+objectbench.height=81
+>>>>>>> Stashed changes
 objectbench.width=801
 package.divider.horizontal=0.6002967359050445
 package.divider.vertical=0.8247487437185931
