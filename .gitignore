@@ -1,0 +1,11 @@
+# Ignorar archivos copilados de Java
+*.class
+
+# Ignorar archivos temporales de blueJ
+*.ctxt
+*.bluej
+package.bluej
+
+# Ignorar carpetas de compilación
+bin/
+out/
