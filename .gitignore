@@ -4,6 +4,7 @@
 # Ignorar archivos temporales de blueJ
 *.ctxt
 *.bluej
+*.pkg
 package.bluej
 
 # Ignorar carpetas de compilación

@@ -1,7 +1,6 @@
-package domain;
+ 
 import java.util.ArrayList;
 import shapes.Rectangle;
-
 
 /**
  * It represents the lid of the cup
