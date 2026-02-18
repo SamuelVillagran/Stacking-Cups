@@ -137,7 +137,7 @@ public class Canvas{
         else if(colorString.equals("pink"))
             graphic.setColor(Color.pink);
         else if(colorString.equals("cyan"))
-            graphic.setColor(Color.cyan);
+            graphic.setColor(Color.cyan); // new Color(121, 12, 32);
         else if(colorString.equals("gray"))
             graphic.setColor(Color.gray);
         else if(colorString.equals("lightGray"))

@@ -156,4 +156,13 @@ public class Cup
         shape.add(right);
         shape.add(down);
     }
+    
+    /**
+     * Erase all cup's shape from Canvas
+     */
+    public void erase() {
+        for (Rectangle s : shape) {
+            s.erase();
+        }
+    }
 }

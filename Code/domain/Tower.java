@@ -10,8 +10,7 @@ import java.util.Random;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Tower
-{
+public class Tower {
     public final static ArrayList<String> COLORS = new ArrayList<>(Arrays.asList("red", "black", 
         "blue", "yellow", "magenta", "white", "orange", "pink",
         "cyan", "gray", "lightGray", "darkGray", "brown", "maroon", 
@@ -36,7 +35,9 @@ public class Tower
      */
     public void pushCup(int number) {
         Cup newCup = new Cup(number, getRandColor());
-        if(heightUsed() + newCup.getHeight() < maxHeight){
+        int towerHeight = heightUsed();
+        int cupHeight = newCup.getHeight();
+        if(towerHeight + cupHeight < maxHeight){
             cups.add(newCup);
         } 
         return;
@@ -48,7 +49,7 @@ public class Tower
     public void popCup(){
         if(!cups.isEmpty()){
             Cup removed = cups.remove(cups.size() - 1);
-            removed.makeInvisible();
+            removed.erase();
         }
     }
     
