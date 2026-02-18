@@ -77,7 +77,7 @@ public class Cup
     }
 
     public int getSize(){
-         return 2 * (id);
+         return 2 * (id-1);
     }
     
     /**

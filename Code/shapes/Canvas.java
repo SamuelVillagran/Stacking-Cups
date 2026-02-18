@@ -233,7 +233,6 @@ public class Canvas{
             graphic.fill(shape);
             
             setForegroundColor("black");
-            
             graphic.draw(shape);
         }
     }
