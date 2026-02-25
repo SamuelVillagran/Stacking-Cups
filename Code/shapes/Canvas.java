@@ -164,6 +164,28 @@ public class Canvas{
             graphic.setColor(new Color(128, 128, 128));
         else if(colorString.equals("SOFTGRAY"))
             graphic.setColor(new Color(224, 224, 224));
+            else if(colorString.equals("VIOLET"))
+            graphic.setColor(new Color(238, 130, 238));
+        else if(colorString.equals("NAVY"))
+            graphic.setColor(new Color(0, 0, 128));
+        else if(colorString.equals("OLIVE"))
+            graphic.setColor(new Color(128, 128, 0));
+        else if(colorString.equals("PURPLE"))
+            graphic.setColor(new Color(128, 0, 128));
+        else if(colorString.equals("SILVER"))
+            graphic.setColor(new Color(192, 192, 192));
+        else if(colorString.equals("LIME"))
+            graphic.setColor(new Color(0, 255, 0));
+        else if(colorString.equals("TEAL"))
+            graphic.setColor(new Color(0, 128, 128));
+        else if(colorString.equals("AQUA"))
+            graphic.setColor(new Color(0, 255, 255));
+        else if(colorString.equals("SKYBLUE"))
+            graphic.setColor(new Color(135, 206, 235));
+        else if(colorString.equals("CHOCOLATE"))
+            graphic.setColor(new Color(210, 105, 30));
+        else if(colorString.equals("BEIGE"))
+            graphic.setColor(new Color(245, 245, 220));
         else
             graphic.setColor(Color.black);
     }
