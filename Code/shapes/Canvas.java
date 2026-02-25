@@ -120,49 +120,49 @@ public class Canvas{
      * @param  newColour   the new colour for the foreground of the Canvas 
      */
     public void setForegroundColor(String colorString){
-        if(colorString.equals("red"))
+        if(colorString.equals("RED"))
             graphic.setColor(Color.red);
-        else if(colorString.equals("black"))
+        else if(colorString.equals("BLACK"))
             graphic.setColor(Color.black);
-        else if(colorString.equals("blue"))
+        else if(colorString.equals("BLUE"))
             graphic.setColor(Color.blue);
-        else if(colorString.equals("yellow"))
+        else if(colorString.equals("YELLOW"))
             graphic.setColor(Color.yellow);
-        else if(colorString.equals("green"))
+        else if(colorString.equals("GREEN"))
             graphic.setColor(Color.green);
-        else if(colorString.equals("magenta"))
+        else if(colorString.equals("MAGENTA"))
             graphic.setColor(Color.magenta);
-        else if(colorString.equals("white"))
+        else if(colorString.equals("WHITE"))
             graphic.setColor(Color.white);
-        else if(colorString.equals("orange"))
+        else if(colorString.equals("ORANGE"))
             graphic.setColor(Color.orange);
-        else if(colorString.equals("pink"))
+        else if(colorString.equals("PINK"))
             graphic.setColor(Color.pink);
-        else if(colorString.equals("cyan"))
+        else if(colorString.equals("CYAN"))
             graphic.setColor(Color.cyan); // new Color(121, 12, 32);
-        else if(colorString.equals("gray"))
+        else if(colorString.equals("GRAY"))
             graphic.setColor(Color.gray);
-        else if(colorString.equals("lightGray"))
+        else if(colorString.equals("LIGHTGRAY"))
             graphic.setColor(Color.lightGray);
-        else if(colorString.equals("darkGray"))
+        else if(colorString.equals("DARKGRAY"))
             graphic.setColor(Color.darkGray);
-        else if(colorString.equals("brown"))
+        else if(colorString.equals("BROWN"))
             graphic.setColor(new Color(139, 69, 19));
-        else if(colorString.equals("maroon"))
+        else if(colorString.equals("MAROON"))
             graphic.setColor(new Color(128, 0, 0));
-        else if(colorString.equals("gold"))
+        else if(colorString.equals("GOLD"))
             graphic.setColor(new Color(255, 220, 70));
-        else if(colorString.equals("darkYellow"))
+        else if(colorString.equals("DARKYELLOW"))
             graphic.setColor(new Color(128, 128, 0));
-        else if(colorString.equals("greenTint"))
+        else if(colorString.equals("GREENTINT"))
             graphic.setColor(new Color(152, 255, 179));
-        else if(colorString.equals("salmon"))
+        else if(colorString.equals("SALMON"))
             graphic.setColor(new Color(255, 76, 76));
-        else if(colorString.equals("darkRed"))
+        else if(colorString.equals("DARKRED"))
             graphic.setColor(new Color(170, 0, 0));
-        else if(colorString.equals("hardGray"))
+        else if(colorString.equals("HARDGRAY"))
             graphic.setColor(new Color(128, 128, 128));
-        else if(colorString.equals("softGray"))
+        else if(colorString.equals("SOFTGRAY"))
             graphic.setColor(new Color(224, 224, 224));
         else
             graphic.setColor(Color.black);

@@ -13,13 +13,17 @@ import java.util.stream.Collectors;
  */
 public class Tower {
     
-    public final static ArrayList<String> COLORS = Arrays.stream(FigureColor.values())
-                        .map(Enum::name) // Ayudado con IA
-                        .collect(Collectors.toCollection(ArrayList::new));
+    public static ArrayList<String> COLORS = new ArrayList<>();
     private int width;
     private int maxHeight;
     private boolean lastOK;
     private ArrayList<Cup> cups;
+    
+    static {
+        for (FigureColor fc : FigureColor.values()) {
+            COLORS.add(fc.name()); // ayudado con IA
+        }
+    }
 
     /**
      * Constructor for objects of class Tower
@@ -69,6 +73,8 @@ public class Tower {
         Random random = new Random();
         int randIndexColor = random.nextInt(COLORS.size());
         String color = COLORS.get(randIndexColor);
+        System.out.println(COLORS);
+        System.out.println(color);
         COLORS.remove(color);
         return color;
     }
