@@ -1,23 +1,21 @@
 package domain;
 
- 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
+import java.util.stream.Collectors;
 
 /**
  * Write a description of class Tower here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Sanchéz - Villagrán
+ * @version 1.0.0
  */
 public class Tower {
-    public final static ArrayList<String> COLORS = new ArrayList<>(Arrays.asList("red", "black", 
-        "blue", "yellow", "magenta", "white", "orange", "pink",
-        "cyan", "gray", "lightGray", "darkGray", "brown", "maroon", 
-        "gold", "darkYellow", "greenTint", "salmon", "darkRed",
-        "hardGray", "softGray"));
+    
+    public final static ArrayList<String> COLORS = Arrays.stream(FigureColor.values())
+                        .map(Enum::name) // Ayudado con IA
+                        .collect(Collectors.toCollection(ArrayList::new));
     private int width;
     private int maxHeight;
     private boolean lastOK;
