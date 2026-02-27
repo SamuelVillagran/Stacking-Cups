@@ -51,7 +51,8 @@ public class Tower {
      *
      */
     public void popCup(){
-        if(!cups.isEmpty()){
+        boolean cupsAreEmpty = cups.isEmpty();
+        if(!cupsAreEmpty){
             Cup removed = cups.remove(cups.size() - 1);
             removed.erase();
         }
@@ -61,8 +62,13 @@ public class Tower {
      * 
      */
     public void removeCup(int j){
-        for(int i = 0; i< cups.size(); i++){
-            if(cups.get(i).getId() == j){
+        int idCurrentCup, lenCups;
+        Cup currentCup;
+        lenCups = cups.size();
+        for(int i = 0; i< lenCups; i++){
+            currentCup = cups.get(i);
+            idCurrentCup = currentCup.getID();
+            if(idCurrentCup == j){
                 Cup removed = cups.remove(i);
                 removed.makeInvisible();
             }
@@ -94,8 +100,10 @@ public class Tower {
      * 
      */
     public void pushLid(int i) {
+        Cup currentCup;
         for(int j = 0; j< cups.size(); j++){
-            if(cups.get(j).getId() == i){
+            currentCup = cups.get(j);
+            if(currentCup.getID() == i){
                 cups.get(j).addLid();
             }
         }
