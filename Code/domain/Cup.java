@@ -136,6 +136,10 @@ public class Cup
         return yPosition;
     }
     
+    public Lid getLid() {
+        return lid;
+    }
+    
     /**
      * Move the cup newX pixels horizontal and newY vertical
      */

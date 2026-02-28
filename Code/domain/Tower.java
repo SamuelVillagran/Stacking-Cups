@@ -79,14 +79,13 @@ public class Tower {
             }
         }
         
-        
         newCup.makeVisible();
         cups.add(newCup);
         
         if (isVisible) {
             makeVisibleRuler();
         }
-        newCup = null;
+        
     }
     
     /**
@@ -246,6 +245,14 @@ public class Tower {
         return true;
     }
     
+    public ArrayList<Lid> getLids() {
+        return lids;
+    }
+    
+    public ArrayList<Cup> getCups() {
+        return cups;
+    }
+    
     /*
      * Generate a random color of list COLORS
      * 
@@ -341,7 +348,7 @@ public class Tower {
      */
     private void inicializate(int width, int height) {
         this.width = width;
-        this.maxHeight = maxHeight;
+        this.maxHeight = height;
         cups = new ArrayList<>();
         lids = new ArrayList<>();
     }
