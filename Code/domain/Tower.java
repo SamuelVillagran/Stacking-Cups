@@ -26,7 +26,7 @@ public class Tower {
     }
 
     /**
-     * Constructor for objects of class Tower
+     * Constructor for objects of class Tower.
      */
     public Tower(int width, int maxHeight) {
         this.width = width;
@@ -35,7 +35,8 @@ public class Tower {
     }
 
     /**
-     * Add a cup if is possible
+     * Add a cup if is possible.
+     * @param int Integer is the id of cup where this going to push at the list cups.
      */
     public void pushCup(int number) {
         Cup newCup = new Cup(number, getRandColor());
@@ -48,7 +49,7 @@ public class Tower {
     }
     
     /**
-     *
+     * Delete the last cup at the cups list.
      */
     public void popCup(){
         boolean cupsAreEmpty = cups.isEmpty();
@@ -59,7 +60,7 @@ public class Tower {
     }
     
     /**
-     * 
+     * Remove a especific cup, the cup that is at the j index of list.
      */
     public void removeCup(int j){
         int idCurrentCup, lenCups;
@@ -75,36 +76,16 @@ public class Tower {
         }
     }
     
-    private String getRandColor(){
-        Random random = new Random();
-        int randIndexColor = random.nextInt(COLORS.size());
-        String color = COLORS.get(randIndexColor);
-        System.out.println(COLORS);
-        System.out.println(color);
-        COLORS.remove(color);
-        return color;
-    }
-    
     /**
-     * Get the height used
-     */
-    public int heightUsed(){
-        int total = 0;
-        for(Cup c : cups){
-            total += c.getHeight();
-        }
-        return total;
-    }
-    
-    /**
-     * 
+     * Put a lid of a specific cup, cup at the i index of cups list.
+     * @param int Index of cup that it's going to add a lid. 
      */
     public void pushLid(int i) {
         Cup currentCup;
         for(int j = 0; j< cups.size(); j++){
             currentCup = cups.get(j);
             if(currentCup.getID() == i){
-                cups.get(j).addLid();
+                currentCup.addLid();
             }
         }
     }
@@ -137,11 +118,11 @@ public class Tower {
     }
     
     /**
-     * 
-     * @return
+     * Get the max height of tower
+     * @return int this is the max height of tower
      */
     public int height() {
-        return 0;
+        return maxHeight;
     }
     
     /**
@@ -186,5 +167,29 @@ public class Tower {
      */
     public boolean ok() {
         return true;
+    }
+    
+    /*
+     * Generate a random color of list COLORS
+     * 
+     */
+    private String getRandColor(){
+        Random random = new Random();
+        int randIndexColor = random.nextInt(COLORS.size());
+        String color = COLORS.get(randIndexColor);
+        COLORS.remove(color);
+        return color;
+    }
+    
+    /*
+     * Get the height used
+     * @return int this is the the height is using the cups at this tower
+     */
+    private int heightUsed(){
+        int total = 0;
+        for(Cup c : cups){
+            total += c.getHeight();
+        }
+        return total;
     }
 }
