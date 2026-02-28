@@ -96,6 +96,17 @@ public class Cup
             lid = new Lid(id, xPosition, yPosition, color);
         }
     }
+    
+    /**
+     * Make null the cup's lid if this have it
+     * And erase the shape of lid from canvas
+     */
+    public void removeLid() {
+        if(lid != null){
+            lid.erase();
+            lid = null;
+        }
+    }
 
     public int getSize(){
          return 2 * (id-1);

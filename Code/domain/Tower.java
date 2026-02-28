@@ -133,6 +133,7 @@ public class Tower {
             currentCup = cups.get(j);
             if(currentCup.getID() == i){
                 currentCup.addLid();
+                lids.add(currentCup.getLid());
                 // Aqui se debe agregar a la lista lids 
                 // la lid que se generó
                 currentCup = null;
@@ -160,15 +161,16 @@ public class Tower {
      * @param i i is index of cup that going to remove lid
      */
     public void removeLid(int i) {
-        Lid currentLid;
-        for(int j = 0; j< cups.size(); j++){
-            currentLid = lids.get(j);
-            if(currentLid.getID() == i){
-                lids.remove(i);
-                // Aqui se debe agregar a la lista lids 
-                // la lid que se generó
-                currentLid = null;
-                return;
+        
+        for(int j = 0; j < cups.size(); j++){
+            Cup currentCup = cups.get(j);
+            if(currentCup.getID() == i){
+                Lid lid = currentCup.getLid();
+                if(lid != null){
+                    currentCup.removeLid();
+                    return;
+                }
+                
             }
         }
         if (isVisible) errorMessage();

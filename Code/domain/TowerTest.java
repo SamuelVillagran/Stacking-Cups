@@ -26,9 +26,9 @@ public class TowerTest {
     
     @Test
     public void shouldEliminateLid() {
-        Tower proofTower = new Tower(3, 15);
-        proofTower.pushCup(2);
-        proofTower.pushLid(1);
+        Tower proofTower = new Tower(5, 15);
+        proofTower.pushCup(0);
+        proofTower.pushLid(0);
         proofTower.removeLid(0);
         
         Lid lidOfCup = proofTower.getCups().get(0).getLid();
