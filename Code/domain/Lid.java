@@ -63,6 +63,20 @@ public class Lid
     }
     
     /**
+     * Erase the lid's shape
+     */
+    public void erase() {
+        shape.erase();
+    }
+    
+    /**
+     * Get size going to be this lid
+     */
+    public int getSize(){
+         return 2 * (id - 1);
+    }
+    
+    /**
      * 
      */
     public int getHeight() {
@@ -76,9 +90,10 @@ public class Lid
         return width;
     }
     
-    public int getSize(){
-         return 2 * (id - 1);
+    public int getID() {
+        return id;
     }
+    
     
     /**
      * Create a rectangle with 

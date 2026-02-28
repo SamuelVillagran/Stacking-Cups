@@ -93,10 +93,12 @@ public class Tower {
      * Delete the last cup at the cups list.
      */
     public void popCup(){
-        boolean cupsAreEmpty = cups.isEmpty();
-        if(!cupsAreEmpty){
+        boolean areCupsEmpty = cups.isEmpty();
+        if(!areCupsEmpty){
             Cup removed = cups.remove(cups.size() - 1);
             removed.erase();
+        } else if (areCupsEmpty && isVisible) {
+            errorMessage();
         }
         
     }
@@ -115,9 +117,11 @@ public class Tower {
             if(idCurrentCup == j){
                 Cup removed = cups.remove(i);
                 removed.erase();
-            }
+                currentCup = null;
+                return;
+            } 
         }
-        currentCup = null;        
+        if (isVisible) errorMessage();
     }
     
     /**
@@ -130,16 +134,24 @@ public class Tower {
             currentCup = cups.get(j);
             if(currentCup.getID() == i){
                 currentCup.addLid();
+                // Aqui se debe agregar a la lista lids 
+                // la lid que se generó
+                currentCup = null;
+                return;
             }
         }
-        currentCup = null;
+        if (isVisible) errorMessage();
     }
     
     public void popLid(){
-        if(!cups.isEmpty()){
-            
-            //cups.get()
+        boolean isLidsEmpty = lids.isEmpty();
+        if(!isLidsEmpty){
+            Lid removed = lids.remove(lids.size() - 1);
+            removed.erase();
+        } else if (isLidsEmpty && isVisible) {
+            errorMessage();
         }
+        
     }
     
     /**
@@ -149,7 +161,18 @@ public class Tower {
      * @param i i is index of cup that going to remove lid
      */
     public void removeLid(int i) {
-        
+        Lid currentLid;
+        for(int j = 0; j< cups.size(); j++){
+            currentLid = lids.get(j);
+            if(currentLid.getID() == i){
+                lids.remove(i);
+                // Aqui se debe agregar a la lista lids 
+                // la lid que se generó
+                currentLid = null;
+                return;
+            }
+        }
+        if (isVisible) errorMessage();
     }
     
     /**
