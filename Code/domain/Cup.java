@@ -140,6 +140,15 @@ public class Cup
     }
     
     /**
+     * Erase all cup's shape from Canvas
+     */
+    public void erase() {
+        for (Rectangle s : shape) {
+            s.erase();
+        }
+    }
+    
+    /*
      * Build the cup with Rectangles
      * To take way cup it makes three Rectangles
      * 
@@ -159,12 +168,4 @@ public class Cup
         shape.add(down);
     }
     
-    /**
-     * Erase all cup's shape from Canvas
-     */
-    public void erase() {
-        for (Rectangle s : shape) {
-            s.erase();
-        }
-    }
 }

@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
@@ -19,6 +18,7 @@ public class Tower {
     private int maxHeight;
     private boolean lastOK;
     private ArrayList<Cup> cups;
+    private ArrayList<Rectangle> ruler;
     private boolean isVisible;
     
     static {
@@ -105,6 +105,7 @@ public class Tower {
     public void popLid(){
         if(!cups.isEmpty()){
             
+            cups.get()
         }
     }
     
@@ -233,5 +234,8 @@ public class Tower {
         }
     }
     
+    /*
+     * Generate the ruler of StackingCups
+     */
     
 }
