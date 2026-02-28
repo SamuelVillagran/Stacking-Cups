@@ -1,9 +1,12 @@
 package domain;
 
+import shapes.Rectangle;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
+
 
 /**
  * Write a description of class Tower here.
@@ -14,11 +17,11 @@ import javax.swing.JOptionPane;
 public class Tower {
     
     public static ArrayList<String> COLORS = new ArrayList<>();
+    public static ArrayList<Rectangle> ruler;
     private int width;
     private int maxHeight;
     private boolean lastOK;
     private ArrayList<Cup> cups;
-    private ArrayList<Rectangle> ruler;
     private boolean isVisible;
     
     static {
@@ -31,12 +34,12 @@ public class Tower {
      * Constructor for objects of class Tower.get
      */
     public Tower(int width, int maxHeight) {
-        
         if (invariant(width, maxHeight)) {
             this.width = width;
             this.maxHeight = maxHeight;
             cups = new ArrayList<>();
-        } else if (!invariant(width, maxHeight)) {
+            generateRuler();
+        } else if (!invariant(width, maxHeight) && isVisible) {
             errorMessage();
         }
     }
@@ -46,15 +49,39 @@ public class Tower {
      * @param int Integer is the id of cup where this going to push at the list cups.
      */
     public void pushCup(int number) {
-        Cup newCup = new Cup(number, getRandColor());
+        // int id, int xPos, int yPos, String color
+        boolean isCupsEmpty = cups.size() == 0 || cups == null ? true : false;
+        Cup newCup = null;
+        if (isCupsEmpty) {
+            isVisible = true;
+            newCup = new Cup(number, getRandColor());
+            newCup.setPosition(160, 20);
+            newCup.makeVisible();
+        }
+        if (!isCupsEmpty) {
+            int lastIndex = cups.size() - 1;
+            Cup lastCup = cups.get(lastIndex);
+            int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
+            int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
+
+            newCup = new Cup(number, nXPos,
+                nYPos, getRandColor());
+            System.out.println(lastCup.getXPosition() + ", " + lastCup.getYPosition());
+            System.out.println(nXPos + ", " + nYPos);
+        }
+        
         int towerHeight = heightUsed();
         int cupHeight = newCup.getHeight();
-        if(towerHeight + cupHeight < maxHeight){
+        if(towerHeight + cupHeight < maxHeight) { // Comprove space at this tower
             cups.add(newCup);
         } 
+        
+        if (isVisible) {
+            makeVisibleRuler();
+        }
+        
         newCup = null;
         
-        return;
     }
     
     /**
@@ -81,7 +108,7 @@ public class Tower {
             idCurrentCup = currentCup.getID();
             if(idCurrentCup == j){
                 Cup removed = cups.remove(i);
-                removed.makeInvisible();
+                removed.erase();
             }
         }
         currentCup = null;        
@@ -105,7 +132,7 @@ public class Tower {
     public void popLid(){
         if(!cups.isEmpty()){
             
-            cups.get()
+            //cups.get()
         }
     }
     
@@ -237,5 +264,32 @@ public class Tower {
     /*
      * Generate the ruler of StackingCups
      */
+    private void generateRuler() {
+        int DISTANCE, NITERATIONS, width, height, currentPosX, currentPosY;
+        DISTANCE = 20;
+        NITERATIONS = 20;
+        currentPosX = 0;
+        currentPosY = 0;
+        width = 10;
+        height = 3;
+        ruler = new ArrayList<>();
+        for (int i = 0; i < NITERATIONS; i++) {
+            // To create a rectangle this has:
+            // int xPos,int yPos, int width, int height, String color
+            Rectangle currentRectangle = new Rectangle(currentPosX, currentPosY, width,
+                height, "BLACK");
+            ruler.add(currentRectangle);
+            currentPosY += DISTANCE;
+            
+        }
+    }
     
+    /*
+     * Make visible the ruler of Stacking Cups
+     */
+    private void makeVisibleRuler() {
+        for (Rectangle r : ruler) {
+            r.makeVisible();
+        }
+    }
 }

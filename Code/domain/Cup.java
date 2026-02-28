@@ -38,10 +38,30 @@ public class Cup
         this.color = color;
         xPosition = 0;
         yPosition = 0;
+        makeCup();
+    }
+    
+    /**
+     * Constructor to create a Cup on a specific position
+     * @param id The rectangle's number, this number will determinate the height and the width
+     * @param xPos The position of cup at the X coordenade
+     * @param yPos The position of cup at the Y coordenade
+     * @param color Color wished to put at the cup
+     */
+    public Cup(int id, int xPos, int yPos, String color) {
+        this.id = id;
+        height = getSize();
+        width = getSize();
+        this.color = color;
+        xPosition = xPos;
+        yPosition = yPos;
         visible = true;
-        shape = new ArrayList<>();
         makeCup();
         makeVisible();
+    }
+    
+    public static int getPixelsPerCm() {
+        return PIXELS_PER_CM;
     }
     
     /**
@@ -148,12 +168,18 @@ public class Cup
         }
     }
     
+    public void setPosition(int xPos, int yPos) {
+        xPosition = xPos;
+        yPosition = yPos;
+    }
+    
     /*
      * Build the cup with Rectangles
      * To take way cup it makes three Rectangles
      * 
      */
     private void makeCup(){
+        shape = new ArrayList<>();
         int heightPixels = PIXELS_PER_CM * height;
         int widthPixels = PIXELS_PER_CM * width;
         

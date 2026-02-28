@@ -93,7 +93,7 @@ public abstract class Figure
      * Slowly move the shape horizontally.
      * @param distance the desired distance in pixels
      */
-    public void slowMoceHorizontal(int distance) {
+    public void slowMoveHorizontal(int distance) {
         int delta;
 
         if(distance < 0) {

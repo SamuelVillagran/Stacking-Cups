@@ -132,14 +132,12 @@ public class Canvas{
             graphic.setColor(Color.green);
         else if(colorString.equals("MAGENTA"))
             graphic.setColor(Color.magenta);
-        else if(colorString.equals("WHITE"))
-            graphic.setColor(Color.white);
         else if(colorString.equals("ORANGE"))
             graphic.setColor(Color.orange);
         else if(colorString.equals("PINK"))
             graphic.setColor(Color.pink);
         else if(colorString.equals("CYAN"))
-            graphic.setColor(Color.cyan); // new Color(121, 12, 32);
+            graphic.setColor(Color.cyan); 
         else if(colorString.equals("GRAY"))
             graphic.setColor(Color.gray);
         else if(colorString.equals("LIGHTGRAY"))
@@ -185,7 +183,7 @@ public class Canvas{
         else if(colorString.equals("CHOCOLATE"))
             graphic.setColor(new Color(210, 105, 30));
         else if(colorString.equals("BEIGE"))
-            graphic.setColor(new Color(245, 245, 220));
+            graphic.setColor(new Color(245, 245, 220)); // Some colors are generated with IA
         else
             graphic.setColor(Color.black);
     }
