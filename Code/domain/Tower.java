@@ -23,6 +23,7 @@ public class Tower {
     private boolean lastOK;
     private ArrayList<Cup> cups;
     private boolean isVisible;
+    private ArrayList<Lid> lids;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -35,9 +36,7 @@ public class Tower {
      */
     public Tower(int width, int maxHeight) {
         if (invariant(width, maxHeight)) {
-            this.width = width;
-            this.maxHeight = maxHeight;
-            cups = new ArrayList<>();
+            inicializate(width, maxHeight);
             generateRuler();
         } else if (!invariant(width, maxHeight) && isVisible) {
             errorMessage();
@@ -74,7 +73,8 @@ public class Tower {
             int cupHeight = newCup.getHeight();
             if (!invariant2(towerHeight, cupHeight)) {
                 newCup.erase();
-                errorMessage();
+                if (isVisible) errorMessage();
+                
                 return;
             }
         }
@@ -103,6 +103,7 @@ public class Tower {
     
     /**
      * Remove a especific cup, the cup that is at the j index of list.
+     * @param j j is the index of cup that going to removed
      */
     public void removeCup(int j){
         int idCurrentCup, lenCups;
@@ -142,7 +143,10 @@ public class Tower {
     }
     
     /**
-     * 
+     * Remove a specific lid of a specific cup
+     * if the cup selected has lid this is removed
+     * otherwise don't remove anythinf
+     * @param i i is index of cup that going to remove lid
      */
     public void removeLid(int i) {
         
@@ -305,5 +309,17 @@ public class Tower {
         for (Rectangle r : ruler) {
             r.makeVisible();
         }
+    }
+    
+    /*
+     * Inicializate atributes needed to build a tower 
+     * @param width width is the atribute of tower to inicializate
+     * @param height height is the atribute of tower going to inicializate 
+     */
+    private void inicializate(int width, int height) {
+        this.width = width;
+        this.maxHeight = maxHeight;
+        cups = new ArrayList<>();
+        lids = new ArrayList<>();
     }
 }
