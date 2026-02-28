@@ -31,9 +31,14 @@ public class Tower {
      * Constructor for objects of class Tower.get
      */
     public Tower(int width, int maxHeight) {
-        this.width = width;
-        this.maxHeight = maxHeight;
-        cups = new ArrayList<>();
+        
+        if (invariant(width, maxHeight)) {
+            this.width = width;
+            this.maxHeight = maxHeight;
+            cups = new ArrayList<>();
+        } else if (!invariant(width, maxHeight)) {
+            errorMessage();
+        }
     }
 
     /**
@@ -147,19 +152,23 @@ public class Tower {
     }
     
     /**
-     * 
+     * Make all cups visible
      */
     public void makeVisible() {
+        if (!isVisible) isVisible = !isVisible;
         for (Cup c : cups) {
             c.makeVisible();
         }
     }
     
     /**
-     * 
+     * Make all cups invisible
      */
     public void makeInvisible() {
-        if (!isVisible) isVisible = !isVisible;
+        if (isVisible) isVisible = !isVisible;
+        for (Cup c : cups) {
+            c.makeInvisible();
+        }
     }
     
     /**
@@ -205,11 +214,24 @@ public class Tower {
      * Invariant of Stacking Cups
      * Comprove if height and weigth are positive integers
      */
-    private boolean invariant(int height, int weigth) {
+    private boolean invariant(int weigth, int height) {
         return (height > 0 && weigth > 0) ? true : false;
     }
     
     /*
-     * Advice 
+     * Error message this going to apperear at the screen
+     * This only apper if simulator is visible
      */
+    private void errorMessage() {
+        if (isVisible) {
+            JOptionPane.showMessageDialog( 
+            null, 
+            "Action not allowed",  // Mensaje de la ventana
+            "Invalid Action",  //Mensaje del titulo de la ventana
+            JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+    
+    
 }
