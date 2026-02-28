@@ -57,7 +57,6 @@ public class Cup
         yPosition = yPos;
         visible = true;
         makeCup();
-        makeVisible();
     }
     
     public static int getPixelsPerCm() {

@@ -49,32 +49,43 @@ public class Tower {
      * @param int Integer is the id of cup where this going to push at the list cups.
      */
     public void pushCup(int number) {
-        // int id, int xPos, int yPos, String color
         boolean isCupsEmpty = cups.size() == 0 || cups == null ? true : false;
         Cup newCup = null;
         if (isCupsEmpty) {
             isVisible = true;
-            newCup = new Cup(number, getRandColor());
-            newCup.setPosition(160, 20);
-            newCup.makeVisible();
+            newCup = new Cup(number, 160, 20, getRandColor());
         }
         if (!isCupsEmpty) {
             int lastIndex = cups.size() - 1;
             Cup lastCup = cups.get(lastIndex);
             int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
             int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
-
-            newCup = new Cup(number, nXPos,
+            if (nYPos > 0 && nXPos > 0) {
+                newCup = new Cup(number, nXPos,
                 nYPos, getRandColor());
+            } else {
+                nYPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
+                nXPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
+                newCup = new Cup(number, nXPos,
+                nYPos, getRandColor());
+            } 
+            
+            int towerHeight = heightUsed();
+            int cupHeight = newCup.getHeight();
+            if (!invariant2(towerHeight, cupHeight)) {
+                newCup.erase();
+                errorMessage();
+                return;
+            }
+            
             System.out.println(lastCup.getXPosition() + ", " + lastCup.getYPosition());
             System.out.println(nXPos + ", " + nYPos);
         }
         
-        int towerHeight = heightUsed();
-        int cupHeight = newCup.getHeight();
-        if(towerHeight + cupHeight < maxHeight) { // Comprove space at this tower
-            cups.add(newCup);
-        } 
+        
+        // int id, int xPos, int yPos, String color
+        newCup.makeVisible();
+        cups.add(newCup);
         
         if (isVisible) {
             makeVisibleRuler();
@@ -241,9 +252,18 @@ public class Tower {
     /*
      * Invariant of Stacking Cups
      * Comprove if height and weigth are positive integers
+     * @param width It's the width of tower that it's going to comprove if this integer is more than 0
+     * @param height It's the height of tower that it's going to comprove if this integer is more than 0
      */
-    private boolean invariant(int weigth, int height) {
-        return (height > 0 && weigth > 0) ? true : false;
+    private boolean invariant(int width, int height) {
+        return (height > 0 && width > 0) ? true : false;
+    }
+    
+    /*
+     * Second invariant of game
+     */
+    private boolean invariant2(int towerHeight, int cupHeight) {
+        return towerHeight + cupHeight < maxHeight ? true : false;
     }
     
     /*
