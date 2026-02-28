@@ -77,22 +77,16 @@ public class Tower {
                 errorMessage();
                 return;
             }
-            
-            System.out.println(lastCup.getXPosition() + ", " + lastCup.getYPosition());
-            System.out.println(nXPos + ", " + nYPos);
         }
         
         
-        // int id, int xPos, int yPos, String color
         newCup.makeVisible();
         cups.add(newCup);
         
         if (isVisible) {
             makeVisibleRuler();
         }
-        
         newCup = null;
-        
     }
     
     /**
@@ -286,8 +280,8 @@ public class Tower {
      */
     private void generateRuler() {
         int DISTANCE, NITERATIONS, width, height, currentPosX, currentPosY;
-        DISTANCE = 20;
-        NITERATIONS = 20;
+        DISTANCE = 10;
+        NITERATIONS = 40;
         currentPosX = 0;
         currentPosY = 0;
         width = 10;
