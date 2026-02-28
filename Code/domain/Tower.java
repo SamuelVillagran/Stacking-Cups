@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
 
 /**
  * Write a description of class Tower here.
@@ -18,6 +19,7 @@ public class Tower {
     private int maxHeight;
     private boolean lastOK;
     private ArrayList<Cup> cups;
+    private boolean isVisible;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -45,6 +47,8 @@ public class Tower {
         if(towerHeight + cupHeight < maxHeight){
             cups.add(newCup);
         } 
+        newCup = null;
+        
         return;
     }
     
@@ -57,6 +61,7 @@ public class Tower {
             Cup removed = cups.remove(cups.size() - 1);
             removed.erase();
         }
+        
     }
     
     /**
@@ -74,6 +79,7 @@ public class Tower {
                 removed.makeInvisible();
             }
         }
+        currentCup = null;        
     }
     
     /**
@@ -88,6 +94,7 @@ public class Tower {
                 currentCup.addLid();
             }
         }
+        currentCup = null;
     }
     
     public void popLid(){
@@ -152,14 +159,15 @@ public class Tower {
      * 
      */
     public void makeInvisible() {
-        
+        if (!isVisible) isVisible = !isVisible;
     }
     
     /**
-     *
+     * Close the game's window
      */
     public void exit() {
-        
+        isVisible = false;
+        System.exit(0);
     }
     
     /**
@@ -192,4 +200,16 @@ public class Tower {
         }
         return total;
     }
+    
+    /*
+     * Invariant of Stacking Cups
+     * Comprove if height and weigth are positive integers
+     */
+    private boolean invariant(int height, int weigth) {
+        return (height > 0 && weigth > 0) ? true : false;
+    }
+    
+    /*
+     * Advice 
+     */
 }
