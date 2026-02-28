@@ -26,7 +26,7 @@ public class Tower {
     }
 
     /**
-     * Constructor for objects of class Tower.
+     * Constructor for objects of class Tower.get
      */
     public Tower(int width, int maxHeight) {
         this.width = width;
