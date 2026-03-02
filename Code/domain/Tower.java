@@ -24,6 +24,10 @@ public class Tower {
     private ArrayList<Cup> cups;
     private boolean isVisible;
     private ArrayList<Lid> lids;
+    private int xCenter;
+    private Cup lastCup;
+    private int heightBase;
+    private int heightCups;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -86,6 +90,63 @@ public class Tower {
             makeVisibleRuler();
         }
         
+    }
+    
+    /**
+     * Add a cup if is possible.
+     * @param number Is the n value cup.
+     * @param isWorking Indicates if the method has to work.
+     */
+    public void pushCup(int number, boolean isworking){
+        int newHeight = 2 * number - 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
+        int yPos;
+
+        if(newHeight > maxHeight){
+            if(isVisible) errorMessage();
+            return;
+        }
+         
+        if(cups.isEmpty()){
+            yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
+            heightCups = newHeight;
+            heightBase = 1;
+        } else{
+            int lastHeight = lastCup.getHeight();
+            int lastY = lastCup.getYPosition();
+            
+            if(newHeight < lastHeight){
+                yPos = lastY + (lastHeight - newHeight - 1) * Cup.getPixelsPerCm();
+                heightBase++;
+            } else {
+                if(heightCups + newHeight > maxHeight){
+                    if(isVisible) errorMessage();
+                    return;
+                }
+                Cup refCup = null;
+                for(int i = cups.size() - 1; i >= 0; i--){
+                    if(cups.get(i).getHeight() >= newHeight){
+                        refCup = cups.get(i);
+                        break;
+                    }
+                }
+                if(refCup == null){
+                    refCup = cups.get(0);
+                    for(Cup c : cups){
+                        if(c.getYPosition() < refCup.getYPosition()){
+                            refCup = c;
+                        }
+                    }
+                }
+                yPos = refCup.getYPosition() - newHeight * Cup.getPixelsPerCm();
+                heightCups += newHeight;
+            }
+        }
+        
+        Cup newCup = new Cup(number, xPos, yPos, getRandColor());
+        lastCup = newCup;
+        cups.add(newCup);
+        newCup.makeVisible();
     }
     
     /**
@@ -253,6 +314,14 @@ public class Tower {
         return cups;
     }
     
+    public int getHeightCups(){
+        return heightCups;
+    }
+    
+    public int getHieghtBas(){
+         return heightBase;
+     }
+     
     /*
      * Generate a random color of list COLORS
      * 
@@ -351,5 +420,6 @@ public class Tower {
         this.maxHeight = height;
         cups = new ArrayList<>();
         lids = new ArrayList<>();
+        xCenter = (int) Math.ceil((double) width / 2);
     }
 }
