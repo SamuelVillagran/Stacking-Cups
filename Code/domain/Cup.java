@@ -109,7 +109,7 @@ public class Cup
     }
 
     public int getSize(){
-         return 2 * (id-1);
+         return (2 * id) -1;
     }
     
     /**
@@ -184,6 +184,10 @@ public class Cup
     
     public void setPosition(int xPos, int yPos) {
         xPosition = xPos;
+        yPosition = yPos;
+    }
+    
+    public void setHeight(int yPos){
         yPosition = yPos;
     }
     
