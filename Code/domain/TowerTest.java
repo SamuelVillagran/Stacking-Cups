@@ -25,7 +25,7 @@ public class TowerTest {
     }
     
     @Test
-    public void shouldEliminateLid() {
+    public void shouldRemoveLid() {
         Tower proofTower = new Tower(5, 15);
         proofTower.pushCup(0);
         proofTower.pushLid(0);
@@ -35,6 +35,16 @@ public class TowerTest {
         assertNull(lidOfCup);
     }
     
+    @Test
+    public void shouldPopLid() {
+        Tower proofTower = new Tower(5, 15);
+        proofTower.pushCup(0);
+        proofTower.pushLid(0);
+        proofTower.popLid();
+        
+        Lid lidOfCup = proofTower.getCups().get(0).getLid();
+        assertNull(lidOfCup);
+    }
     /**
      * Tears down the test fixture.
      *
