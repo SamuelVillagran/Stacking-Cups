@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
  */
 public class Tower {
     
-    public static ArrayList<String> COLORS = new ArrayList<>();
-    public static ArrayList<Rectangle> ruler;
+    private static ArrayList<String> COLORS = new ArrayList<>();
+    private static ArrayList<Rectangle> ruler;
     private int width;
     private int maxHeight;
     private boolean lastOK;
@@ -209,6 +209,58 @@ public class Tower {
      * 
      */
     public String[][] stackingitems() {
+        int lenCups, lenLids, j = 0, c = 0, counterAdd = 0;
+        lenCups = cups.size();
+        lenLids = cups.size();
+        
+        String[][] res =  new String[lenCups+lenLids][2];
+        
+        if (lenCups >= lenLids) {
+            for (int i = 0; i < lenCups; i++) {
+                //j++;
+                if (j > lenLids) {
+                    joinArray(i, j);
+                }
+                
+                Cup currentCup = cups.get(i); 
+                Lid currentLid = lids.get(j);
+                int verifyCup = currentCup.getHeight();
+                int verifyLid = currentLid.getHeight();
+                counterAdd++;
+                if (verifyCup > verifyLid) {
+                    j++;
+                    i--;
+                    res[counterAdd][0] = "Lid";
+                    res[counterAdd][1] = verifyLid + "";
+                    continue;
+                } else if (verifyCup <= verifyLid) {
+                    res[counterAdd][0] = "Cup";
+                    res[counterAdd][1] = verifyCup + "";
+                }
+            }
+        } else if (lenCups < lenLids) {
+            for (int l = 0; l < lenLids; l++) {
+                if (c > lenCups) {
+                    joinArray(l, j);
+                }
+                Cup currentCup = cups.get(c); 
+                Lid currentLid = lids.get(l);
+                int verifyCup2 = currentCup.getHeight();
+                int verifyLid2 = currentLid.getHeight();
+                if (verifyLid2 > verifyCup2) {
+                    c++;
+                    l--;
+                    res[counterAdd][0] = "Cup";
+                    res[counterAdd][1] = verifyCup2 + "";
+                } else if (verifyLid2 <= verifyCup2) {
+                    res[counterAdd][0] = "Lid";
+                    res[counterAdd][1] = verifyLid2 + "";
+                }
+                
+            }
+        }
+        
+        
         return new String[][] {{""}};
     }
     
@@ -353,5 +405,12 @@ public class Tower {
         this.maxHeight = height;
         cups = new ArrayList<>();
         lids = new ArrayList<>();
+    }
+    
+    /*
+     * Join two array of a determinated index  
+     */
+    private void joinArray(int i, int j) {
+        
     }
 }
