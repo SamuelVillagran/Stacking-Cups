@@ -94,7 +94,6 @@ public class Lid
         return id;
     }
     
-    
     /**
      * Create a rectangle with 
      */
