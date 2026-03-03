@@ -247,6 +247,7 @@ public class Tower {
                 Lid currentLid = lids.get(l);
                 int verifyCup2 = currentCup.getHeight();
                 int verifyLid2 = currentLid.getHeight();
+                counterAdd++;
                 if (verifyLid2 > verifyCup2) {
                     c++;
                     l--;
