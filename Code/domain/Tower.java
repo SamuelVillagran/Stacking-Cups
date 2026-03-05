@@ -278,9 +278,9 @@ public class Tower {
         
         if (lenCups >= lenLids) {
             for (int i = 0; i < lenCups; i++) {
-                //j++;
+                
                 if (j > lenLids) {
-                    joinArray(i, j);
+                    joinArrayCups(i, counterAdd, res);
                 }
                 
                 Cup currentCup = cups.get(i); 
@@ -302,7 +302,7 @@ public class Tower {
         } else if (lenCups < lenLids) {
             for (int l = 0; l < lenLids; l++) {
                 if (c > lenCups) {
-                    joinArray(l, j);
+                    joinArrayLids(l, counterAdd, res);
                 }
                 Cup currentCup = cups.get(c); 
                 Lid currentLid = lids.get(l);
@@ -479,9 +479,34 @@ public class Tower {
     }
     
     /*
-     * Join two array of a determinated index  
+     * Join two array of cups at a determinated index 
      */
-    private void joinArray(int i, int j) {
-        
+    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) {
+        int lenCups = cups.size();
+        int number;
+        for (int z = i; z < lenCups; z++) {
+            number = cups.get(z).getHeight();
+            matrixString[counter][0] = "Cup";
+            matrixString[counter][1] = number+"";
+        }
+        return matrixString;
+    }
+    
+    /*
+     * Join two array of lids at a determinated index to complete staking items method
+     * @param i i index integer of list is missing to add to matrix of strings
+     * @param counter counter is the count where matrixString is being add its data
+     * @param matrixString matrixString is the matrix that going to be fulled of data
+     * @return matrixString is the matrix fulled of data 
+     */
+    private String[][] joinArrayLids(int i, int counter, String[][] matrixString) {
+        int lenLids = lids.size();
+        int number;
+        for (int z = i; z < lenLids; z++) {
+            number = lids.get(z).getHeight();
+            matrixString[counter][0] = "Lid";
+            matrixString[counter][1] = number+"";
+        }
+        return matrixString;
     }
 }
