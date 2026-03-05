@@ -209,6 +209,7 @@ public class Tower {
         if(!isLidsEmpty){
             Lid removed = lids.remove(lids.size() - 1);
             removed.erase();
+            removed = null;
         } else if (isLidsEmpty && isVisible) {
             errorMessage();
         }

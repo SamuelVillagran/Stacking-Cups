@@ -36,6 +36,14 @@ public class TowerTest {
     }
     
     @Test
+    public void shouldMessageErrorAppearInPopLid() {
+        Tower proofTower = new Tower(5, 15);
+        proofTower.pushCup(0);
+        proofTower.popLid();
+        
+    }
+    
+    @Test
     public void shouldPopLid() {
         Tower proofTower = new Tower(5, 15);
         proofTower.pushCup(0);
@@ -66,7 +74,7 @@ public class TowerTest {
     // =========================================================
 
     @Test
-    public void shouldStackingItemsExecute() {
+    public void shouldStackingItemsExecute() { // Generado con Caulde IA Sonet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
         tower.pushCup(1); // Cup con id=1 → height = 2*1-1 = 1
 
@@ -74,8 +82,8 @@ public class TowerTest {
 
         assertEquals(1, result.length);
         // Debe haber al menos 1 fila con "Cup"
-        //assertEquals("Cup", result[0][0]);
-        //assertEquals("1", result[0][1]);
+        assertEquals("Cup", result[0][0]);
+        assertEquals("1", result[0][1]);
     }
 
     // =========================================================
@@ -83,9 +91,9 @@ public class TowerTest {
     // =========================================================
 
     @Test
-    public void stackingItems_oneCupWithLid_returnsCupThenLid() {
+    public void stackingItems_oneCupWithLid_returnsCupThenLid() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
-        tower.pushCup(1, true); // Cup id=1, height=1
+        tower.pushCup(1); // Cup id=1, height=1
         tower.pushLid(1);       // Lid para cup id=1, height = 2*(1-1) = 0 → ajustar según Lid.getSize()
 
         String[][] result = tower.stackingItems();
@@ -109,10 +117,10 @@ public class TowerTest {
     // =========================================================
 
     @Test
-    public void stackingItems_twoCupsNoLids_returnsOnlyCups() {
+    public void stackingItemsTwoCupsNoLidsReturnsOnlyCups() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
         Tower tower = new Tower(10, 20);
-        tower.pushCup(3, true); // height = 5
-        tower.pushCup(2, true); // height = 3
+        tower.pushCup(3); // height = 5
+        tower.pushCup(2); // height = 3
 
         String[][] result = tower.stackingItems();
 
