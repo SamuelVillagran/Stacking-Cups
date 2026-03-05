@@ -270,69 +270,35 @@ public class Tower {
      * 
      */
     public String[][] stackingItems() {
-        int lenCups, lenLids, j = 0, c = 0, counterAdd = 0;
+        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0;
         lenCups = cups.size();
         lenLids = lids.size();
         
         String[][] res =  new String[lenCups+lenLids][2];
         
-        if (lenCups >= lenLids) {
-            Lid currentLid = null;
-            Cup currentCup = null;
-            int verifyLid = -1, verifyCup;
-            for (int i = 0; i < lenCups; i++) {
-                
-                if (j > lenLids) {
-                    res = joinArrayCups(i, counterAdd, res);
-                }
-                
-                currentCup = cups.get(i); 
-                if (lenLids != 0) currentLid = lids.get(j);
-                verifyCup = currentCup.getHeight();
-                if (currentLid != null) {
-                    verifyLid = currentLid.getHeight();
-                }
-                
-                counterAdd++;
-                if (verifyCup > verifyLid) {
-                    j++;
-                    i--;
-                    res[counterAdd][0] = "Lid";
-                    res[counterAdd][1] = verifyLid + "";
-                    continue;
-                } else if (verifyCup <= verifyLid) {
-                    res[counterAdd][0] = "Cup";
-                    res[counterAdd][1] = verifyCup + "";
-                }
+        while (i < lenCups && j < lenLids) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
+            cupHeight = cups.get(i).getHeight();// No todo se escribe de lo que la IA genera
+            lidHeight = lids.get(j).getHeight();
+            
+            if (cupHeight > lidHeight) {
+                res[k][0] = "Lid";
+                res[k][1] = lidHeight+"";
+                j++;
+            } 
+            if (cupHeight <= lidHeight) {
+                res[k][0] = "Cup";
+                res[k][1] = lidHeight+"";
+                i++;
             }
-        } else if (lenCups < lenLids) {
-            Cup currentCup = null;
-            Lid currentLid = null;
-            int verifyLid2 = -1, verifyCup2;
-            for (int l = 0; l < lenLids; l++) {
-                if (c > lenCups) {
-                    res = joinArrayLids(l, counterAdd, res);
-                }
-                currentCup = cups.get(c); 
-                currentLid = lids.get(l);
-                verifyCup2 = currentCup.getHeight();
-                if (lenLids != 0) {
-                    verifyLid2 = currentLid.getHeight();
-                }
-                
-                if (verifyLid2 > verifyCup2) {
-                    c++;
-                    l--;
-                    res[counterAdd][0] = "Cup";
-                    res[counterAdd][1] = verifyCup2 + "";
-                } else if (verifyLid2 <= verifyCup2) {
-                    res[counterAdd][0] = "Lid";
-                    res[counterAdd][1] = verifyLid2 + "";
-                }
-                counterAdd++;
-            }
+            k++;
         }
         
+        if (i >= lenCups) {
+            res = joinArrayLids(j, k, res);
+        }
+        if (j >= lenLids) {
+            res = joinArrayCups(i, k, res);
+        }
         
         return res;
     }
@@ -499,6 +465,7 @@ public class Tower {
             number = cups.get(z).getHeight();
             matrixString[counter][0] = "Cup";
             matrixString[counter][1] = number+"";
+            counter++;
         }
         return matrixString;
     }
@@ -517,6 +484,7 @@ public class Tower {
             number = lids.get(z).getHeight();
             matrixString[counter][0] = "Lid";
             matrixString[counter][1] = number+"";
+            counter++;
         }
         return matrixString;
     }
