@@ -269,24 +269,30 @@ public class Tower {
     /**
      * 
      */
-    public String[][] stackingitems() {
+    public String[][] stackingItems() {
         int lenCups, lenLids, j = 0, c = 0, counterAdd = 0;
         lenCups = cups.size();
-        lenLids = cups.size();
+        lenLids = lids.size();
         
         String[][] res =  new String[lenCups+lenLids][2];
         
         if (lenCups >= lenLids) {
+            Lid currentLid = null;
+            Cup currentCup = null;
+            int verifyLid = -1, verifyCup;
             for (int i = 0; i < lenCups; i++) {
                 
                 if (j > lenLids) {
-                    joinArrayCups(i, counterAdd, res);
+                    res = joinArrayCups(i, counterAdd, res);
                 }
                 
-                Cup currentCup = cups.get(i); 
-                Lid currentLid = lids.get(j);
-                int verifyCup = currentCup.getHeight();
-                int verifyLid = currentLid.getHeight();
+                currentCup = cups.get(i); 
+                if (lenLids != 0) currentLid = lids.get(j);
+                verifyCup = currentCup.getHeight();
+                if (currentLid != null) {
+                    verifyLid = currentLid.getHeight();
+                }
+                
                 counterAdd++;
                 if (verifyCup > verifyLid) {
                     j++;
@@ -300,15 +306,20 @@ public class Tower {
                 }
             }
         } else if (lenCups < lenLids) {
+            Cup currentCup = null;
+            Lid currentLid = null;
+            int verifyLid2 = -1, verifyCup2;
             for (int l = 0; l < lenLids; l++) {
                 if (c > lenCups) {
-                    joinArrayLids(l, counterAdd, res);
+                    res = joinArrayLids(l, counterAdd, res);
                 }
-                Cup currentCup = cups.get(c); 
-                Lid currentLid = lids.get(l);
-                int verifyCup2 = currentCup.getHeight();
-                int verifyLid2 = currentLid.getHeight();
-                counterAdd++;
+                currentCup = cups.get(c); 
+                currentLid = lids.get(l);
+                verifyCup2 = currentCup.getHeight();
+                if (lenLids != 0) {
+                    verifyLid2 = currentLid.getHeight();
+                }
+                
                 if (verifyLid2 > verifyCup2) {
                     c++;
                     l--;
@@ -318,12 +329,12 @@ public class Tower {
                     res[counterAdd][0] = "Lid";
                     res[counterAdd][1] = verifyLid2 + "";
                 }
-                
+                counterAdd++;
             }
         }
         
         
-        return new String[][] {{""}};
+        return res;
     }
     
     /**
