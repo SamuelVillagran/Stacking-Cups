@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
  */
 public class Tower {
     
-    public static ArrayList<String> COLORS = new ArrayList<>();
-    public static ArrayList<Rectangle> ruler;
+    private static ArrayList<String> COLORS = new ArrayList<>();
+    private static ArrayList<Rectangle> ruler;
     private int width;
     private int maxHeight;
     private boolean lastOK;
@@ -196,6 +196,7 @@ public class Tower {
             currentCup = cups.get(j);
             if(currentCup.getID() == i){
                 currentCup.addLid();
+                lids.add(currentCup.getLid());
                 // Aqui se debe agregar a la lista lids 
                 // la lid que se generó
                 currentCup = null;
@@ -210,6 +211,7 @@ public class Tower {
         if(!isLidsEmpty){
             Lid removed = lids.remove(lids.size() - 1);
             removed.erase();
+            removed = null;
         } else if (isLidsEmpty && isVisible) {
             errorMessage();
         }
@@ -223,15 +225,16 @@ public class Tower {
      * @param i i is index of cup that going to remove lid
      */
     public void removeLid(int i) {
-        Lid currentLid;
-        for(int j = 0; j< cups.size(); j++){
-            currentLid = lids.get(j);
-            if(currentLid.getID() == i){
-                lids.remove(i);
-                // Aqui se debe agregar a la lista lids 
-                // la lid que se generó
-                currentLid = null;
-                return;
+        
+        for(int j = 0; j < cups.size(); j++){
+            Cup currentCup = cups.get(j);
+            if(currentCup.getID() == i){
+                Lid lid = currentCup.getLid();
+                if(lid != null){
+                    currentCup.removeLid();
+                    return;
+                }
+                
             }
         }
         if (isVisible) errorMessage();
@@ -269,8 +272,38 @@ public class Tower {
     /**
      * 
      */
-    public String[][] stackingitems() {
-        return new String[][] {{""}};
+    public String[][] stackingItems() {
+        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0;
+        lenCups = cups.size();
+        lenLids = lids.size();
+        
+        String[][] res =  new String[lenCups+lenLids][2];
+        
+        while (i < lenCups && j < lenLids) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
+            cupHeight = cups.get(i).getHeight();// No todo se escribe de lo que la IA genera
+            lidHeight = lids.get(j).getHeight();
+            
+            if (cupHeight > lidHeight) {
+                res[k][0] = "Lid";
+                res[k][1] = lidHeight+"";
+                j++;
+            } 
+            if (cupHeight <= lidHeight) {
+                res[k][0] = "Cup";
+                res[k][1] = lidHeight+"";
+                i++;
+            }
+            k++;
+        }
+        
+        if (i >= lenCups) {
+            res = joinArrayLids(j, k, res);
+        }
+        if (j >= lenLids) {
+            res = joinArrayCups(i, k, res);
+        }
+        
+        return res;
     }
     
     /**
@@ -423,5 +456,39 @@ public class Tower {
         cups = new ArrayList<>();
         lids = new ArrayList<>();
         xCenter = (int) Math.ceil((double) width / 2);
+    }
+    
+    /*
+     * Join two array of cups at a determinated index 
+     */
+    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) {
+        int lenCups = cups.size();
+        int number;
+        for (int z = i; z < lenCups; z++) {
+            number = cups.get(z).getHeight();
+            matrixString[counter][0] = "Cup";
+            matrixString[counter][1] = number+"";
+            counter++;
+        }
+        return matrixString;
+    }
+    
+    /*
+     * Join two array of lids at a determinated index to complete staking items method
+     * @param i i index integer of list is missing to add to matrix of strings
+     * @param counter counter is the count where matrixString is being add its data
+     * @param matrixString matrixString is the matrix that going to be fulled of data
+     * @return matrixString is the matrix fulled of data 
+     */
+    private String[][] joinArrayLids(int i, int counter, String[][] matrixString) {
+        int lenLids = lids.size();
+        int number;
+        for (int z = i; z < lenLids; z++) {
+            number = lids.get(z).getHeight();
+            matrixString[counter][0] = "Lid";
+            matrixString[counter][1] = number+"";
+            counter++;
+        }
+        return matrixString;
     }
 }

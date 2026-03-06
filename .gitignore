@@ -10,3 +10,6 @@ package.bluej
 # Ignorar carpetas de compilación
 bin/
 out/
+
+# Ignorar archivos temporales de astah
+*.asta.lock
