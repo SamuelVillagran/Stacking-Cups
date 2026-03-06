@@ -2,9 +2,12 @@ package domain;
 
 import shapes.Rectangle;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.ArrayList;
+
 import java.util.Random;
-import java.util.stream.Collectors;
+
 import javax.swing.JOptionPane;
 
 
@@ -50,14 +53,12 @@ public class Tower {
     /**
      * Constructor for objects of class with a determinated number of cups 
      */
-    public Tower(int width, int maxHeight, int cupsRequeried) {
-        if (invariant(width, maxHeight)) {
-            inicializate(width, maxHeight);
-            generateRuler();
-            generateCupsInTower(cupsRequeried);
-        } else if (!invariant(width, maxHeight) && isVisible) {
-            errorMessage();
-        }
+    public Tower(int cups) {
+        
+        inicializate(width, maxHeight);
+        generateRuler();
+        generateCupsInTower(cups);
+        
     }
     
     /**
@@ -265,6 +266,24 @@ public class Tower {
     }
     
     /**
+     * Swap two objects of position
+     * @param o1 o1 is the first object to swap positions with o2's position
+     * @param o2 o2 is the second object to swap position with o1's position
+     */
+    public void swap(String [] o1, String[] o2) {
+        
+    }
+    
+    /**
+     * 
+     */
+    public void cover() {
+        
+    }
+    
+    
+    
+    /**
      * Get the max height of tower
      * @return int this is the max height of tower
      */
@@ -273,34 +292,62 @@ public class Tower {
     }
     
     /**
-     * 
+     * Get a list of lid widths in ascending order.
+     * @return int[] Sorted lid widths.
      */
     public int[] lidedCups() {
-        return new int[] {0, 0};
+        int i = 0, lenLids = lids.size(), currentWidthLid;
+        boolean isLidsEmpty = lids.isEmpty();
+        
+        if (isLidsEmpty && isVisible) {
+            errorMessage();
+            return null;
+        } 
+        
+        if (isLidsEmpty) return null;
+        
+        List<Integer> widths = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
+        for (Lid lid : lids) {
+            currentWidthLid = lid.getWidth();
+            widths.add(currentWidthLid);
+        }
+        Collections.sort(widths);
+        
+        int [] result = new int[widths.size()]; 
+        for (int widthLid : widths) {
+            result[i] = widthLid;
+            i++;
+        }
+        
+        return result;
     }
     
     /**
      * 
      */
     public String[][] stackingItems() {
-        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0;
+        int lenCups, lenLids, cupHeight, lidWidth, j = 0, i = 0, k = 0;
         lenCups = cups.size();
         lenLids = lids.size();
         
         String[][] res =  new String[lenCups+lenLids][2];
-        
+        Cup currentCup;
+        Lid currentLid;
         while (i < lenCups && j < lenLids) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
-            cupHeight = cups.get(i).getHeight();// No todo se escribe de lo que la IA genera
-            lidHeight = lids.get(j).getHeight();
+                                                // No todo se escribe de lo que la IA genera
+            currentCup = cups.get(i);
+            currentLid = lids.get(j);
+            cupHeight = currentCup.getHeight();
+            lidWidth = currentLid.getWidth();
             
-            if (cupHeight > lidHeight) {
-                res[k][0] = "Lid";
-                res[k][1] = lidHeight+"";
+            if (cupHeight > lidWidth) {
+                res[k][0] = "lid";
+                res[k][1] = lidWidth+"";
                 j++;
             } 
-            if (cupHeight <= lidHeight) {
-                res[k][0] = "Cup";
-                res[k][1] = lidHeight+"";
+            if (cupHeight <= lidWidth) {
+                res[k][0] = "cup";
+                res[k][1] = lidWidth+"";
                 i++;
             }
             k++;
@@ -309,11 +356,20 @@ public class Tower {
         if (i >= lenCups) {
             res = joinArrayLids(j, k, res);
         }
+        
         if (j >= lenLids) {
             res = joinArrayCups(i, k, res);
         }
         
         return res;
+    }
+    
+    /**
+     * 
+     */
+    public String[][] swapToReduce() {
+        
+        return new String[0][0];
     }
     
     /**
@@ -494,7 +550,7 @@ public class Tower {
         int number;
         for (int z = i; z < lenCups; z++) {
             number = cups.get(z).getHeight();
-            matrixString[counter][0] = "Cup";
+            matrixString[counter][0] = "cup";
             matrixString[counter][1] = number+"";
             counter++;
         }
@@ -513,7 +569,7 @@ public class Tower {
         int number;
         for (int z = i; z < lenLids; z++) {
             number = lids.get(z).getHeight();
-            matrixString[counter][0] = "Lid";
+            matrixString[counter][0] = "lid";
             matrixString[counter][1] = number+"";
             counter++;
         }

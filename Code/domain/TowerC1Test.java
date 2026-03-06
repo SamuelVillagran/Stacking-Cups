@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 
 /**
  * The test class TowerTest.
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
  * @author  (your name)
  * @version (a version number or a date)
  */
-public class TowerTest {
+public class TowerC1Test {
 
     /**
      * Sets up the test fixture.
@@ -26,7 +27,7 @@ public class TowerTest {
     
     @Test
     public void shouldRemoveLid() {
-        Tower proofTower = new Tower(5, 15);
+        Tower proofTower = new Tower(2, 15);
         proofTower.pushCup(0);
         proofTower.pushLid(0);
         proofTower.removeLid(0);
@@ -52,6 +53,36 @@ public class TowerTest {
         
         Lid lidOfCup = proofTower.getCups().get(0).getLid();
         assertNull(lidOfCup);
+    }
+    
+    @Test
+    public void shouldLidedCupsCorrectly() {
+        Tower proofTower = new Tower(50, 50);
+        assertNull(proofTower.lidedCups());
+        
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(5);
+        proofTower.pushCup(3);
+        proofTower.pushCup(9);
+        proofTower.pushCup(7);
+        
+        proofTower.pushLid(1);
+        proofTower.pushLid(2);
+        proofTower.pushLid(5);
+        proofTower.pushLid(3);
+        proofTower.pushLid(9);
+        proofTower.pushLid(7);
+        
+        int[] lidsSorted = proofTower.lidedCups();
+        List<Lid> lids = proofTower.getLids();
+        assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
+        assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
+        assertEquals(lids.get(3).getWidth(), lidsSorted[2]);
+        assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
+        assertEquals(lids.get(5).getWidth(), lidsSorted[4]);
+        assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
+        
     }
     
     // =========================================================
@@ -136,7 +167,7 @@ public class TowerTest {
     //=============================================================
     @Test
     public void shouldGenerateATowerWithDeterminatedCups() {
-        Tower proofTower = new Tower(5, 15, 3);
+        Tower proofTower = new Tower(3);
         assertNotNull(proofTower.getCups());
         assertEquals(3, proofTower.getCups().size());
     }
