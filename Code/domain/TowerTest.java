@@ -130,7 +130,17 @@ public class TowerTest {
             assertEquals("Cup", row[0], "Sin lids, todas las filas deben ser Cup");
         }
     }
-
+    
+    //=============================================================
+    //Caso 1: Debería ejecutarse el constructor
+    //=============================================================
+    @Test
+    public void shouldGenerateATowerWithDeterminatedCups() {
+        Tower proofTower = new Tower(5, 15, 3);
+        assertNotNull(proofTower.getCups());
+        assertEquals(3, proofTower.getCups().size());
+    }
+    
     /**
      * Tears down the test fixture.
      *

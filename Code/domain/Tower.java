@@ -46,9 +46,22 @@ public class Tower {
             errorMessage();
         }
     }
-
+    
     /**
-     * Add a cup if is possible.
+     * Constructor for objects of class with a determinated number of cups 
+     */
+    public Tower(int width, int maxHeight, int cupsRequeried) {
+        if (invariant(width, maxHeight)) {
+            inicializate(width, maxHeight);
+            generateRuler();
+            generateCupsInTower(cupsRequeried);
+        } else if (!invariant(width, maxHeight) && isVisible) {
+            errorMessage();
+        }
+    }
+    
+    /**
+     * Add a cup if is possible in order.
      * @param int Integer is the id of cup where this going to push at the list cups.
      */
     public void pushCup(int number) {
@@ -83,7 +96,6 @@ public class Tower {
             }
         }
         
-        newCup.makeVisible();
         cups.add(newCup);
         
         if (isVisible) {
@@ -312,6 +324,10 @@ public class Tower {
         for (Cup c : cups) {
             c.makeVisible();
         }
+        for (Lid l : lids) {
+            l.makeVisible();
+        }
+        makeVisibleRuler();
     }
     
     /**
@@ -322,6 +338,10 @@ public class Tower {
         for (Cup c : cups) {
             c.makeInvisible();
         }
+        for (Lid l : lids) {
+            l.makeInvisible();
+        }
+        makeInvisibleRuler();
     }
     
     /**
@@ -444,6 +464,16 @@ public class Tower {
     }
     
     /*
+     * Make invisible the ruler of Stacking Cups
+     */
+    private void makeInvisibleRuler() {
+        for (Rectangle r : ruler) {
+            r.makeInvisible();
+        }
+        
+    }
+    
+    /*
      * Inicializate atributes needed to build a tower 
      * @param width width is the atribute of tower to inicializate
      * @param height height is the atribute of tower going to inicializate 
@@ -488,5 +518,26 @@ public class Tower {
             counter++;
         }
         return matrixString;
+    }
+    
+    /*
+     * Set deterninated cups at the tower 
+     */
+    private void generateCupsInTower(int cupsRequeried) {
+        int calculateTotalHeight, calculateHeight;
+        for (int i = 0; i < cupsRequeried; i++) {
+            pushCup(i+1);
+            calculateTotalHeight = heightUsed();
+            calculateHeight = cups.get(i).getHeight();
+            if (calculateTotalHeight <= maxHeight) {
+                cups.get(i).makeVisible();
+                
+            } 
+            if (calculateTotalHeight > maxHeight) {
+                cups.get(i).erase();
+                popCup();
+                break;
+            }
+        }
     }
 }
