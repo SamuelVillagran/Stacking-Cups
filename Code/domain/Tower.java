@@ -54,13 +54,15 @@ public class Tower {
      * Constructor for objects of class with a determinated number of cups 
      */
     public Tower(int cups) {
-        
-        inicializate(width, maxHeight);
-        generateRuler();
-        generateCupsInTower(cups);
-        
+        if (cups > 0) {
+            inicializate(width, maxHeight);
+            generateRuler();
+            generateCupsInTower(cups);
+        } else {
+            errorMessage();
+        }
     }
-    
+    git 
     /**
      * Add a cup if is possible in order.
      * @param int Integer is the id of cup where this going to push at the list cups.
