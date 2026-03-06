@@ -93,7 +93,7 @@ public class Cup
      */
     public void addLid(){
         if(lid == null){
-            lid = new Lid(id, xPosition, yPosition, color);
+            lid = new Lid(id, xPosition, yPosition - PIXELS_PER_CM, color);
         }
     }
 

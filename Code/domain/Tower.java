@@ -112,34 +112,31 @@ public class Tower {
             heightCups = newHeight;
             heightBase = 1;
         } else{
-            int lastHeight = lastCup.getHeight();
-            int lastY = lastCup.getYPosition();
+            Cup landingCup = null;
+            int minY = Integer.MAX_VALUE;
+            for(Cup c : cups){
+                boolean blocksPassage = c.getHeight() <= newHeight || c.getLid() != null;
+                if(blocksPassage && c.getYPosition() < minY){
+                    landingCup = c;
+                    minY = c.getYPosition();
+                }
+            }
             
-            if(newHeight < lastHeight){
-                yPos = lastY + (lastHeight - newHeight - 1) * Cup.getPixelsPerCm();
-                heightBase++;
-            } else {
-                if(heightCups + newHeight > maxHeight){
+            if(landingCup != null){
+                yPos = getEffectiveTop(landingCup) - newHeight * Cup.getPixelsPerCm();
+                if(yPos < 0){
                     if(isVisible) errorMessage();
                     return;
                 }
-                Cup refCup = null;
-                for(int i = cups.size() - 1; i >= 0; i--){
-                    if(cups.get(i).getHeight() >= newHeight){
-                        refCup = cups.get(i);
-                        break;
-                    }
-                }
-                if(refCup == null){
-                    refCup = cups.get(0);
-                    for(Cup c : cups){
-                        if(c.getYPosition() < refCup.getYPosition()){
-                            refCup = c;
-                        }
-                    }
-                }
-                yPos = refCup.getYPosition() - newHeight * Cup.getPixelsPerCm();
                 heightCups += newHeight;
+                heightBase = 1;
+            } else {
+                yPos = lastCup.getYPosition() + (lastCup.getHeight() - newHeight - 1) * Cup.getPixelsPerCm();
+                if(yPos < 0){
+                    if(isVisible) errorMessage();
+                    return;
+                }
+                heightBase++;
             }
         }
         
@@ -147,6 +144,11 @@ public class Tower {
         lastCup = newCup;
         cups.add(newCup);
         newCup.makeVisible();
+    }
+    
+    private int getEffectiveTop(Cup cup){
+        int lidExtra = cup.getLid() != null ? cup.getLid().getHeight() * Cup.PIXELS_PER_CM : 0;
+        return cup.getYPosition() - lidExtra;
     }
     
     /**
