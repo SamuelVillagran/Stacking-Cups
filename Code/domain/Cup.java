@@ -105,7 +105,7 @@ public class Cup
         if(lid != null){
             lid.erase();
             lid = null;
-        }
+        } 
     }
 
     public int getSize(){

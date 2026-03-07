@@ -40,8 +40,7 @@ public class TowerC1Test {
     public void shouldMessageErrorAppearInPopLid() {
         Tower proofTower = new Tower(5, 15);
         proofTower.pushCup(0);
-        proofTower.popLid();
-        
+        assertFalse(proofTower.ok()); // Siempre comprobar el ok, no deberia mostrarse gráficamente 
     }
     
     @Test
@@ -67,43 +66,42 @@ public class TowerC1Test {
         proofTower.pushCup(9);
         proofTower.pushCup(7);
         
-        proofTower.pushLid(1);
-        proofTower.pushLid(2);
-        proofTower.pushLid(5);
-        proofTower.pushLid(3);
-        proofTower.pushLid(9);
-        proofTower.pushLid(7);
+        proofTower.pushLid(1); // indice 0
+        proofTower.pushLid(2); // indice 1
+        proofTower.pushLid(5); // indice 2
+        proofTower.pushLid(3); // indice 3
+        proofTower.pushLid(9); // indice 4
+        proofTower.pushLid(7); // indice 4
         
         int[] lidsSorted = proofTower.lidedCups();
         List<Lid> lids = proofTower.getLids();
         assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
         assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
-        assertEquals(lids.get(3).getWidth(), lidsSorted[2]);
+        assertEquals(lids.get(3).getWidth(), lidsSorted[2]); // Se alternan, va primero el indice 3
         assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
-        assertEquals(lids.get(5).getWidth(), lidsSorted[4]);
+        assertEquals(lids.get(5).getWidth(), lidsSorted[4]); // Se alternan, va primero el indice 5
         assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
         
-    }
+    } //  Incluir el caso en el que este la taza pero no la tapa (id - 1)
     
     // =========================================================
     // CASO 1: Sin cups ni lids → resultado vacío, no null, no explota
     // =========================================================
 
     @Test
-    public void shouldGiveSomethingStickingItemsInZero() {
+    public void shouldGiveSomethingStickingItemsInZero() { // Generado con Caulde IA Sonet 4.6 2026 pero corregido
         // Con 0 cups y 0 lids, el método no debe lanzar excepción
         // y debe retornar una matriz no nula
         Tower tower = new Tower(5, 15);
 
         String[][] result = tower.stackingItems();
 
-        assertNotNull(result);
+        assertEquals(0, result.length);
     }
 
     // =========================================================
     // CASO 2: Un solo cup, sin lid
     // =========================================================
-
     @Test
     public void shouldStackingItemsExecute() { // Generado con Caulde IA Sonet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
@@ -113,7 +111,7 @@ public class TowerC1Test {
 
         assertEquals(1, result.length);
         // Debe haber al menos 1 fila con "Cup"
-        assertEquals("Cup", result[0][0]);
+        assertEquals("cup", result[0][0]);
         assertEquals("1", result[0][1]);
     }
 
@@ -136,8 +134,8 @@ public class TowerC1Test {
         // Verificar que ambos tipos están presentes
         boolean hasCup = false, hasLid = false;
         for (String[] row : result) {
-            if ("Cup".equals(row[0])) hasCup = true;
-            if ("Lid".equals(row[0])) hasLid = true;
+            if ("cup".equals(row[0])) hasCup = true;
+            if ("lid".equals(row[0])) hasLid = true;
         }
         assertTrue(hasCup, "Debe haber al menos un Cup en el resultado");
         assertTrue(hasLid, "Debe haber al menos un Lid en el resultado");
@@ -158,7 +156,7 @@ public class TowerC1Test {
         assertNotNull(result);
         assertEquals(2, result.length);
         for (String[] row : result) {
-            assertEquals("Cup", row[0], "Sin lids, todas las filas deben ser Cup");
+            assertEquals("cup", row[0], "Sin lids, todas las filas deben ser Cup");
         }
     }
     

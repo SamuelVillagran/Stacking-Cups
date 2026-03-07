@@ -31,6 +31,7 @@ public class Tower {
     private Cup lastCup;
     private int heightBase;
     private int heightCups;
+    private boolean isCreatedRuler;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -39,7 +40,7 @@ public class Tower {
     }
 
     /**
-     * Constructor for objects of class Tower.get
+     * Constructor for objects of class Tower
      */
     public Tower(int width, int maxHeight) {
         if (invariant(width, maxHeight)) {
@@ -55,7 +56,7 @@ public class Tower {
      */
     public Tower(int cups) {
         if (cups > 0) {
-            inicializate(width, maxHeight);
+            inicializateAttributes();
             generateRuler();
             generateCupsInTower(cups);
         } else {
@@ -65,9 +66,9 @@ public class Tower {
     
     /**
      * Add a cup if is possible in order.
-     * @param int Integer is the id of cup where this going to push at the list cups.
+     * @param number Integer is the id of cup where this going to push at the list cups.
      */
-    public void pushCup(int number) {
+    public void pushCupInOrder(int number) {
         boolean isCupsEmpty = cups.size() == 0 || cups == null ? true : false;
         Cup newCup = null;
         if (isCupsEmpty) {
@@ -79,30 +80,23 @@ public class Tower {
             Cup lastCup = cups.get(lastIndex);
             int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
             int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
-            if (nYPos > 0 && nXPos > 0) {
-                newCup = new Cup(number, nXPos,
-                nYPos, getRandColor());
-            } else {
-                nYPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
-                nXPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
-                newCup = new Cup(number, nXPos,
-                nYPos, getRandColor());
-            } 
+            putCupInTower(nXPos, nYPos, number, newCup);
             
             int towerHeight = heightUsed();
             int cupHeight = newCup.getHeight();
             if (!invariant2(towerHeight, cupHeight)) {
                 newCup.erase();
                 if (isVisible) errorMessage();
-                
                 return;
             }
         }
         
+        lastCup = newCup;
         cups.add(newCup);
         
-        if (isVisible) {
+        if (isVisible && !isCreatedRuler) {
             makeVisibleRuler();
+            isCreatedRuler = !isCreatedRuler;
         }
         
     }
@@ -175,7 +169,6 @@ public class Tower {
         } else if (areCupsEmpty && isVisible) {
             errorMessage();
         }
-        
     }
     
     /**
@@ -492,7 +485,10 @@ public class Tower {
     /*
      * Generate the ruler of StackingCups
      */
-    private void generateRuler() {
+    private void generateRuler() { // Ayudado por Gemini IA 2026 pero revisado
+        
+        if (isCreatedRuler) return;
+        
         int DISTANCE, NITERATIONS, width, height, currentPosX, currentPosY;
         DISTANCE = 10;
         NITERATIONS = 40;
@@ -582,20 +578,33 @@ public class Tower {
      * Set deterninated cups at the tower 
      */
     private void generateCupsInTower(int cupsRequeried) {
-        int calculateTotalHeight, calculateHeight;
         for (int i = 0; i < cupsRequeried; i++) {
-            pushCup(i+1);
-            calculateTotalHeight = heightUsed();
-            calculateHeight = cups.get(i).getHeight();
-            if (calculateTotalHeight <= maxHeight) {
-                cups.get(i).makeVisible();
-                
-            } 
-            if (calculateTotalHeight > maxHeight) {
-                cups.get(i).erase();
-                popCup();
-                break;
-            }
+            pushCup(i+1, true);
+            cups.get(i).makeVisible();
         }
+    }
+    
+    /*
+     * Put Cups in Tower
+     */
+    private void putCupInTower(int xPos, int yPos, int idCup, Cup newCup) {
+        if (yPos > 0 && xPos > 0) {
+                newCup = new Cup(idCup, xPos,
+                    yPos, getRandColor());
+            } else {
+                yPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
+                xPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
+                newCup = new Cup(idCup, xPos,
+                    yPos, getRandColor());
+            } 
+    }
+
+    private void inicializateAttributes() {
+        cups = new ArrayList<>();
+        lids = new ArrayList<>();
+        isVisible =  false;
+        width = Integer.MAX_VALUE;
+        maxHeight = Integer.MAX_VALUE;
+        isCreatedRuler = false;
     }
 }
