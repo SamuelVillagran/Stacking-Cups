@@ -57,9 +57,6 @@ public class Cup extends StackingItem
         return PIXELS_PER_CM;
     }
     
-    /**
-     * Draw the cup
-     */
     @Override
     public void makeVisible(){
         for(Rectangle r : shape){
@@ -70,9 +67,6 @@ public class Cup extends StackingItem
         }
     }
     
-    /**
-     * Hide the cup
-     */
     @Override
     public void makeInvisible(){
         for(Rectangle r : shape){
@@ -136,11 +130,6 @@ public class Cup extends StackingItem
         return lid;
     }
     
-    @Override
-    public StackingItem.PieceType getType(){
-        return StackingItem.PieceType.CUP;
-    }
-    
     /**
      * Move the cup newX pixels horizontal and newY vertical
      */
@@ -160,9 +149,6 @@ public class Cup extends StackingItem
         }
     }
     
-    /**
-     * Erase all cup's shape from Canvas
-     */
     @Override
     public void erase() {
         for (Rectangle s : shape) {

@@ -29,10 +29,7 @@ public class Lid extends StackingItem
         yPosition = yPos;
         createShape();
     }
-    
-    /**
-     * Move the lid 'x' units horizontal and 'y' units vertical
-     */
+
     @Override
     public void move(int x, int y) {
         int dx = x - xPosition;
@@ -65,18 +62,6 @@ public class Lid extends StackingItem
     @Override
     public void erase() {
         shape.erase();
-    }
-    
-    /**
-     * Get size going to be this lid
-     */
-    public int getSize(){
-         return 2 * id - 1;
-    }
-    
-    @Override 
-    public StackingItem.PieceType getType(){
-        return StackingItem.PieceType.LID;
     }
     
     /**

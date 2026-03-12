@@ -2,15 +2,12 @@ package domain;
 
 
 /**
- * Write a description of class StackingItems here.
+ * Represents the idea of elements in Tower.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @ Sanchez - Villagrán
  */
 public abstract class StackingItem
 {
-    public enum PieceType{CUP, LID};
-    
     protected int id;
     protected int height;
     protected int width;
@@ -38,7 +35,9 @@ public abstract class StackingItem
         return color;
     }
     
-    public abstract PieceType getType();
+    public int getSize(){
+         return 2 * id - 1;
+    }
     
     /**
      * Returns true if this piece has an interior where other pieces can land.
@@ -59,8 +58,24 @@ public abstract class StackingItem
      * Lids never can contain.
      */
     public abstract boolean canContain(int fallingWidth);
+    
+    /**
+     * Draw the stack item.
+     */
     public abstract void makeVisible();
+    
+    /**
+     * Hide the stack item.
+     */
     public abstract void makeInvisible();
+    
+    /**
+     * Erase all stak item's shape from Canvas.
+     */
     public abstract void erase();
+    
+    /**
+     * Move the lid 'x' units horizontal and 'y' units vertical.
+     */
     public abstract void move(int x, int y);
 }

@@ -263,39 +263,27 @@ public class Tower{
      * 
      */
     public String[][] stackingItems() {
-        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0; //Está dañado por arreglos
-        lenCups = cups.size();
-        lenLids = lids.size();
+        int lenStack, cupHeight, lidHeight; //Está dañado por arreglos
+        lenStack = stackingItems.size();
         
-        String[][] res =  new String[lenCups+lenLids][2];
-        Cup currentCup;
-        Lid currentLid;
-        while (i < lenCups && j < lenLids) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
+        String[][] res =  new String[lenStack][2];
+        StackingItem currentItem;
+        
+        for (int i = 0; i < lenStack; i++) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
                                                 // No todo se escribe de lo que la IA genera
-            currentCup = cups.get(i);
-            currentLid = lids.get(j);
-            cupHeight = currentCup.getHeight();
-            lidWidth = currentLid.getWidth();
+            currentItem = stackingItems.get(i);
             
-            if (cupHeight > lidWidth) {
-                res[k][0] = "lid";
-                res[k][1] = lidWidth+"";
-                j++;
+            if (currentItem.hasInterior()) {
+                res[i][0] = "cup";
+                res[i][1] = currentItem.getSize() + "";
+                i++;
             } 
-            if (cupHeight <= lidWidth) {
-                res[k][0] = "cup";
-                res[k][1] = lidWidth+"";
+            if (!currentItem.hasInterior()) {
+                res[i][0] = "lid";
+                res[i][1] = currentItem.getSize() + "";
                 i++;
             }
-            k++;
-        }
-        
-        if (i >= lenCups) {
-            res = joinArrayLids(j, k, res);
-        }
-        
-        if (j >= lenLids) {
-            res = joinArrayCups(i, k, res);
+            i++;
         }
         
         return res;
@@ -305,7 +293,6 @@ public class Tower{
      * 
      */
     public String[][] swapToReduce() {
-        
         return new String[0][0];
     }
     
@@ -318,9 +305,6 @@ public class Tower{
         for (StackingItem s : stackingItems) {
             s.makeVisible();
         }
-        for (Lid l : lids) {
-            l.makeVisible();
-        }
         makeVisibleRuler();
     }
     
@@ -331,9 +315,6 @@ public class Tower{
         if (isVisible) isVisible = !isVisible;
         for (StackingItem s : stackingItems) {
             s.makeInvisible();
-        }
-        for (Lid l : lids) {
-            l.makeInvisible();
         }
         makeInvisibleRuler();
     }
@@ -472,7 +453,7 @@ public class Tower{
     
     /*
      * Join two array of cups at a determinated index 
-     */
+     
     private String[][] joinArrayCups(int i, int counter, String[][] matrixString) { //Está dañado por arreglos
         int lenCups = cups.size();
         int number;
@@ -484,6 +465,7 @@ public class Tower{
         }
         return matrixString;
     }
+    */
     
     /*
      * Join two array of lids at a determinated index to complete staking items method
@@ -506,17 +488,18 @@ public class Tower{
     
     /*
      * Set deterninated cups at the tower 
-     */
+     
     private void generateCupsInTower(int cupsRequeried) {
         for (int i = 0; i < cupsRequeried; i++) {
             pushCup(i+1, true);
             cups.get(i).makeVisible();
         }
     }
-    
+    */
+   
     /*
      * Put Cups in Tower
-     */
+    
     private void putCupInTower(int xPos, int yPos, int idCup, Cup newCup) {
         if (yPos > 0 && xPos > 0) {
                 newCup = new Cup(idCup, xPos,
@@ -536,8 +519,8 @@ public class Tower{
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
         isCreatedRuler = false;
-     * Get the color of a specific cup given its number.
-     */
+    } */ 
+     // Get the color of a specific cup given its number.
     private String getColorCup(int number){
         String result = null;
         if(stackingItems.isEmpty()){
