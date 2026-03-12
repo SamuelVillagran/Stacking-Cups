@@ -13,16 +13,10 @@ import shapes.Rectangle;
  * @author Sanchez-Villagran 
  * 
  */
-public class Cup
+public class Cup extends StackingItem
 {
     public static final int PIXELS_PER_CM = 10;
     private ArrayList<Rectangle> shape;
-    private int id;
-    private int height;
-    private int width;
-    private String color;
-    private int xPosition; //pixels
-    private int yPosition; //pixels
     private boolean visible;
     private Lid lid;
     
@@ -35,7 +29,7 @@ public class Cup
         this.id = id;
         height = getSize();
         width = getSize();
-        this.color = color;
+        color = color;
         xPosition = 0;
         yPosition = 0;
         makeCup();
@@ -66,6 +60,7 @@ public class Cup
     /**
      * Draw the cup
      */
+    @Override
     public void makeVisible(){
         for(Rectangle r : shape){
             r.makeVisible();
@@ -78,6 +73,7 @@ public class Cup
     /**
      * Hide the cup
      */
+    @Override
     public void makeInvisible(){
         for(Rectangle r : shape){
             r.makeInvisible();
@@ -86,6 +82,30 @@ public class Cup
         if(lid != null){
             lid.makeInvisible();
         }
+    }
+    
+    /**
+     * A Cup has an interior where other pieces can land.
+     */
+    @Override
+    public boolean hasInterior(){
+        return true;
+    }
+    
+    /**
+     * A cup can blocks a falling piece if the Cup's wisth is less than or equals to the falling piece's width.
+     */
+    @Override
+    public boolean blocksPassage(int fallingWidth){
+        return this.width <= fallingWidth;
+    }
+    
+    /**
+     * A cup can contain a falling piece if the Cup's width is exactly greater than the fallings piece's width.
+     */
+    @Override
+    public boolean canContain(int fallingWidth){
+        return this.width > fallingWidth;
     }
     
     /**
@@ -112,48 +132,19 @@ public class Cup
          return (2 * id) -1;
     }
     
-    /**
-     * 
-     */
-    public int getHeight() {
-        return height;
-    }
-    
-    /**
-     * 
-     */
-    public int getWidth() {
-        return width;
-    }
-    
-    /**
-     * 
-     */
-    public String getColor(){
-        return color;
-    }
-    
-    /**
-     * 
-     */
-    public int getXPosition(){
-        return xPosition;
-    }
-    
-    /**
-     * 
-     */
-    public int getYPosition(){
-        return yPosition;
-    }
-    
     public Lid getLid() {
         return lid;
+    }
+    
+    @Override
+    public StackingItem.PieceType getType(){
+        return StackingItem.PieceType.CUP;
     }
     
     /**
      * Move the cup newX pixels horizontal and newY vertical
      */
+    @Override
     public void move(int newX, int newY) {
         int dx = newX - xPosition;
         int dy = newY - yPosition;
@@ -169,13 +160,10 @@ public class Cup
         }
     }
     
-    public int getID(){
-        return id;
-    }
-    
     /**
      * Erase all cup's shape from Canvas
      */
+    @Override
     public void erase() {
         for (Rectangle s : shape) {
             s.erase();
