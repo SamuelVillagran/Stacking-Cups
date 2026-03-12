@@ -17,21 +17,20 @@ import javax.swing.JOptionPane;
  * @author Sanchéz - Villagrán
  * @version 1.0.0
  */
-public class Tower {
+public class Tower{
     
     private static ArrayList<String> COLORS = new ArrayList<>();
     private static ArrayList<Rectangle> ruler;
     private int width;
     private int maxHeight;
     private boolean lastOK;
-    private ArrayList<Cup> cups;
     private boolean isVisible;
-    private ArrayList<Lid> lids;
+    private ArrayList<Lid> lids; //delete
     private int xCenter;
     private Cup lastCup;
-    private int heightBase;
     private int heightCups;
     private boolean isCreatedRuler;
+    private ArrayList<StackingItem> stackingItems;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -52,121 +51,53 @@ public class Tower {
     }
     
     /**
-     * Constructor for objects of class with a determinated number of cups 
-     */
-    public Tower(int cups) {
-        if (cups > 0) {
-            inicializateAttributes();
-            generateRuler();
-            generateCupsInTower(cups);
-        } else {
-            errorMessage();
-        }
-    }
-    
-    /**
-     * Add a cup if is possible in order.
-     * @param number Integer is the id of cup where this going to push at the list cups.
-     */
-    public void pushCupInOrder(int number) {
-        boolean isCupsEmpty = cups.size() == 0 || cups == null ? true : false;
-        Cup newCup = null;
-        if (isCupsEmpty) {
-            isVisible = true;
-            newCup = new Cup(number, 160, 20, getRandColor());
-        }
-        if (!isCupsEmpty) {
-            int lastIndex = cups.size() - 1;
-            Cup lastCup = cups.get(lastIndex);
-            int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
-            int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
-            putCupInTower(nXPos, nYPos, number, newCup);
-            
-            int towerHeight = heightUsed();
-            int cupHeight = newCup.getHeight();
-            if (!invariant2(towerHeight, cupHeight)) {
-                newCup.erase();
-                if (isVisible) errorMessage();
-                return;
-            }
-        }
-        
-        lastCup = newCup;
-        cups.add(newCup);
-        
-        if (isVisible && !isCreatedRuler) {
-            makeVisibleRuler();
-            isCreatedRuler = !isCreatedRuler;
-        }
-        
-    }
-    
-    /**
      * Add a cup if is possible.
      * @param number Is the n value cup.
      * @param isWorking Indicates if the method has to work.
      */
-    public void pushCup(int number, boolean isworking){
+    public void pushCup(int number){
         int newHeight = 2 * number - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
 
-        if(newHeight > maxHeight){
+        if(newHeight > maxHeight || stackItemInteriorExists(number)){
             if(isVisible) errorMessage();
             return;
         }
          
-        if(cups.isEmpty()){
+        if(stackingItems.isEmpty()){
             yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
             heightCups = newHeight;
-            heightBase = 1;
         } else{
-            int lastHeight = lastCup.getHeight();
-            int lastY = lastCup.getYPosition();
-            
-            if(newHeight < lastHeight){
-                yPos = lastY + (lastHeight - newHeight - 1) * Cup.getPixelsPerCm();
-                heightBase++;
-            } else {
-                if(heightCups + newHeight > maxHeight){
-                    if(isVisible) errorMessage();
-                    return;
-                }
-                Cup refCup = null;
-                for(int i = cups.size() - 1; i >= 0; i--){
-                    if(cups.get(i).getHeight() >= newHeight){
-                        refCup = cups.get(i);
-                        break;
-                    }
-                }
-                if(refCup == null){
-                    refCup = cups.get(0);
-                    for(Cup c : cups){
-                        if(c.getYPosition() < refCup.getYPosition()){
-                            refCup = c;
-                        }
-                    }
-                }
-                yPos = refCup.getYPosition() - newHeight * Cup.getPixelsPerCm();
+            StackingItem landingItem = findLandingPiece(newHeight);
+            yPos = resolveYPos(landingItem, newHeight, newHeight);
+            if(yPos < 0){
+                if(isVisible) errorMessage();
+                return;
+            }
+            if(landingItem != null){
                 heightCups += newHeight;
             }
         }
         
         Cup newCup = new Cup(number, xPos, yPos, getRandColor());
-        lastCup = newCup;
-        cups.add(newCup);
-        newCup.makeVisible();
+        stackingItems.add(newCup);
+        if(isVisible) newCup.makeVisible();
     }
     
     /**
-     * Delete the last cup at the cups list.
+     * Delete the last cup at the stackingItems list.
      */
     public void popCup(){
-        boolean areCupsEmpty = cups.isEmpty();
-        if(!areCupsEmpty){
-            Cup removed = cups.remove(cups.size() - 1);
-            removed.erase();
-        } else if (areCupsEmpty && isVisible) {
+        boolean areStackingItemsEmpty = stackingItems.isEmpty();
+        if(!areStackingItemsEmpty){
+            for(int i = stackingItems.size() -1; i >= 0; i--){
+                if(stackingItems.get(i).hasInterior()){
+                    stackingItems.remove(i).erase();
+                    return;
+                }
+            }
+        } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
         }
     }
@@ -176,14 +107,14 @@ public class Tower {
      * @param j j is the index of cup that going to removed
      */
     public void removeCup(int j){
-        int idCurrentCup, lenCups;
-        Cup currentCup;
-        lenCups = cups.size();
-        for(int i = 0; i< lenCups; i++){
-            currentCup = cups.get(i);
-            idCurrentCup = currentCup.getID();
-            if(idCurrentCup == j){
-                Cup removed = cups.remove(i);
+        int idCurrentCup, lenStack;
+        StackingItem currentCup;
+        lenStack = stackingItems.size();
+        for(int i = 0; i< lenStack; i++){
+            currentCup = stackingItems.get(i);
+            idCurrentCup = currentCup.getId();
+            if(idCurrentCup == j && currentCup.hasInterior()){
+                StackingItem removed = stackingItems.remove(i);
                 removed.erase();
                 currentCup = null;
                 return;
@@ -197,28 +128,38 @@ public class Tower {
      * @param int Index of cup that it's going to add a lid. 
      */
     public void pushLid(int i) {
-        Cup currentCup;
-        for(int j = 0; j< cups.size(); j++){
-            currentCup = cups.get(j);
-            if(currentCup.getID() == i){
-                currentCup.addLid();
-                lids.add(currentCup.getLid());
-                // Aqui se debe agregar a la lista lids 
-                // la lid que se generó
-                currentCup = null;
-                return;
-            }
+        int lidWidth = 2 * i -1;
+        int lidHeight = 1;
+        int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
+        
+        if(stackingItems.isEmpty() || (stackItemNonInteriorExists(i) && stackItemInteriorExists(i))){
+            if(isVisible) errorMessage();
+            return;
         }
-        if (isVisible) errorMessage();
+        
+        StackingItem landingItem = findLandingPiece(lidWidth);
+        int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        if (yPos < 0) {
+            if (isVisible) errorMessage();
+            return;
+        }
+        String color = getColorCup(i);
+        Lid newLid = new Lid(i, xPos, yPos, color);
+        stackingItems.add(newLid);
+        if(isVisible) newLid.makeVisible();
+        heightCups += lidHeight;
     }
     
     public void popLid(){
-        boolean isLidsEmpty = lids.isEmpty();
-        if(!isLidsEmpty){
-            Lid removed = lids.remove(lids.size() - 1);
-            removed.erase();
-            removed = null;
-        } else if (isLidsEmpty && isVisible) {
+        boolean areStackingItemsEmpty = stackingItems.isEmpty();;
+        if(!areStackingItemsEmpty){
+            for(int i = stackingItems.size() -1; i >= 0; i--){
+                if(!stackingItems.get(i).hasInterior()){
+                    stackingItems.remove(i).erase();
+                    return;
+                }
+            }
+        } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
         }
         
@@ -229,10 +170,10 @@ public class Tower {
      * if the cup selected has lid this is removed
      * otherwise don't remove anythinf
      * @param i i is index of cup that going to remove lid
-     */
+     
     public void removeLid(int i) {
         
-        for(int j = 0; j < cups.size(); j++){
+        for(int j = 0; j < cups.size(); j++){ //Está dañado por arreglos
             Cup currentCup = cups.get(j);
             if(currentCup.getID() == i){
                 Lid lid = currentCup.getLid();
@@ -245,7 +186,8 @@ public class Tower {
         }
         if (isVisible) errorMessage();
     }
-    
+    */
+   
     /**
      * 
      */
@@ -321,7 +263,7 @@ public class Tower {
      * 
      */
     public String[][] stackingItems() {
-        int lenCups, lenLids, cupHeight, lidWidth, j = 0, i = 0, k = 0;
+        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0; //Está dañado por arreglos
         lenCups = cups.size();
         lenLids = lids.size();
         
@@ -369,11 +311,12 @@ public class Tower {
     
     /**
      * Make all cups visible
+     * Make the stacking items visible.
      */
     public void makeVisible() {
         if (!isVisible) isVisible = !isVisible;
-        for (Cup c : cups) {
-            c.makeVisible();
+        for (StackingItem s : stackingItems) {
+            s.makeVisible();
         }
         for (Lid l : lids) {
             l.makeVisible();
@@ -382,12 +325,12 @@ public class Tower {
     }
     
     /**
-     * Make all cups invisible
+     * Make the stacking items invisible.
      */
     public void makeInvisible() {
         if (isVisible) isVisible = !isVisible;
-        for (Cup c : cups) {
-            c.makeInvisible();
+        for (StackingItem s : stackingItems) {
+            s.makeInvisible();
         }
         for (Lid l : lids) {
             l.makeInvisible();
@@ -409,23 +352,11 @@ public class Tower {
     public boolean ok() {
         return true;
     }
-    
-    public ArrayList<Lid> getLids() {
-        return lids;
-    }
-    
-    public ArrayList<Cup> getCups() {
-        return cups;
-    }
-    
+
     public int getHeightCups(){
         return heightCups;
     }
     
-    public int getHieghtBas(){
-         return heightBase;
-     }
-     
     /*
      * Generate a random color of list COLORS
      * 
@@ -444,8 +375,8 @@ public class Tower {
      */
     private int heightUsed(){
         int total = 0;
-        for(Cup c : cups){
-            total += c.getHeight();
+        for(StackingItem s : stackingItems){
+            total += s.getHeight();
         }
         return total;
     }
@@ -535,15 +466,14 @@ public class Tower {
     private void inicializate(int width, int height) {
         this.width = width;
         this.maxHeight = height;
-        cups = new ArrayList<>();
-        lids = new ArrayList<>();
+        stackingItems = new ArrayList<>();
         xCenter = (int) Math.ceil((double) width / 2);
     }
     
     /*
      * Join two array of cups at a determinated index 
      */
-    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) {
+    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) { //Está dañado por arreglos
         int lenCups = cups.size();
         int number;
         for (int z = i; z < lenCups; z++) {
@@ -606,5 +536,153 @@ public class Tower {
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
         isCreatedRuler = false;
+     * Get the color of a specific cup given its number.
+     */
+    private String getColorCup(int number){
+        String result = null;
+        if(stackingItems.isEmpty()){
+            if(isVisible) errorMessage();
+        } else{
+            for(int i = 0; i< stackingItems.size(); i++){
+                if(stackingItems.get(i).getId() == number){
+                    result = stackingItems.get(i).getColor();
+                    return result;
+                }
+            }
+        }
+        return result;
+    }
+    
+    /*
+     * Calculates the final yPosition of the falling piece.
+     * If landing == null, landing piece falls through all and it nests in the deepest container.
+     * If landing.hasInterior() search the effective container above the blocker.
+     * If landing is a null, lands directly on top.
+    */
+    private int resolveYPos(StackingItem landing, int fallingWidth, int fallingHeight){ // Generado con IA, modificado.
+        if (landing == null){
+            StackingItem deepest = findDeepestContainer(fallingWidth);
+            if(deepest == null){
+                return (maxHeight - fallingHeight) * Cup.PIXELS_PER_CM;
+            }
+            return deepest.getYPosition() + (deepest.getHeight() - fallingHeight -1) * Cup.PIXELS_PER_CM;
+        }
+        if(landing.hasInterior()){
+            StackingItem landingContainer = findLandingContainer(landing, fallingWidth);
+            if(landingContainer != landing){
+                return landingContainer.getYPosition() + (landingContainer.getHeight() -fallingHeight -1) * Cup.PIXELS_PER_CM;
+            }
+        }
+        return landing.getYPosition() -fallingHeight * Cup.PIXELS_PER_CM;
+    }
+    
+    /*
+     * Returns the deepest piece that can contain a piece of fallingWidth.
+     * This is used when the falling piece is more smaller than everything,
+     * like no blocker found.
+     */
+    private StackingItem findDeepestContainer(int fallingWidth){
+        StackingItem deepest = null;
+        for(StackingItem s : stackingItems){
+            if(s.canContain(fallingWidth)){
+                if(deepest == null || s.getYPosition() > deepest.getYPosition()){
+                    deepest = s;
+                }
+            }
+        }
+        return deepest;
+    }
+    
+    /*
+     * Find the effective container where the falling piece will actually land.
+     * Climbs up through containers whose bottom aligns with landing's top.
+     * It could land into the deepest nested container.
+     */
+    private StackingItem findLandingContainer(StackingItem landing, int fallingWidth){ //Generado con IA
+        StackingItem container = landing;
+        boolean found = true;
+        while(found){
+            found = false;
+            for(StackingItem s : stackingItems){
+                if(s.canContain(fallingWidth) && s.getYPosition() + s.getHeight() * Cup.PIXELS_PER_CM == container.getYPosition()){
+                    container = s;
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if(container != landing){
+            container = findInnermostContainer(container, fallingWidth);
+        }
+        return container;
+    }
+    
+    /*
+     * Given a container iteratively finds the deepest piece nested inside it
+     * that can still hold the falling piece.
+     */
+    private StackingItem findInnermostContainer(StackingItem container, int fallingWidth){
+        boolean foundInner = true;
+        while(foundInner){
+            foundInner = false;
+            StackingItem deepestInner = null;
+            int containerBottom = container.getYPosition() + container.getHeight() * Cup.PIXELS_PER_CM;
+            for(StackingItem s : stackingItems){
+                if(s.canContain(fallingWidth) && s.getYPosition() > container.getYPosition() 
+                    && s.getYPosition() > deepestInner.getYPosition()){
+                    if (deepestInner == null || s.getYPosition() > deepestInner.getYPosition()) {
+                        deepestInner = s;
+                    }
+                }
+            } if(deepestInner != null){
+                container = deepestInner;
+                foundInner = true;
+            }
+        }
+        return container;
+    }
+    
+    /*
+     * Returns the upper piece that blocks a fallinge piece of the giving width.
+     * Returns null when no piece blocks - the falling piece is smaller than everything
+     * and will nest in the deepest avilable "container".
+     */
+    private StackingItem findLandingPiece(int fallingWidth){
+        StackingItem landing = null;
+        int minY = Integer.MAX_VALUE;
+        for(StackingItem s : stackingItems){
+            if(s.blocksPassage(fallingWidth) && s.getYPosition() < minY){
+                landing = s;
+                minY = s.getYPosition();
+            }
+        }
+        return landing;
+    }
+    
+    /*
+     * Check if the stack item Cup exists.
+     */
+    private boolean stackItemInteriorExists(int number){
+        for(int i = 0; i < stackingItems.size(); i++){
+            StackingItem element = stackingItems.get(i);
+            if(element.getId() ==  number && element.hasInterior()) return true;
+        }
+        return false;
+    }
+    
+    /*
+     * Check if the stack item Lid exists.
+     */
+    private boolean stackItemNonInteriorExists(int number){
+        for(int i = 0; i < stackingItems.size(); i++){
+            StackingItem element = stackingItems.get(i);
+            if( element.getId() ==  number && !element.hasInterior()) return true;
+        }
+        return false;
+    }
+    
+    private int getEffectiveTop(Cup cup){
+        int lidExtra = cup.getLid() != null ? cup.getLid().getHeight() * Cup.PIXELS_PER_CM : 0;
+        return cup.getYPosition() - lidExtra;
     }
 }

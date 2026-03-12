@@ -12,15 +12,9 @@ import shapes.Rectangle;
  * 
  * @author Sanchez-Villagran
  */
-public class Lid
+public class Lid extends StackingItem
 {
     public static final int PIXELS_PER_CM = 10;
-    private int id;
-    private int height;
-    private int width;
-    private String color;
-    private int xPosition;
-    private int yPosition;
     private Rectangle shape;
 
     /**
@@ -39,6 +33,7 @@ public class Lid
     /**
      * Move the lid 'x' units horizontal and 'y' units vertical
      */
+    @Override
     public void move(int x, int y) {
         int dx = x - xPosition;
         int dy = y - yPosition;
@@ -51,6 +46,7 @@ public class Lid
     /**
      * Draw the lid
      */
+    @Override
     public void makeVisible(){
         shape.makeVisible();
     }
@@ -58,6 +54,7 @@ public class Lid
     /**
      * Hide the lid
      */
+    @Override
     public void makeInvisible(){
         shape.makeInvisible();
     }
@@ -65,6 +62,7 @@ public class Lid
     /**
      * Erase the lid's shape
      */
+    @Override
     public void erase() {
         shape.erase();
     }
@@ -73,25 +71,36 @@ public class Lid
      * Get size going to be this lid
      */
     public int getSize(){
-         return 2 * (id - 1);
+         return 2 * id - 1;
+    }
+    
+    @Override 
+    public StackingItem.PieceType getType(){
+        return StackingItem.PieceType.LID;
     }
     
     /**
-     * 
+     * A lid doesn't hace interior, nothin can land inside it.
      */
-    public int getHeight() {
-        return height;
+    @Override
+    public boolean hasInterior(){
+        return false;
     }
     
     /**
-     * 
+     * A Lid always blocks any falling piece
      */
-    public int getWidth() {
-        return width;
+    @Override
+    public boolean blocksPassage(int fallingWidth){
+        return true;
     }
     
-    public int getID() {
-        return id;
+    /**
+     * A Lid does not have interior, it can't be a container.
+     */
+    @Override
+    public boolean canContain(int fallingWidth){
+        return false;
     }
     
     /**
