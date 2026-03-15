@@ -31,6 +31,10 @@ public abstract class StackingItem
         return yPosition;
     }
     
+    public int getXPosition() {
+        return xPosition;
+    }
+    
     public String getColor(){
         return color;
     }
@@ -38,6 +42,9 @@ public abstract class StackingItem
     public int getSize(){
          return 2 * id - 1;
     }
+    public abstract String toString();
+    
+    public abstract PieceType getType();
     
     /**
      * Returns true if this piece has an interior where other pieces can land.
