@@ -42,6 +42,8 @@ public abstract class StackingItem
         return color;
     }
     
+    public abstract String toString();
+    
     public abstract PieceType getType();
     
     /**

@@ -1,6 +1,7 @@
 package domain;
 
 import shapes.Rectangle;
+import java.util.TreeMap;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Tower{
     private Cup lastCup;
     private int heightCups;
     private boolean isCreatedRuler;
-    private ArrayList<StackingItem> stackingItems;
+    private TreeMap<Integer, StackingItem> stackingItems;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -81,7 +82,7 @@ public class Tower{
         }
         
         Cup newCup = new Cup(number, xPos, yPos, getRandColor());
-        stackingItems.add(newCup);
+        stackingItems.put(number, newCup);
         if(isVisible) newCup.makeVisible();
     }
     
@@ -145,7 +146,7 @@ public class Tower{
         }
         //String color = landingItem.getColorCup(i);
         Lid newLid = new Lid(i, xPos, yPos, "BLUE");
-        stackingItems.add(newLid);
+        stackingItems.put(i, newLid);
         if(isVisible) newLid.makeVisible();
         heightCups += lidHeight;
     }
@@ -260,46 +261,20 @@ public class Tower{
     }
     
     /**
-     * 
+     * Give items order from base since top
+     * @return A matrix-array of two columns where first column
+     *      contain name item and second column contain its width
      */
     public String[][] stackingItems() {
-        int lenItems, itemWidth, left, rigth; 
+        int lenItems, i = 0;
         lenItems = stackingItems.size();
-        
-        String[][] res =  new String[lenItems][2];
-        StackingItem pivot = stackingItems.get(lenItems/2);
-        StackingItem i = stackingItems.get(0);
-        left = 0;
-        rigth = lenItems-1;
-        
-        
-        while (i < lenItems) { 
-            
-            currentItem = stackingItems.get(i);
-            itemWidth = currentItem.getWidth();
-            
-            if (cupHeight > lidWidth) {
-                res[k][0] = "lid";
-                res[k][1] = lidWidth+"";
-                j++;
-            } 
-            if (cupHeight <= lidWidth) {
-                res[k][0] = "cup";
-                res[k][1] = lidWidth+"";
-                i++;
-            }
-            k++;
+        String[][] result =  new String[lenItems][2];
+        for (StackingItem item : stackingItems.values()) {
+            result[i][0] = item.toString();
+            result[i][1] = item.getWidth()+"";
+            i++;
         }
-        
-        if (i >= lenCups) {
-            res = joinArrayLids(j, k, res);
-        }
-        
-        if (j >= lenLids) {
-            res = joinArrayCups(i, k, res);
-        }
-        
-        return res;
+        return result;
     }
     
     /**
@@ -311,17 +286,15 @@ public class Tower{
     }
     
     /**
-     * Make all cups visible
-     * Make the stacking items visible.
+     * Make all items of StackingItems visible
+     * and make ruler visible
      */
     public void makeVisible() {
         if (!isVisible) isVisible = !isVisible;
-        for (StackingItem s : stackingItems) {
+        for (StackingItem s : stackingItems.values()) {
             s.makeVisible();
         }
-        for (Lid l : lids) {
-            l.makeVisible();
-        }
+        
         makeVisibleRuler();
     }
     
@@ -330,11 +303,8 @@ public class Tower{
      */
     public void makeInvisible() {
         if (isVisible) isVisible = !isVisible;
-        for (StackingItem s : stackingItems) {
+        for (StackingItem s : stackingItems.values()) {
             s.makeInvisible();
-        }
-        for (Lid l : lids) {
-            l.makeInvisible();
         }
         makeInvisibleRuler();
     }
@@ -376,7 +346,7 @@ public class Tower{
      */
     private int heightUsed(){
         int total = 0;
-        for(StackingItem s : stackingItems){
+        for(StackingItem s : stackingItems.values()) {
             total += s.getHeight();
         }
         return total;
@@ -467,51 +437,16 @@ public class Tower{
     private void inicializate(int width, int height) {
         this.width = width;
         this.maxHeight = height;
-        stackingItems = new ArrayList<>();
+        stackingItems = new TreeMap<>();
         xCenter = (int) Math.ceil((double) width / 2);
     }
-    
-    /*
-     * Join two array of cups at a determinated index 
-     */
-    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) { //Está dañado por arreglos
-        int lenCups = cups.size();
-        int number;
-        for (int z = i; z < lenCups; z++) {
-            number = cups.get(z).getHeight();
-            matrixString[counter][0] = "cup";
-            matrixString[counter][1] = number+"";
-            counter++;
-        }
-        return matrixString;
-    }
-    
-    /*
-     * Join two array of lids at a determinated index to complete staking items method
-     * @param i i index integer of list is missing to add to matrix of strings
-     * @param counter counter is the count where matrixString is being add its data
-     * @param matrixString matrixString is the matrix that going to be fulled of data
-     * @return matrixString is the matrix fulled of data 
-     */
-    private String[][] joinArrayLids(int i, int counter, String[][] matrixString) {
-        int lenLids = lids.size();
-        int number;
-        for (int z = i; z < lenLids; z++) {
-            number = lids.get(z).getHeight();
-            matrixString[counter][0] = "lid";
-            matrixString[counter][1] = number+"";
-            counter++;
-        }
-        return matrixString;
-    }
-    
     /*
      * Set deterninated cups at the tower 
      */
     private void generateCupsInTower(int cupsRequeried) {
         for (int i = 0; i < cupsRequeried; i++) {
-            pushCup(i+1, true);
-            cups.get(i).makeVisible();
+            pushCup(i+1);
+            stackingItems.get(i).makeVisible();
         }
     }
     
@@ -531,7 +466,7 @@ public class Tower{
     }
 
     private void inicializateAttributes() {
-        stackingItems = new ArrayList<>();
+        stackingItems = new TreeMap<>();
         isVisible =  false;
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
@@ -569,7 +504,7 @@ public class Tower{
      */
     private StackingItem findDeepestContainer(int fallingWidth){
         StackingItem deepest = null;
-        for(StackingItem s : stackingItems){
+        for(StackingItem s : stackingItems.values()){
             if(s.canContain(fallingWidth)){
                 if(deepest == null || s.getYPosition() > deepest.getYPosition()){
                     deepest = s;
@@ -589,7 +524,7 @@ public class Tower{
         boolean found = true;
         while(found){
             found = false;
-            for(StackingItem s : stackingItems){
+            for(StackingItem s : stackingItems.values()){
                 if(s.canContain(fallingWidth) && s.getYPosition() + s.getHeight() * Cup.PIXELS_PER_CM == container.getYPosition()){
                     container = s;
                     found = true;
@@ -613,7 +548,7 @@ public class Tower{
             foundInner = false;
             StackingItem deepestInner = null;
             int containerBottom = container.getYPosition() + container.getHeight() * Cup.PIXELS_PER_CM;
-            for(StackingItem s : stackingItems){
+            for(StackingItem s : stackingItems.values()){
                 if(s.canContain(fallingWidth) && s.getYPosition() > container.getYPosition() 
                     && s.getYPosition() > deepestInner.getYPosition()){
                     if (deepestInner == null || s.getYPosition() > deepestInner.getYPosition()) {
@@ -636,7 +571,7 @@ public class Tower{
     private StackingItem findLandingPiece(int fallingWidth){
         StackingItem landing = null;
         int minY = Integer.MAX_VALUE;
-        for(StackingItem s : stackingItems){
+        for(StackingItem s : stackingItems.values()) {
             if(s.blocksPassage(fallingWidth) && s.getYPosition() < minY){
                 landing = s;
                 minY = s.getYPosition();

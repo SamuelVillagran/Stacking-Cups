@@ -179,6 +179,10 @@ public class Cup extends StackingItem
         yPosition = yPos;
     }
     
+    public String toString() {
+        return "cup";
+    }
+    
     /*
      * Build the cup with Rectangles
      * To take way cup it makes three Rectangles

@@ -103,7 +103,11 @@ public class Lid extends StackingItem
         return false;
     }
     
-    /**
+    public String toString() {
+        return "lid";
+    }
+    
+    /*
      * Create a rectangle with 
      */
     private void createShape(){
