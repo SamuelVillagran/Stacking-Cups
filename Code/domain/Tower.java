@@ -409,7 +409,6 @@ public class Tower{
      * Close the game's window
      */
     public void exit() {
-        
         System.exit(0);
     }
     

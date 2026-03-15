@@ -97,10 +97,6 @@ public class Lid extends StackingItem {
         return false;
     }
     
-    public String toString() {
-        return "lid";
-    }
-    
     public Lid getLid() {
         return this;
     }

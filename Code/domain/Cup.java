@@ -174,9 +174,7 @@ public class Cup extends StackingItem {
         yPosition = yPos;
     }
     
-    public String toString() {
-        return "cup";
-    }
+    
     
     
     /*
