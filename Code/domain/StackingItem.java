@@ -42,13 +42,9 @@ public abstract class StackingItem
         return color;
     }
     
-    public abstract void removeLid();
-    
-    public abstract Lid getLid();
-    
-    /**
-     * Give a String to visualizate type of item
-     */
+    public int getSize(){
+         return 2 * id - 1;
+    }
     public abstract String toString();
     
     public abstract PieceType getType();

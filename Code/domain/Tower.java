@@ -276,7 +276,7 @@ public class Tower{
      * Give items order from base since top
      * @return A matrix-array of two columns where first column
      *      contain name item and second column contain its width
-     */
+     
     public String[][] stackingItems() {
         int lenItems, i = 0;
         lenItems = stackingItems.size();
@@ -298,7 +298,7 @@ public class Tower{
         
         return result;
     }
-    
+    */
     /**
      * 
      */
@@ -316,7 +316,6 @@ public class Tower{
         for (StackingItem s : stackingItems.values()) {
             s.makeVisible();
         }
-        
         makeVisibleRuler();
     }
     
@@ -327,6 +326,9 @@ public class Tower{
         if (isVisible) isVisible = !isVisible;
         for (StackingItem s : stackingItems.values()) {
             s.makeInvisible();
+        }
+        for (Lid l : lids) {
+            l.makeInvisible();
         }
         makeInvisibleRuler();
     }
@@ -466,6 +468,42 @@ public class Tower{
         stackingItems = new TreeMap<>();
         xCenter = (int) Math.ceil((double) width / 2);
     }
+    
+    /*
+     * Join two array of cups at a determinated index 
+     
+    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) { //Está dañado por arreglos
+        int lenCups = cups.size();
+        int number;
+        for (int z = i; z < lenCups; z++) {
+            number = cups.get(z).getHeight();
+            matrixString[counter][0] = "cup";
+            matrixString[counter][1] = number+"";
+            counter++;
+        }
+        return matrixString;
+    }
+    */
+    
+    /*
+     * Join two array of lids at a determinated index to complete staking items method
+     * @param i i index integer of list is missing to add to matrix of strings
+     * @param counter counter is the count where matrixString is being add its data
+     * @param matrixString matrixString is the matrix that going to be fulled of data
+     * @return matrixString is the matrix fulled of data 
+     */
+    private String[][] joinArrayLids(int i, int counter, String[][] matrixString) {
+        int lenLids = lids.size();
+        int number;
+        for (int z = i; z < lenLids; z++) {
+            number = lids.get(z).getHeight();
+            matrixString[counter][0] = "lid";
+            matrixString[counter][1] = number+"";
+            counter++;
+        }
+        return matrixString;
+    }
+    
     /*
      * Set deterninated cups at the tower 
      */
@@ -497,7 +535,21 @@ public class Tower{
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
         isCreatedRuler = false;
+    }
     
+    private String getColorCup(int number){
+        String result = null;
+        if(stackingItems.isEmpty()){
+            if(isVisible) errorMessage();
+        } else{
+            for(int i = 0; i< stackingItems.size(); i++){
+                if(stackingItems.get(i).getId() == number){
+                    result = stackingItems.get(i).getColor();
+                    return result;
+                }
+            }
+        }
+        return result;
     }
     
     /*

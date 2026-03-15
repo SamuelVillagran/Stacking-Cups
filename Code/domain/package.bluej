@@ -1,7 +1,23 @@
 #BlueJ package file
-dependency1.from=TowerC2Test
-dependency1.to=Tower
+dependency1.from=Lid
+dependency1.to=StackingItem
 dependency1.type=UsesDependency
+<<<<<<< HEAD
+dependency10.from=Tower
+dependency10.to=StackingItem
+dependency10.type=UsesDependency
+dependency11.from=Tower
+dependency11.to=FigureColor
+dependency11.type=UsesDependency
+dependency2.from=TowerC2Test
+dependency2.to=Tower
+dependency2.type=UsesDependency
+dependency3.from=TowerC1Test
+dependency3.to=Tower
+dependency3.type=UsesDependency
+dependency4.from=TowerC1Test
+dependency4.to=Lid
+=======
 dependency2.from=Tower
 dependency2.to=Cup
 dependency2.type=UsesDependency
@@ -10,10 +26,37 @@ dependency3.to=Lid
 dependency3.type=UsesDependency
 dependency4.from=Tower
 dependency4.to=FigureColor
+>>>>>>> parent of 7b58a97 (Moficando detalles)
 dependency4.type=UsesDependency
-dependency5.from=Cup
-dependency5.to=Lid
+dependency5.from=AcceptanceTest
+dependency5.to=Tower
 dependency5.type=UsesDependency
+<<<<<<< HEAD
+dependency6.from=Cup
+dependency6.to=Lid
+dependency6.type=UsesDependency
+dependency7.from=Cup
+dependency7.to=StackingItem
+dependency7.type=UsesDependency
+dependency8.from=Tower
+dependency8.to=Lid
+dependency8.type=UsesDependency
+dependency9.from=Tower
+dependency9.to=Cup
+dependency9.type=UsesDependency
+objectbench.height=151
+objectbench.width=436
+package.divider.horizontal=0.6002702702702702
+package.divider.vertical=0.7796234772978959
+package.editor.height=543
+package.editor.width=634
+package.editor.x=6
+package.editor.y=0
+package.frame.height=822
+package.frame.width=773
+package.numDependencies=11
+package.numTargets=9
+=======
 dependency6.from=AcceptanceTest
 dependency6.to=Tower
 dependency6.type=UsesDependency
@@ -35,6 +78,7 @@ package.frame.height=788
 package.frame.width=1386
 package.numDependencies=8
 package.numTargets=7
+>>>>>>> parent of 7b58a97 (Moficando detalles)
 package.showExtends=true
 package.showUses=true
 readme.height=60
