@@ -145,8 +145,16 @@ public class Tower{
             if (isVisible) errorMessage();
             return;
         }
-        //String color = landingItem.getColorCup(i);
-        Lid newLid = new Lid(i, xPos, yPos, "BLUE");
+        if(landingItem == null){
+            if(isVisible){
+                errorMessage();
+                return;
+            }else{
+                return;
+            }
+        }
+        String color = landingItem.getColor();
+        Lid newLid = new Lid(i, xPos, yPos, color);
         stackingItems.put(i, newLid);
         if(isVisible) newLid.makeVisible();
         heightCups += lidHeight;
@@ -275,7 +283,7 @@ public class Tower{
      * Give items order from base since top
      * @return A matrix-array of two columns where first column
      *      contain name item and second column contain its width
-     
+     */
     public String[][] stackingItems() {
         int lenItems, i = 0;
         lenItems = stackingItems.size();
@@ -303,12 +311,11 @@ public class Tower{
         
         return result;
     }
-    */
+    
     /**
      * 
      */
     public String[][] swapToReduce() {
-        
         return new String[0][0];
     }
     
@@ -331,9 +338,6 @@ public class Tower{
         if (isVisible) isVisible = !isVisible;
         for (StackingItem s : stackingItems.values()) {
             s.makeInvisible();
-        }
-        for (Lid l : lids) {
-            l.makeInvisible();
         }
         makeInvisibleRuler();
     }
@@ -472,41 +476,6 @@ public class Tower{
         this.maxHeight = height;
         stackingItems = new TreeMap<>();
         xCenter = (int) Math.ceil((double) width / 2);
-    }
-    
-    /*
-     * Join two array of cups at a determinated index 
-     
-    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) { //Está dañado por arreglos
-        int lenCups = cups.size();
-        int number;
-        for (int z = i; z < lenCups; z++) {
-            number = cups.get(z).getHeight();
-            matrixString[counter][0] = "cup";
-            matrixString[counter][1] = number+"";
-            counter++;
-        }
-        return matrixString;
-    }
-    */
-    
-    /*
-     * Join two array of lids at a determinated index to complete staking items method
-     * @param i i index integer of list is missing to add to matrix of strings
-     * @param counter counter is the count where matrixString is being add its data
-     * @param matrixString matrixString is the matrix that going to be fulled of data
-     * @return matrixString is the matrix fulled of data 
-     */
-    private String[][] joinArrayLids(int i, int counter, String[][] matrixString) {
-        int lenLids = lids.size();
-        int number;
-        for (int z = i; z < lenLids; z++) {
-            number = lids.get(z).getHeight();
-            matrixString[counter][0] = "lid";
-            matrixString[counter][1] = number+"";
-            counter++;
-        }
-        return matrixString;
     }
     
     /*
@@ -667,8 +636,7 @@ public class Tower{
      * Check if the stack item Cup exists.
      */
     private boolean stackItemInteriorExists(int number){
-        for(int i = 0; i < stackingItems.size(); i++){
-            StackingItem element = stackingItems.get(i);
+        for(StackingItem element : stackingItems.values()){
             if(element.getId() ==  number && element.hasInterior()) return true;
         }
         return false;
@@ -678,8 +646,7 @@ public class Tower{
      * Check if the stack item Lid exists.
      */
     private boolean stackItemNonInteriorExists(int number){
-        for(int i = 0; i < stackingItems.size(); i++){
-            StackingItem element = stackingItems.get(i);
+        for(StackingItem element : stackingItems.values()){
             if( element.getId() ==  number && !element.hasInterior()) return true;
         }
         return false;

@@ -45,9 +45,12 @@ public abstract class StackingItem
     public int getSize(){
          return 2 * id - 1;
     }
-    public abstract String toString();
     
-    public abstract PieceType getType();
+    public abstract Lid getLid();
+    
+    public abstract void removeLid();
+    
+    public abstract String toString();
     
     /**
      * Returns true if this piece has an interior where other pieces can land.
