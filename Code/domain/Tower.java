@@ -28,7 +28,6 @@ public class Tower{
     private int maxHeight;
     private boolean lastOK;
     private boolean isVisible;
-    private ArrayList<Lid> lids; //delete
     private int xCenter;
     private Cup lastCup;
     private int heightCups;
@@ -246,8 +245,8 @@ public class Tower{
      * @return int[] Sorted lid widths.
      */
     public int[] lidedCups() {
-        int i = 0, lenLids = lids.size(), currentWidthLid;
-        boolean isLidsEmpty = lids.isEmpty();
+        int i = 0, lenItems = stackingItems.size(), currentWidthItem;
+        boolean isLidsEmpty = stackingItems.isEmpty();
         
         if (isLidsEmpty && isVisible) {
             errorMessage();
@@ -257,9 +256,9 @@ public class Tower{
         if (isLidsEmpty) return null;
         
         List<Integer> widths = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
-        for (Lid lid : lids) {
-            currentWidthLid = lid.getWidth();
-            widths.add(currentWidthLid);
+        for (StackingItem item : stackingItems.values()) {
+            currentWidthItem = item.getWidth();
+            widths.add(currentWidthItem);
         }
         Collections.sort(widths);
         
