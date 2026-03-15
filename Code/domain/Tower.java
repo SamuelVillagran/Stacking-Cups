@@ -323,7 +323,7 @@ public class Tower{
      * Close the game's window
      */
     public void exit() {
-        isVisible = false;
+        
         System.exit(0);
     }
     
@@ -335,7 +335,7 @@ public class Tower{
     public boolean ok() {
         int heightCup;
         heightCup = lastCup.getHeight();
-        return invariant2(heightCup);
+        return invariant2(heightCup) && lastOK;
     }
 
     public int getHeightCups(){
