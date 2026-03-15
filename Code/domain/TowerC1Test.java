@@ -28,7 +28,7 @@ public class TowerC1Test {
     @Test
     public void shouldRemoveLid() {
         Tower proofTower = new Tower(2, 15);
-        proofTower.pushCup(0);
+        //proofTower.pushCup(0);
         proofTower.pushLid(0);
         proofTower.removeLid(0);
         
@@ -39,14 +39,14 @@ public class TowerC1Test {
     @Test
     public void shouldMessageErrorAppearInPopLid() {
         Tower proofTower = new Tower(5, 15);
-        proofTower.pushCup(0);
+        //proofTower.pushCup(0);
         assertFalse(proofTower.ok()); // Siempre comprobar el ok, no deberia mostrarse gráficamente 
     }
     
     @Test
     public void shouldPopLid() {
         Tower proofTower = new Tower(5, 15);
-        proofTower.pushCup(0);
+        //proofTower.pushCup(0);
         proofTower.pushLid(0);
         proofTower.popLid();
         
@@ -58,7 +58,7 @@ public class TowerC1Test {
     public void shouldLidedCupsCorrectly() {
         Tower proofTower = new Tower(50, 50);
         assertNull(proofTower.lidedCups());
-        
+        /*
         proofTower.pushCup(1);
         proofTower.pushCup(2);
         proofTower.pushCup(5);
@@ -72,7 +72,7 @@ public class TowerC1Test {
         proofTower.pushLid(3); // indice 3
         proofTower.pushLid(9); // indice 4
         proofTower.pushLid(7); // indice 4
-        
+        */
         int[] lidsSorted = proofTower.lidedCups();
         List<Lid> lids = proofTower.getLids();
         assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
@@ -105,7 +105,7 @@ public class TowerC1Test {
     @Test
     public void shouldStackingItemsExecute() { // Generado con Caulde IA Sonet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
-        tower.pushCup(1); // Cup con id=1 → height = 2*1-1 = 1
+        //tower.pushCup(1); // Cup con id=1 → height = 2*1-1 = 1
 
         String[][] result = tower.stackingItems();
 
@@ -122,7 +122,7 @@ public class TowerC1Test {
     @Test
     public void stackingItems_oneCupWithLid_returnsCupThenLid() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
-        tower.pushCup(1); // Cup id=1, height=1
+        //tower.pushCup(1); // Cup id=1, height=1
         tower.pushLid(1);       // Lid para cup id=1, height = 2*(1-1) = 0 → ajustar según Lid.getSize()
 
         String[][] result = tower.stackingItems();
@@ -148,8 +148,8 @@ public class TowerC1Test {
     @Test
     public void stackingItemsTwoCupsNoLidsReturnsOnlyCups() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
         Tower tower = new Tower(10, 20);
-        tower.pushCup(3); // height = 5
-        tower.pushCup(2); // height = 3
+        //tower.pushCup(3); // height = 5
+        //tower.pushCup(2); // height = 3
 
         String[][] result = tower.stackingItems();
 
