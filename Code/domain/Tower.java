@@ -2,6 +2,8 @@ package domain;
 
 import shapes.Rectangle;
 import java.util.TreeMap;
+import java.util.Collection;
+import java.util.Set;
 
 import java.util.Collections;
 import java.util.List;
@@ -279,11 +281,21 @@ public class Tower{
         int lenItems, i = 0;
         lenItems = stackingItems.size();
         String[][] result =  new String[lenItems][2];
-        for (StackingItem item : stackingItems.values()) {
-            result[i][0] = item.toString();
-            result[i][1] = item.getWidth()+"";
+        Collection<StackingItem> items = stackingItems.values(); // A+Esta linea fue ayudada a extraer con Gemini IA
+        TreeMap<Integer, StackingItem> itemsWithPosY = new TreeMap<>();
+        
+        for (StackingItem item : items) {
+            itemsWithPosY.put(item.getYPosition(), item);
+        }
+        
+        Set<Integer> itemsWithPosYKey = itemsWithPosY.keySet();
+        for (Integer itemPosY : itemsWithPosYKey) {
+            StackingItem currentItem = itemsWithPosY.get(itemPosY);
+            result[i][0] = currentItem.toString();
+            result[i][1] = itemPosY+"";
             i++;
         }
+        
         return result;
     }
     
