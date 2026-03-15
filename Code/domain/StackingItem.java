@@ -34,6 +34,10 @@ public abstract class StackingItem
         return yPosition;
     }
     
+    public int getXPosition() {
+        return xPosition;
+    }
+    
     public String getColor(){
         return color;
     }

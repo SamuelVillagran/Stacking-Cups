@@ -263,19 +263,15 @@ public class Tower{
      * 
      */
     public String[][] stackingItems() {
-        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0; //Está dañado por arreglos
-        lenCups = cups.size();
-        lenLids = lids.size();
+        int lenItems, itemWidth, j = 0, i = 0, k = 0; //Está dañado por arreglos
+        lenItems = stackingItems.size();
         
-        String[][] res =  new String[lenCups+lenLids][2];
-        Cup currentCup;
-        Lid currentLid;
-        while (i < lenCups && j < lenLids) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
+        String[][] res =  new String[lenItems][2];
+        StackingItem currentItem;
+        while (i < lenItems) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
                                                 // No todo se escribe de lo que la IA genera
-            currentCup = cups.get(i);
-            currentLid = lids.get(j);
-            cupHeight = currentCup.getHeight();
-            lidWidth = currentLid.getWidth();
+            currentItem = stackingItems.get(i);
+            itemWidth = currentItem.getWidth();
             
             if (cupHeight > lidWidth) {
                 res[k][0] = "lid";
@@ -530,27 +526,12 @@ public class Tower{
     }
 
     private void inicializateAttributes() {
-        cups = new ArrayList<>();
-        lids = new ArrayList<>();
+        stackingItems = new ArrayList<>();
         isVisible =  false;
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
         isCreatedRuler = false;
-     * Get the color of a specific cup given its number.
-     */
-    private String getColorCup(int number){
-        String result = null;
-        if(stackingItems.isEmpty()){
-            if(isVisible) errorMessage();
-        } else{
-            for(int i = 0; i< stackingItems.size(); i++){
-                if(stackingItems.get(i).getId() == number){
-                    result = stackingItems.get(i).getColor();
-                    return result;
-                }
-            }
-        }
-        return result;
+    
     }
     
     /*
