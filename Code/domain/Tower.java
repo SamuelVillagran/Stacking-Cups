@@ -143,8 +143,8 @@ public class Tower{
             if (isVisible) errorMessage();
             return;
         }
-        String color = getColorCup(i);
-        Lid newLid = new Lid(i, xPos, yPos, color);
+        //String color = landingItem.getColorCup(i);
+        Lid newLid = new Lid(i, xPos, yPos, "BLUE");
         stackingItems.add(newLid);
         if(isVisible) newLid.makeVisible();
         heightCups += lidHeight;
@@ -263,13 +263,18 @@ public class Tower{
      * 
      */
     public String[][] stackingItems() {
-        int lenItems, itemWidth, j = 0, i = 0, k = 0; //Está dañado por arreglos
+        int lenItems, itemWidth, left, rigth; 
         lenItems = stackingItems.size();
         
         String[][] res =  new String[lenItems][2];
-        StackingItem currentItem;
-        while (i < lenItems) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
-                                                // No todo se escribe de lo que la IA genera
+        StackingItem pivot = stackingItems.get(lenItems/2);
+        StackingItem i = stackingItems.get(0);
+        left = 0;
+        rigth = lenItems-1;
+        
+        
+        while (i < lenItems) { 
+            
             currentItem = stackingItems.get(i);
             itemWidth = currentItem.getWidth();
             
