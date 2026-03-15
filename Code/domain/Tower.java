@@ -151,6 +151,9 @@ public class Tower{
         heightCups += lidHeight;
     }
     
+    /**
+     * Delete the last lid put at this tower
+     */
     public void popLid(){
         boolean areStackingItemsEmpty = stackingItems.isEmpty();;
         if(!areStackingItemsEmpty){
@@ -171,15 +174,22 @@ public class Tower{
      * if the cup selected has lid this is removed
      * otherwise don't remove anythinf
      * @param i i is index of cup that going to remove lid
-     
+     */
     public void removeLid(int i) {
         
-        for(int j = 0; j < cups.size(); j++){ //Está dañado por arreglos
-            Cup currentCup = cups.get(j);
-            if(currentCup.getID() == i){
-                Lid lid = currentCup.getLid();
+        for(Integer j : stackingItems.keySet()){ //Está dañado por arreglos
+            StackingItem currentItem = stackingItems.get(j);
+            
+            if(j == i) {
+                boolean isCup = currentItem.toString().equals("cup");
+                Lid lid = null;
+                if (isCup) {
+                    lid = currentItem.getLid();
+                } else {
+                    continue;
+                }
                 if(lid != null){
-                    currentCup.removeLid();
+                    currentItem.removeLid();
                     return;
                 }
                 
@@ -187,7 +197,7 @@ public class Tower{
         }
         if (isVisible) errorMessage();
     }
-    */
+    
    
     /**
      * 
@@ -313,7 +323,7 @@ public class Tower{
      * Close the game's window
      */
     public void exit() {
-        isVisible = false;
+        
         System.exit(0);
     }
     
@@ -325,7 +335,7 @@ public class Tower{
     public boolean ok() {
         int heightCup;
         heightCup = lastCup.getHeight();
-        return invariant2(heightCup);
+        return invariant2(heightCup) && lastOK;
     }
 
     public int getHeightCups(){

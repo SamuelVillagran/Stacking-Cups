@@ -13,8 +13,7 @@ import shapes.Rectangle;
  * @author Sanchez-Villagran 
  * 
  */
-public class Cup extends StackingItem
-{
+public class Cup extends StackingItem {
     public static final int PIXELS_PER_CM = 10;
     private ArrayList<Rectangle> shape;
     private boolean visible;
@@ -132,6 +131,7 @@ public class Cup extends StackingItem
          return (2 * id) -1;
     }
     
+    @Override
     public Lid getLid() {
         return lid;
     }
@@ -182,6 +182,7 @@ public class Cup extends StackingItem
     public String toString() {
         return "cup";
     }
+    
     
     /*
      * Build the cup with Rectangles

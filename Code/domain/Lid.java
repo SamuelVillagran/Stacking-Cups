@@ -12,8 +12,7 @@ import shapes.Rectangle;
  * 
  * @author Sanchez-Villagran
  */
-public class Lid extends StackingItem
-{
+public class Lid extends StackingItem {
     public static final int PIXELS_PER_CM = 10;
     private Rectangle shape;
 
@@ -105,6 +104,16 @@ public class Lid extends StackingItem
     
     public String toString() {
         return "lid";
+    }
+    
+    @Override
+    public Lid getLid() {
+        return this;
+    }
+    
+    @Override
+    public void removeLid() {
+        shape.erase();
     }
     
     /*
