@@ -131,15 +131,10 @@ public class Cup extends StackingItem {
          return (2 * id) -1;
     }
     
-    @Override
     public Lid getLid() {
         return lid;
     }
     
-    @Override
-    public StackingItem.PieceType getType(){
-        return StackingItem.PieceType.CUP;
-    }
     
     /**
      * Move the cup newX pixels horizontal and newY vertical
@@ -179,9 +174,7 @@ public class Cup extends StackingItem {
         yPosition = yPos;
     }
     
-    public String toString() {
-        return "cup";
-    }
+    
     
     
     /*

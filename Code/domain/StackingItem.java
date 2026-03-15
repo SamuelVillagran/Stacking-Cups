@@ -7,9 +7,7 @@ package domain;
  * @author (your name)
  * @version (a version number or a date)
  */
-public abstract class StackingItem
-{
-    public enum PieceType{CUP, LID};
+public abstract class StackingItem {
     
     protected int id;
     protected int height;
@@ -42,16 +40,14 @@ public abstract class StackingItem
         return color;
     }
     
-    public abstract void removeLid();
+    public int getSize(){
+         return 2 * id - 1;
+    }
     
     public abstract Lid getLid();
     
-    /**
-     * Give a String to visualizate type of item
-     */
-    public abstract String toString();
+    public abstract void removeLid();
     
-    public abstract PieceType getType();
     
     /**
      * Returns true if this piece has an interior where other pieces can land.

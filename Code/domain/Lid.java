@@ -73,11 +73,6 @@ public class Lid extends StackingItem {
          return 2 * id - 1;
     }
     
-    @Override 
-    public StackingItem.PieceType getType(){
-        return StackingItem.PieceType.LID;
-    }
-    
     /**
      * A lid doesn't hace interior, nothin can land inside it.
      */
@@ -102,16 +97,10 @@ public class Lid extends StackingItem {
         return false;
     }
     
-    public String toString() {
-        return "lid";
-    }
-    
-    @Override
     public Lid getLid() {
         return this;
     }
     
-    @Override
     public void removeLid() {
         shape.erase();
     }
