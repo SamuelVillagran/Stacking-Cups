@@ -264,23 +264,50 @@ public class Tower{
      * Give items order from base since top
      * @return A matrix-array of two columns where first column
      *      contain name item and second column contain its width
-     */
+     
     public String[][] stackingItems() {
-        int lenItems, i = 0;
-        lenItems = stackingItems.size();
-        String[][] result =  new String[lenItems][2];
-        for (StackingItem item : stackingItems.values()) {
-            result[i][0] = item.toString();
-            result[i][1] = item.getWidth()+"";
-            i++;
+        int lenCups, lenLids, cupHeight, lidHeight, j = 0, i = 0, k = 0; //Está dañado por arreglos
+        lenCups = cups.size();
+        lenLids = lids.size();
+        
+        String[][] res =  new String[lenCups+lenLids][2];
+        Cup currentCup;
+        Lid currentLid;
+        while (i < lenCups && j < lenLids) { // Ayudado a organizar con Gemini IA (La lógica que la IA demuestra se corrige)
+                                                // No todo se escribe de lo que la IA genera
+            currentCup = cups.get(i);
+            currentLid = lids.get(j);
+            cupHeight = currentCup.getHeight();
+            lidWidth = currentLid.getWidth();
+            
+            if (cupHeight > lidWidth) {
+                res[k][0] = "lid";
+                res[k][1] = lidWidth+"";
+                j++;
+            } 
+            if (cupHeight <= lidWidth) {
+                res[k][0] = "cup";
+                res[k][1] = lidWidth+"";
+                i++;
+            }
+            k++;
+        }
+        
+        if (i >= lenCups) {
+            res = joinArrayLids(j, k, res);
+        }
+        
+        if (j >= lenLids) {
+            res = joinArrayCups(i, k, res);
         }
         return result;
     }
-    
+    */
     /**
      * 
      */
     public String[][] swapToReduce() {
+        
         return new String[0][0];
     }
     
@@ -293,7 +320,6 @@ public class Tower{
         for (StackingItem s : stackingItems.values()) {
             s.makeVisible();
         }
-        
         makeVisibleRuler();
     }
     
@@ -304,6 +330,9 @@ public class Tower{
         if (isVisible) isVisible = !isVisible;
         for (StackingItem s : stackingItems.values()) {
             s.makeInvisible();
+        }
+        for (Lid l : lids) {
+            l.makeInvisible();
         }
         makeInvisibleRuler();
     }
@@ -439,20 +468,55 @@ public class Tower{
         stackingItems = new TreeMap<>();
         xCenter = (int) Math.ceil((double) width / 2);
     }
+    
+    /*
+     * Join two array of cups at a determinated index 
+     
+    private String[][] joinArrayCups(int i, int counter, String[][] matrixString) { //Está dañado por arreglos
+        int lenCups = cups.size();
+        int number;
+        for (int z = i; z < lenCups; z++) {
+            number = cups.get(z).getHeight();
+            matrixString[counter][0] = "cup";
+            matrixString[counter][1] = number+"";
+            counter++;
+        }
+        return matrixString;
+    }
+    */
+    
+    /*
+     * Join two array of lids at a determinated index to complete staking items method
+     * @param i i index integer of list is missing to add to matrix of strings
+     * @param counter counter is the count where matrixString is being add its data
+     * @param matrixString matrixString is the matrix that going to be fulled of data
+     * @return matrixString is the matrix fulled of data 
+     */
+    private String[][] joinArrayLids(int i, int counter, String[][] matrixString) {
+        int lenLids = lids.size();
+        int number;
+        for (int z = i; z < lenLids; z++) {
+            number = lids.get(z).getHeight();
+            matrixString[counter][0] = "lid";
+            matrixString[counter][1] = number+"";
+            counter++;
+        }
+        return matrixString;
+    }
+    
     /*
      * Set deterninated cups at the tower 
-     
+     */
     private void generateCupsInTower(int cupsRequeried) {
         for (int i = 0; i < cupsRequeried; i++) {
             pushCup(i+1);
             stackingItems.get(i).makeVisible();
         }
     }
-    */
-   
+    
     /*
      * Put Cups in Tower
-    
+     */
     private void putCupInTower(int xPos, int yPos, int idCup, Cup newCup) {
         if (yPos > 0 && xPos > 0) {
                 newCup = new Cup(idCup, xPos,
@@ -471,7 +535,21 @@ public class Tower{
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
         isCreatedRuler = false;
+    }
     
+    private String getColorCup(int number){
+        String result = null;
+        if(stackingItems.isEmpty()){
+            if(isVisible) errorMessage();
+        } else{
+            for(int i = 0; i< stackingItems.size(); i++){
+                if(stackingItems.get(i).getId() == number){
+                    result = stackingItems.get(i).getColor();
+                    return result;
+                }
+            }
+        }
+        return result;
     }
     
     /*
