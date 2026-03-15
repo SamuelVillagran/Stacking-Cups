@@ -318,10 +318,14 @@ public class Tower{
     }
     
     /**
-     * 
+     * Verify with the invariant if Its last movement was valid
+     * @return true if last cup's height was menor than height of tower;
+     *          false otherwise.
      */
     public boolean ok() {
-        return true;
+        int heightCup;
+        heightCup = lastCup.getHeight();
+        return invariant2(heightCup);
     }
 
     public int getHeightCups(){
@@ -359,14 +363,14 @@ public class Tower{
      * @param height It's the height of tower that it's going to comprove if this integer is more than 0
      */
     private boolean invariant(int width, int height) {
-        return (height > 0 && width > 0) ? true : false;
+        return (height > 0 && width > 0);
     }
     
     /*
      * Second invariant of game
      */
-    private boolean invariant2(int towerHeight, int cupHeight) {
-        return towerHeight + cupHeight < maxHeight ? true : false;
+    private boolean invariant2(int cupHeight) {
+        return heightUsed() + cupHeight <= maxHeight;
     }
     
     /*
