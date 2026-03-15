@@ -662,7 +662,8 @@ public class Tower{
      * Check if the stack item Cup exists.
      */
     private boolean stackItemInteriorExists(int number){
-        for(StackingItem element : stackingItems.values()){
+        for(int i = 0; i < stackingItems.size(); i++){
+            StackingItem element = stackingItems.get(i);
             if(element.getId() ==  number && element.hasInterior()) return true;
         }
         return false;
@@ -672,7 +673,8 @@ public class Tower{
      * Check if the stack item Lid exists.
      */
     private boolean stackItemNonInteriorExists(int number){
-        for(StackingItem element : stackingItems.values()){
+        for(int i = 0; i < stackingItems.size(); i++){
+            StackingItem element = stackingItems.get(i);
             if( element.getId() ==  number && !element.hasInterior()) return true;
         }
         return false;

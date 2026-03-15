@@ -42,9 +42,12 @@ public abstract class StackingItem
         return color;
     }
     
-    public abstract PieceType getType();
-    
+    public int getSize(){
+         return 2 * id - 1;
+    }
     public abstract String toString();
+    
+    public abstract PieceType getType();
     
     /**
      * Returns true if this piece has an interior where other pieces can land.
