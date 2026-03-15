@@ -253,7 +253,7 @@ public class Tower{
             StackingItem currentItem = stackingItems.get(j);
             
             if(j == i) {
-                boolean isCup = currentItem.toString().equals("cup");
+                boolean isCup = currentItem.hasInterior();
                 Lid lid = null;
                 if (isCup) {
                     lid = currentItem.getLid();
