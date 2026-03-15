@@ -1,14 +1,14 @@
 #BlueJ package file
-dependency1.from=Rectangle
+dependency1.from=Figure
 dependency1.to=Canvas
 dependency1.type=UsesDependency
-dependency2.from=Figure
+dependency2.from=Circle
 dependency2.to=Canvas
 dependency2.type=UsesDependency
-dependency3.from=Circle
+dependency3.from=Triangle
 dependency3.to=Canvas
 dependency3.type=UsesDependency
-dependency4.from=Triangle
+dependency4.from=Rectangle
 dependency4.to=Canvas
 dependency4.type=UsesDependency
 objectbench.height=92
