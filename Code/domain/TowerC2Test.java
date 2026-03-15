@@ -51,6 +51,6 @@ public class TowerC2Test
      */
     @AfterEach
     public void tearDown()
-    {g
+    {
     }
 }
