@@ -57,8 +57,8 @@ public class Tower{
      */
     public Tower(int numberCups) {
         inicializateAttributes();
-        generateCupsInTower(numberCups);
         generateRuler();
+        generateCupsInTower(numberCups);
     }
     
     /**
@@ -101,15 +101,25 @@ public class Tower{
      * @param int Integer is the id of cup where this going to push at the list cups.
      */
     public void pushCupInOrder(int number) {
-        boolean isItemEmpty = stackingItems.size() == 0 || stackingItems == null ? true : false;
+        boolean isItemEmpty = stackingItems.size() == 0 || stackingItems == null;
         Cup newCup = null;
-        if (isItemEmpty) {
+        int newHeight = 2 * number - 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
+        int yPos;
+        if (isItemEmpty) { // Si es la primera copa que se inserto
             isVisible = true;
-            newCup = new Cup(number, 170, 20, getRandColor());
+            yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
+            newCup = new Cup(number, xPos, 30, getRandColor());
         }
+        
         if (!isItemEmpty) {
             Integer lastIndex = stackingItems.lastKey();
             StackingItem lastCup = stackingItems.get(lastIndex).hasInterior() ? stackingItems.get(lastIndex) : null;
+            
+            StackingItem landingItem = findLandingPiece(newHeight);
+            yPos = resolveYPos(landingItem, newHeight, newHeight);
+            
+            
             if (lastCup == null) return;
             int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
             int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
@@ -536,8 +546,8 @@ public class Tower{
      */
     private void generateCupsInTower(int cupsRequeried) {
         for (int i = 0; i < cupsRequeried; i++) {
-            pushCup(i+1);
-            stackingItems.get(i).makeVisible();
+            pushCupInOrder(i+1);
+            stackingItems.get(i+1).makeVisible();
         }
     }
     
@@ -556,12 +566,16 @@ public class Tower{
             } 
     }
 
+    /*
+     * Inicializate attributes of second constructor
+     */
     private void inicializateAttributes() {
-        stackingItems = new TreeMap<>();
+        this.stackingItems = new TreeMap<>();
         isVisible =  false;
-        width = Integer.MAX_VALUE;
-        maxHeight = Integer.MAX_VALUE;
+        width = 30;
+        maxHeight = 30;
         isCreatedRuler = false;
+        xCenter = (int) Math.ceil((double) width / 2);
     }
     
     private String getColorCup(int number){
