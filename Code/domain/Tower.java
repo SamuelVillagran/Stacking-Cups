@@ -291,8 +291,14 @@ public class Tower{
         Set<Integer> itemsWithPosYKey = itemsWithPosY.keySet();
         for (Integer itemPosY : itemsWithPosYKey) {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
-            result[i][0] = currentItem.toString();
-            result[i][1] = itemPosY+"";
+            boolean isCup = currentItem.hasInterior();
+            if (isCup) {
+                result[i][0] = "cup";
+                result[i][1] = itemPosY+"";
+            } else {
+                result[i][0] = "lid";
+                result[i][1] = itemPosY+"";
+            }
             i++;
         }
         
