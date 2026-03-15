@@ -53,6 +53,15 @@ public class Tower{
     }
     
     /**
+     * Constructor 2 cicle
+     */
+    public Tower(int numberCups) {
+        inicializateAttributes();
+        generateCupsInTower(numberCups);
+        generateRuler();
+    }
+    
+    /**
      * Add a cup if is possible.
      * @param number Is the n value cup.
      * @param isWorking Indicates if the method has to work.
@@ -437,7 +446,7 @@ public class Tower{
         height = 3;
         ruler = new ArrayList<>();
         for (int i = 0; i < NITERATIONS; i++) {
-            // To create a rectangle this has:
+            // To create a rectangle this have:
             // int xPos,int yPos, int width, int height, String color
             Rectangle currentRectangle = new Rectangle(currentPosX, currentPosY, width,
                 height, "BLACK");
