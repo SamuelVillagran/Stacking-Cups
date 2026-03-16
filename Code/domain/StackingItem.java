@@ -9,7 +9,6 @@ package domain;
  */
 public abstract class StackingItem
 {
-    public enum PieceType{CUP, LID};
     
     protected int id;
     protected int height;

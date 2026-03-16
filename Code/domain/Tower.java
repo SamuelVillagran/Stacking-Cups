@@ -32,7 +32,7 @@ public class Tower{
     private Cup lastCup;
     private int heightCups;
     private boolean isCreatedRuler;
-    private TreeMap<Integer, StackingItem> stackingItems;
+    private ArrayList<StackingItem> stackingItems;
     
     static {
         for (FigureColor fc : FigureColor.values()) {
@@ -66,7 +66,7 @@ public class Tower{
             if(isVisible) errorMessage();
             return;
         }
-         
+        
         if(stackingItems.isEmpty()){
             yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
             heightCups = newHeight;
@@ -83,7 +83,7 @@ public class Tower{
         }
         
         Cup newCup = new Cup(number, xPos, yPos, getRandColor());
-        stackingItems.put(number, newCup);
+        stackingItems.add(newCup);
         if(isVisible) newCup.makeVisible();
     }
     
@@ -155,7 +155,7 @@ public class Tower{
         }
         String color = landingItem.getColor();
         Lid newLid = new Lid(i, xPos, yPos, color);
-        stackingItems.put(i, newLid);
+        stackingItems.add(newLid);
         if(isVisible) newLid.makeVisible();
         heightCups += lidHeight;
     }
@@ -186,28 +186,18 @@ public class Tower{
      */
     public void removeLid(int i) {
         
-        for(Integer j : stackingItems.keySet()){ //Está dañado por arreglos
-            StackingItem currentItem = stackingItems.get(j);
-            
-            if(j == i) {
-                boolean isCup = currentItem.toString().equals("cup");
-                Lid lid = null;
-                if (isCup) {
-                    lid = currentItem.getLid();
-                } else {
-                    continue;
-                }
-                if(lid != null){
+        for(StackingItem currentItem : stackingItems){
+            if(currentItem.getId() == i && !currentItem.hasInterior()){
+                Lid lid = currentItem.getLid();
+                if(currentItem != null){
                     currentItem.removeLid();
                     return;
                 }
-                
+                if (isVisible) errorMessage();
             }
         }
-        if (isVisible) errorMessage();
     }
     
-   
     /**
      * 
      */
@@ -264,7 +254,7 @@ public class Tower{
         if (isLidsEmpty) return null;
         
         List<Integer> widths = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
-        for (StackingItem item : stackingItems.values()) {
+        for (StackingItem item : stackingItems) {
             currentWidthItem = item.getWidth();
             widths.add(currentWidthItem);
         }
@@ -288,23 +278,24 @@ public class Tower{
         int lenItems, i = 0;
         lenItems = stackingItems.size();
         String[][] result =  new String[lenItems][2];
-        Collection<StackingItem> items = stackingItems.values(); // A+Esta linea fue ayudada a extraer con Gemini IA
+        Collection<StackingItem> items = stackingItems; // A+Esta linea fue ayudada a extraer con Gemini IA
+        System.out.println(items.size());
         TreeMap<Integer, StackingItem> itemsWithPosY = new TreeMap<>();
         
         for (StackingItem item : items) {
-            itemsWithPosY.put(item.getYPosition(), item);
+            itemsWithPosY.put(item.getYPosition() + (item.getHeight() * Cup.PIXELS_PER_CM), item);
         }
-        
-        Set<Integer> itemsWithPosYKey = itemsWithPosY.keySet();
+        System.out.println(itemsWithPosY.size());
+        Set<Integer> itemsWithPosYKey = itemsWithPosY.descendingKeySet();
         for (Integer itemPosY : itemsWithPosYKey) {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
             boolean isCup = currentItem.hasInterior();
             if (isCup) {
                 result[i][0] = "cup";
-                result[i][1] = itemPosY+"";
+                result[i][1] = currentItem.getId()+"";
             } else {
                 result[i][0] = "lid";
-                result[i][1] = itemPosY+"";
+                result[i][1] = currentItem.getId()+"";
             }
             i++;
         }
@@ -325,7 +316,7 @@ public class Tower{
      */
     public void makeVisible() {
         if (!isVisible) isVisible = !isVisible;
-        for (StackingItem s : stackingItems.values()) {
+        for (StackingItem s : stackingItems) {
             s.makeVisible();
         }
         makeVisibleRuler();
@@ -336,7 +327,7 @@ public class Tower{
      */
     public void makeInvisible() {
         if (isVisible) isVisible = !isVisible;
-        for (StackingItem s : stackingItems.values()) {
+        for (StackingItem s : stackingItems) {
             s.makeInvisible();
         }
         makeInvisibleRuler();
@@ -383,7 +374,7 @@ public class Tower{
      */
     private int heightUsed(){
         int total = 0;
-        for(StackingItem s : stackingItems.values()) {
+        for(StackingItem s : stackingItems) {
             total += s.getHeight();
         }
         return total;
@@ -474,7 +465,7 @@ public class Tower{
     private void inicializate(int width, int height) {
         this.width = width;
         this.maxHeight = height;
-        stackingItems = new TreeMap<>();
+        stackingItems = new ArrayList<>();
         xCenter = (int) Math.ceil((double) width / 2);
     }
     
@@ -504,7 +495,7 @@ public class Tower{
     }
 
     private void inicializateAttributes() {
-        stackingItems = new TreeMap<>();
+        stackingItems = new ArrayList<>();
         isVisible =  false;
         width = Integer.MAX_VALUE;
         maxHeight = Integer.MAX_VALUE;
@@ -556,7 +547,7 @@ public class Tower{
      */
     private StackingItem findDeepestContainer(int fallingWidth){
         StackingItem deepest = null;
-        for(StackingItem s : stackingItems.values()){
+        for(StackingItem s : stackingItems){
             if(s.canContain(fallingWidth)){
                 if(deepest == null || s.getYPosition() > deepest.getYPosition()){
                     deepest = s;
@@ -576,7 +567,7 @@ public class Tower{
         boolean found = true;
         while(found){
             found = false;
-            for(StackingItem s : stackingItems.values()){
+            for(StackingItem s : stackingItems){
                 if(s.canContain(fallingWidth) && s.getYPosition() + s.getHeight() * Cup.PIXELS_PER_CM == container.getYPosition()){
                     container = s;
                     found = true;
@@ -600,7 +591,7 @@ public class Tower{
             foundInner = false;
             StackingItem deepestInner = null;
             int containerBottom = container.getYPosition() + container.getHeight() * Cup.PIXELS_PER_CM;
-            for(StackingItem s : stackingItems.values()){
+            for(StackingItem s : stackingItems){
                 if(s.canContain(fallingWidth) && s.getYPosition() > container.getYPosition() 
                     && s.getYPosition() > deepestInner.getYPosition()){
                     if (deepestInner == null || s.getYPosition() > deepestInner.getYPosition()) {
@@ -623,7 +614,7 @@ public class Tower{
     private StackingItem findLandingPiece(int fallingWidth){
         StackingItem landing = null;
         int minY = Integer.MAX_VALUE;
-        for(StackingItem s : stackingItems.values()) {
+        for(StackingItem s : stackingItems) {
             if(s.blocksPassage(fallingWidth) && s.getYPosition() < minY){
                 landing = s;
                 minY = s.getYPosition();
@@ -636,7 +627,7 @@ public class Tower{
      * Check if the stack item Cup exists.
      */
     private boolean stackItemInteriorExists(int number){
-        for(StackingItem element : stackingItems.values()){
+        for(StackingItem element : stackingItems){
             if(element.getId() ==  number && element.hasInterior()) return true;
         }
         return false;
@@ -646,7 +637,7 @@ public class Tower{
      * Check if the stack item Lid exists.
      */
     private boolean stackItemNonInteriorExists(int number){
-        for(StackingItem element : stackingItems.values()){
+        for(StackingItem element : stackingItems){
             if( element.getId() ==  number && !element.hasInterior()) return true;
         }
         return false;
