@@ -47,7 +47,9 @@ public class Tower{
         if (invariant(width, maxHeight)) {
             inicializate(width, maxHeight);
             generateRuler();
+            lastOK = true;
         } else if (!invariant(width, maxHeight) && isVisible) {
+            lastOK = false;
             errorMessage();
         }
     }
@@ -63,6 +65,7 @@ public class Tower{
         int yPos;
 
         if(newHeight > maxHeight || stackItemInteriorExists(number)){
+            lastOK = false;
             if(isVisible) errorMessage();
             return;
         }
@@ -75,6 +78,7 @@ public class Tower{
             yPos = resolveYPos(landingItem, newHeight, newHeight);
             if(yPos < 0){
                 if(isVisible) errorMessage();
+                lastOK = false;
                 return;
             }
             if(landingItem != null){
@@ -83,7 +87,9 @@ public class Tower{
         }
         
         Cup newCup = new Cup(number, xPos, yPos, getRandColor());
+        lastCup = newCup;
         stackingItems.add(newCup);
+        lastOK = true;
         if(isVisible) newCup.makeVisible();
     }
     
@@ -96,12 +102,14 @@ public class Tower{
             for(int i = stackingItems.size() -1; i >= 0; i--){
                 if(stackingItems.get(i).hasInterior()){
                     stackingItems.remove(i).erase();
+                    lastOK = true;
                     return;
                 }
             }
         } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
         }
+        lastOK = false;
     }
     
     /**
@@ -119,10 +127,12 @@ public class Tower{
                 StackingItem removed = stackingItems.remove(i);
                 removed.erase();
                 currentCup = null;
+                lastOK = true;
                 return;
             } 
         }
         if (isVisible) errorMessage();
+        lastOK = false;
     }
     
     /**
@@ -136,20 +146,24 @@ public class Tower{
         
         if(stackingItems.isEmpty() || (stackItemNonInteriorExists(i) && stackItemInteriorExists(i))){
             if(isVisible) errorMessage();
+            lastOK = false;
             return;
         }
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
         if (yPos < 0) {
+            lastOK = false;
             if (isVisible) errorMessage();
             return;
         }
         if(landingItem == null){
             if(isVisible){
+                lastOK = false;
                 errorMessage();
                 return;
             }else{
+                lastOK = false;
                 return;
             }
         }
@@ -158,6 +172,7 @@ public class Tower{
         stackingItems.add(newLid);
         if(isVisible) newLid.makeVisible();
         heightCups += lidHeight;
+        lastOK = true;
     }
     
     /**
@@ -169,13 +184,14 @@ public class Tower{
             for(int i = stackingItems.size() -1; i >= 0; i--){
                 if(!stackingItems.get(i).hasInterior()){
                     stackingItems.remove(i).erase();
+                    lastOK = true;
                     return;
                 }
             }
         } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
         }
-        
+        lastOK = false;
     }
     
     /**
@@ -191,11 +207,13 @@ public class Tower{
                 Lid lid = currentItem.getLid();
                 if(currentItem != null){
                     currentItem.removeLid();
+                    lastOK = true;
                     return;
                 }
                 if (isVisible) errorMessage();
             }
         }
+        lastOK = false;
     }
     
     /**
@@ -248,6 +266,7 @@ public class Tower{
         
         if (isLidsEmpty && isVisible) {
             errorMessage();
+            lastOK = false;
             return null;
         } 
         
@@ -266,6 +285,7 @@ public class Tower{
             i++;
         }
         
+        lastOK = true;
         return result;
     }
     

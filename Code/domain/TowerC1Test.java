@@ -26,6 +26,71 @@ public class TowerC1Test {
     }
     
     @Test
+    public void shouldPushCupsNormally(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(4); //Cup grande, va primero
+        proofTower.pushCup(3); //Cup va sobre Cup4
+        proofTower.pushCup(2); //Cup va sobre Cup3
+        proofTower.pushCup(1); //Cup va sobre Cup2
+        
+        String[][] result = proofTower.stackingItems();
+        assertArrayEquals(new String[]{"cup", "4"}, result[0]);
+        assertArrayEquals(new String[]{"cup", "3"}, result[1]);
+        assertArrayEquals(new String[]{"cup", "2"}, result[2]);
+        assertArrayEquals(new String[]{"cup", "1"}, result[3]);
+        //assertTrue(proofTower.ok());
+    }
+    
+    @Test
+    public void shouldIgnoreDuplicatedCup(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(4);
+        proofTower.pushCup(4);
+        
+        String[][] result = proofTower.stackingItems();
+        
+        assertEquals(1, result.length);
+        assertFalse(proofTower.ok());
+    }
+    
+    @Test
+    public void shouldPushLidWithCup(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(4);
+        proofTower.pushLid(4);
+        
+        String[][] result = proofTower.stackingItems();
+        
+        assertArrayEquals(new String[]{"cup", "4"}, result[0]);
+        assertArrayEquals(new String[]{"lid", "4"}, result[1]);
+    }
+    
+    @Test
+    public void shouldNotInsertALidWithoutCupAssociated(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(3);
+        proofTower.pushLid(2);
+        
+        String[][] result = proofTower.stackingItems();
+        
+        assertEquals(1, result.length);
+    }
+    
+    @Test
+    public void shouldNotAddCupsMoreThanTheHeightTowerAllow(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        proofTower.pushCup(4);
+        
+        String[][] result = proofTower.stackingItems();
+        
+        assertFalse(proofTower.ok());
+        assertEquals(3, result.length);
+    }
+    
+    @Test
     public void shouldRemoveLid() {
         Tower proofTower = new Tower(2, 15);
         //proofTower.pushCup(0);
