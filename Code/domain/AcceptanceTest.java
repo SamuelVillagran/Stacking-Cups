@@ -33,10 +33,9 @@ public class AcceptanceTest
     }
 
     @Test
-    public void shouldMessageErrorAppearInPopLid() {
-        Tower proofTower = new Tower(5, 15);
-        //proofTower.pushCup(0);
-        proofTower.popLid();
+    public void shouldFuctionSecondConstructor() {
+        Tower proofTower = new Tower(5);
+        
     }    
     
     /**

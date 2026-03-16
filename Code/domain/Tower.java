@@ -55,6 +55,15 @@ public class Tower{
     }
     
     /**
+     * Constructor 2 cicle
+     */
+    public Tower(int numberCups) {
+        inicializateAttributes();
+        generateRuler();
+        generateCupsInTower(numberCups);
+    }
+    
+    /**
      * Add a cup if is possible.
      * @param number Is the n value cup.
      * @param isWorking Indicates if the method has to work.
@@ -91,6 +100,60 @@ public class Tower{
         stackingItems.add(newCup);
         lastOK = true;
         if(isVisible) newCup.makeVisible();
+    }
+    
+    /**
+     * Add a cup if is possible in order.
+     * @param int Integer is the id of cup where this going to push at the list cups.
+     */
+    public void pushCupInOrder(int number) {
+        boolean isItemEmpty = stackingItems.size() == 0 || stackingItems == null;
+        Cup newCup = null;
+        int newHeight = 2 * number - 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
+        int yPos;
+        if (isItemEmpty) { // Si es la primera copa que se inserto
+            isVisible = true;
+            yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
+            newCup = new Cup(number, xPos, 30, getRandColor());
+        }
+        
+        if (!isItemEmpty) {
+            Integer lastIndex = stackingItems.lastKey();
+            StackingItem lastCup = stackingItems.get(lastIndex).hasInterior() ? stackingItems.get(lastIndex) : null;
+            
+            StackingItem landingItem = findLandingPiece(newHeight);
+            yPos = resolveYPos(landingItem, newHeight, newHeight);
+            
+            
+            if (lastCup == null) return;
+            int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
+            int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
+            if (nYPos > 0 && nXPos > 0) {
+                newCup = new Cup(number, nXPos,
+                nYPos, getRandColor());
+            } else {
+                nYPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
+                nXPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
+                newCup = new Cup(number, nXPos,
+                nYPos, getRandColor());
+            } 
+
+            int cupHeight = newCup.getHeight();
+            if (!invariant2(cupHeight)) {
+                newCup.erase();
+                if (isVisible) errorMessage();
+
+                return;
+            }
+        }
+
+        stackingItems.put(number, newCup);
+
+        if (isVisible) {
+            makeVisibleRuler();
+        }
+
     }
     
     /**
@@ -357,7 +420,6 @@ public class Tower{
      * Close the game's window
      */
     public void exit() {
-        
         System.exit(0);
     }
     
@@ -448,7 +510,7 @@ public class Tower{
         height = 3;
         ruler = new ArrayList<>();
         for (int i = 0; i < NITERATIONS; i++) {
-            // To create a rectangle this has:
+            // To create a rectangle this have:
             // int xPos,int yPos, int width, int height, String color
             Rectangle currentRectangle = new Rectangle(currentPosX, currentPosY, width,
                 height, "BLACK");
@@ -494,8 +556,8 @@ public class Tower{
      */
     private void generateCupsInTower(int cupsRequeried) {
         for (int i = 0; i < cupsRequeried; i++) {
-            pushCup(i+1);
-            stackingItems.get(i).makeVisible();
+            pushCupInOrder(i+1);
+            stackingItems.get(i+1).makeVisible();
         }
     }
     
@@ -514,12 +576,16 @@ public class Tower{
             } 
     }
 
+    /*
+     * Inicializate attributes of second constructor
+     */
     private void inicializateAttributes() {
         stackingItems = new ArrayList<>();
         isVisible =  false;
-        width = Integer.MAX_VALUE;
-        maxHeight = Integer.MAX_VALUE;
+        width = 30;
+        maxHeight = 30;
         isCreatedRuler = false;
+        xCenter = (int) Math.ceil((double) width / 2);
     }
     
     private String getColorCup(int number){
