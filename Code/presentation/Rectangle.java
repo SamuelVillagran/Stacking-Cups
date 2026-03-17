@@ -1,4 +1,4 @@
-package shapes;
+package presentation;
 
 /**
  * A rectangle that can be manipulated and that draws itself on a canvas.
@@ -7,7 +7,7 @@ package shapes;
  * @version 1.0  (15 July 2000)()
  */
 
-public class Rectangle extends Figure{
+public class Rectangle extends Figure {
 
     public static final int EDGES = 4;
     
@@ -60,7 +60,7 @@ public class Rectangle extends Figure{
     }
     
     public int getWidht(){
-        return this.width;git
+        return this.width;
     }
 }
 
