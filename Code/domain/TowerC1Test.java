@@ -38,7 +38,7 @@ public class TowerC1Test {
         assertArrayEquals(new String[]{"cup", "3"}, result[1]);
         assertArrayEquals(new String[]{"cup", "2"}, result[2]);
         assertArrayEquals(new String[]{"cup", "1"}, result[3]);
-        //assertTrue(proofTower.ok());
+        assertTrue(proofTower.ok());
     }
     
     @Test
@@ -88,6 +88,36 @@ public class TowerC1Test {
         
         assertFalse(proofTower.ok());
         assertEquals(3, result.length);
+    }
+    
+    @Test
+    public void shouldOrderTower(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        
+        proofTower.orderTower();
+        String[][] result = proofTower.stackingItems();
+        
+        assertArrayEquals(new String[]{"cup", "3"}, result[0]);
+        assertArrayEquals(new String[]{"cup", "2"}, result[1]);
+        assertArrayEquals(new String[]{"cup", "1"}, result[2]);
+    }
+    
+    @Test
+    public void shouldReverseTower(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(3);
+        proofTower.pushCup(2);
+        proofTower.pushCup(1);
+        
+        proofTower.reverseTower();
+        String[][] result = proofTower.stackingItems();
+        
+        assertArrayEquals(new String[]{"cup", "1"}, result[0]);
+        assertArrayEquals(new String[]{"cup", "2"}, result[1]);
+        assertArrayEquals(new String[]{"cup", "3"}, result[2]);
     }
     
     @Test

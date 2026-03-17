@@ -60,7 +60,7 @@ public class Rectangle extends Figure{
     }
     
     public int getWidht(){
-        return this.width;git
+        return this.width;
     }
 }
 

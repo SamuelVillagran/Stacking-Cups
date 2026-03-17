@@ -4,6 +4,8 @@ import shapes.Rectangle;
 import java.util.TreeMap;
 import java.util.Collection;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.HashMap;
 
 import java.util.Collections;
 import java.util.List;
@@ -119,7 +121,7 @@ public class Tower{
         }
         
         if (!isItemEmpty) {
-            Integer lastIndex = stackingItems.lastKey();
+            Integer lastIndex = stackingItems.get(stackingItems.size() - 1).getId();
             StackingItem lastCup = stackingItems.get(lastIndex).hasInterior() ? stackingItems.get(lastIndex) : null;
             
             StackingItem landingItem = findLandingPiece(newHeight);
@@ -148,7 +150,7 @@ public class Tower{
             }
         }
 
-        stackingItems.put(number, newCup);
+        stackingItems.add(newCup);
 
         if (isVisible) {
             makeVisibleRuler();
@@ -236,6 +238,12 @@ public class Tower{
         if(isVisible) newLid.makeVisible();
         heightCups += lidHeight;
         lastOK = true;
+        
+        checkAssociatedCup(i, newLid);
+    }
+    
+    public ArrayList<StackingItem> getStackItems(){
+        return stackingItems;
     }
     
     /**
@@ -280,17 +288,96 @@ public class Tower{
     }
     
     /**
-     * 
+     * Order the stackin items from lowest to highest width.
      */
     public void orderTower() {
+        TreeMap<Integer, String> cupsIds = new TreeMap<>();
+        TreeMap<Integer, String> lidsIds= new TreeMap<>();
         
+        for(StackingItem item : stackingItems){
+            if(item.hasInterior()){
+                cupsIds.put(item.getId(), item.getColor());
+            }else{
+                lidsIds.put(item.getId(), item.getColor());
+            }
+        }
+        
+        for(StackingItem item : stackingItems){
+            item.erase();
+        }
+        heightCups = 0;
+        stackingItems.clear();
+        
+        
+        for(Integer id : cupsIds.descendingKeySet()){
+            pushCup(id, cupsIds.get(id));
+            if(lidsIds.containsKey(id)){
+                pushLid(id);
+            }
+        }
+    }
+    
+    private void pushCup(int number, String color ){
+        int newHeight = 2 * number - 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
+        int yPos;
+
+        if(newHeight > maxHeight || stackItemInteriorExists(number)){
+            lastOK = false;
+            if(isVisible) errorMessage();
+            return;
+        }
+        
+        if(stackingItems.isEmpty()){
+            yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
+            heightCups = newHeight;
+        } else{
+            StackingItem landingItem = findLandingPiece(newHeight);
+            yPos = resolveYPos(landingItem, newHeight, newHeight);
+            if(yPos < 0){
+                if(isVisible) errorMessage();
+                lastOK = false;
+                return;
+            }
+            if(landingItem != null){
+                heightCups += newHeight;
+            }
+        }
+        
+        Cup newCup = new Cup(number, xPos, yPos, color);
+        lastCup = newCup;
+        stackingItems.add(newCup);
+        lastOK = true;
+        if(isVisible) newCup.makeVisible();
     }
     
     /**
-     * 
+     * Order the stackin items from highest to lowest width.
      */
     public void reverseTower() {
+        TreeMap<Integer, String> cupsIds = new TreeMap<>();
+        TreeMap<Integer, String> lidsIds= new TreeMap<>();
         
+        for(StackingItem item : stackingItems){
+            if(item.hasInterior()){
+                cupsIds.put(item.getId(), item.getColor());
+            }else{
+                lidsIds.put(item.getId(), item.getColor());
+            }
+        }
+        
+        for(StackingItem item : stackingItems){
+            item.erase();
+        }
+        heightCups = 0;
+        stackingItems.clear();
+        
+        for(Integer id : cupsIds.keySet()){
+            pushCup(id, cupsIds.get(id));
+            if(lidsIds.containsKey(id)){
+                pushLid(id);
+            }
+        }
     }
     
     /**
@@ -308,8 +395,6 @@ public class Tower{
     public void cover() {
         
     }
-    
-    
     
     /**
      * Get the max height of tower
@@ -454,12 +539,14 @@ public class Tower{
      * Get the height used
      * @return int this is the the height is using the cups at this tower
      */
-    private int heightUsed(){
-        int total = 0;
+    public int heightUsed(){
+        int min = Integer.MAX_VALUE;
         for(StackingItem s : stackingItems) {
-            total += s.getHeight();
+            if(s.getYPosition() < min){
+                min = s.getYPosition();
+            }
         }
-        return total;
+        return maxHeight - (min / Cup.PIXELS_PER_CM);
     }
     
     /*
@@ -732,5 +819,30 @@ public class Tower{
     private int getEffectiveTop(Cup cup){
         int lidExtra = cup.getLid() != null ? cup.getLid().getHeight() * Cup.PIXELS_PER_CM : 0;
         return cup.getYPosition() - lidExtra;
+    }
+    
+    /*
+     * Find the Cup whose id matches with the given number.
+     */
+    private Cup findCupWithId(int number){
+        for(StackingItem item : stackingItems){
+            if(item.getId() == number && item.hasInterior()){
+                return (Cup)item;
+            }
+        }
+        return null;
+    }
+    
+    /*
+     * Match a Lid with the respective Cup.
+     */
+    private void checkAssociatedCup(int number, Lid lid){
+        Cup matchingCup = findCupWithId(number);
+        if(matchingCup !=null){
+            int expectedLidPos =  matchingCup.getYPosition() - (1 * Cup.PIXELS_PER_CM);
+            if(lid.getYPosition() == expectedLidPos){
+                matchingCup.addLid(lid);
+            }
+        }
     }
 }
