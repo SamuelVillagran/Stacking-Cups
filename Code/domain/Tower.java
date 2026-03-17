@@ -1,6 +1,6 @@
 package domain;
 
-import shapes.Rectangle;
+import presentation.Rectangle;
 import java.util.TreeMap;
 import java.util.Collection;
 import java.util.Set;
@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
  * @author Sanchéz - Villagrán
  * @version 1.0.0
  */
-public class Tower{
+public class Tower {
     
     private static ArrayList<String> COLORS = new ArrayList<>();
     private static ArrayList<Rectangle> ruler;
@@ -121,7 +121,7 @@ public class Tower{
         }
         
         if (!isItemEmpty) {
-            Integer lastIndex = stackingItems.get(stackingItems.size() - 1).getId();
+            Integer lastIndex = stackingItems.size() - 1;
             StackingItem lastCup = stackingItems.get(lastIndex).hasInterior() ? stackingItems.get(lastIndex) : null;
             
             StackingItem landingItem = findLandingPiece(newHeight);
@@ -523,6 +523,37 @@ public class Tower{
         return heightCups;
     }
     
+    public String icpcProblem(String numberAndHeight) {
+        String result = "";
+        
+        String[] nAndHeight = numberAndHeight.split(" ");
+        
+        try {
+            int[] nAndHeightInteger = new int[2];
+            int i = 0;
+            for (String part : nAndHeight) {
+                nAndHeightInteger[i++] = Integer.parseInt(part);
+            }
+            boolean isPosible = isPosible(nAndHeightInteger);
+            
+            if (isPosible) {
+                
+            }
+            
+            if (!isPosible) {
+                return "impossible";    
+            }
+            
+        } catch (Exception e) {
+            System.err.println("""
+                Look that any parameter given will 
+                be more than two numbers \nOr This be numbers""");
+            e.printStackTrace();
+        }
+        
+        return result;
+    }
+    
     /*
      * Generate a random color of list COLORS
      * 
@@ -844,5 +875,25 @@ public class Tower{
                 matchingCup.addLid(lid);
             }
         }
+    private boolean isPosible(int[] numberAndHeight) {
+        int number = numberAndHeight[0], heightWillBeOcupped = numberAndHeight[1];
+        int CONDITION = (2*number) - 1;
+        for (int i = 1; i <= numberAndHeight[0]; i++) {
+            
+            if (number >= 3) {
+                heightWillBeOcupped -= CONDITION;
+                if (heightWillBeOcupped == 0) {
+                    return true;
+                }
+            }
+            
+            if (number < 3 && number > 0) {
+                
+            }
+            
+            if (number <= 0 || number > heightWillBeOcupped) return false;
+        }
+        
+        return false;
     }
 }
