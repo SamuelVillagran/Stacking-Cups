@@ -60,9 +60,18 @@ public class Tower {
      * Constructor 2 cicle
      */
     public Tower(int numberCups) {
-        inicializateAttributes();
-        generateRuler();
-        generateCupsInTower(numberCups);
+        int height = 0;
+        for(int i = 1; i<= numberCups; i++){
+             height += 2 * i -1;
+        }
+        if (invariant(height, height)) {
+            inicializate(height, height);
+            generateCupsInTower(numberCups);
+            generateRuler();
+        } else if (!invariant(width, maxHeight) && isVisible) {
+            lastOK = false;
+            errorMessage();
+        }
     }
     
     /**
@@ -316,7 +325,7 @@ public class Tower {
             }
         }
     }
-    
+
     private void pushCup(int number, String color ){
         int newHeight = 2 * number - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
@@ -673,9 +682,8 @@ public class Tower {
      * Set deterninated cups at the tower 
      */
     private void generateCupsInTower(int cupsRequeried) {
-        for (int i = 0; i < cupsRequeried; i++) {
-            pushCupInOrder(i+1);
-            stackingItems.get(i+1).makeVisible();
+        for (int i = 1; i <= cupsRequeried; i++) {
+            pushCup(i);
         }
     }
     
@@ -875,6 +883,8 @@ public class Tower {
                 matchingCup.addLid(lid);
             }
         }
+    }
+    
     private boolean isPosible(int[] numberAndHeight) {
         int number = numberAndHeight[0], heightWillBeOcupped = numberAndHeight[1];
         int CONDITION = (2*number) - 1;
