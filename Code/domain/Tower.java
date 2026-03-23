@@ -875,9 +875,14 @@ public class Tower {
                 matchingCup.addLid(lid);
             }
         }
+    }
+    
     private boolean isPosible(int[] numberAndHeight) {
         int number = numberAndHeight[0], heightWillBeOcupped = numberAndHeight[1];
         int CONDITION = (2*number) - 1;
+        
+        if ((number*number - 2) == heightWillBeOcupped) return false;
+        
         for (int i = 1; i <= numberAndHeight[0]; i++) {
             
             if (number >= 3) {
