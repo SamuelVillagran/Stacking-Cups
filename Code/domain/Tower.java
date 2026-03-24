@@ -395,7 +395,47 @@ public class Tower {
      * @param o2 o2 is the second object to swap position with o1's position
      */
     public void swap(String [] o1, String[] o2) {
+        ArrayList<StackingItem> itemsCopy = new ArrayList<>();
+        int idO1 = Integer.parseInt(o1[1]);
+        int idO2 = Integer.parseInt(o2[1]);
         
+        StackingItem item1 = null,item2 = null;
+        for(StackingItem s : stackingItems){
+            if(s.getId() == idO1) item1 = s;
+            if(s.getId() == idO2) item2 = s;
+        }
+        
+        if(item1 == null || item2 == null){
+            lastOK = false;
+            if(isVisible) errorMessage();
+            return;
+        }
+        
+        int indx1 = stackingItems.indexOf(item1);
+        int indx2 = stackingItems.indexOf(item2);
+        Collections.swap(stackingItems, indx1, indx2);
+        itemsCopy.addAll(stackingItems);
+        
+        eraseItems();
+        
+        for(StackingItem s : itemsCopy){
+            if(s.hasInterior()){
+                pushCup(s.getId());
+            }else {
+               pushLid(s.getId()); 
+            }
+        }
+    }
+    
+    /*
+     * Delete the items of the container.
+     */
+    private void eraseItems(){
+        for(StackingItem item : stackingItems){
+            item.erase();
+        }
+        heightCups = 0;
+        stackingItems.clear();
     }
     
     /**
