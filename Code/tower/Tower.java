@@ -1,4 +1,4 @@
-package domain;
+package tower;
 
 import presentation.Rectangle;
 import java.util.TreeMap;
