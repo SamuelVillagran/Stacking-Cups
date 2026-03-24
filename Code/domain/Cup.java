@@ -110,10 +110,8 @@ public class Cup extends StackingItem {
     /**
      * Add a lip in the top of the cup
      */
-    public void addLid(){
-        if(lid == null){
-            lid = new Lid(id, xPosition, yPosition - PIXELS_PER_CM, color);
-        }
+    public void addLid(Lid lid){
+        if(this.lid == null) this.lid = lid;
     }
     
     /**
