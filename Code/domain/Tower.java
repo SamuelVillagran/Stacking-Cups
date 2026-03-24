@@ -117,7 +117,7 @@ public class Tower {
      * Add a cup if is possible in order.
      * @param int Integer is the id of cup where this going to push at the list cups.
      */
-    public void pushCupInOrder(int number) {
+    private void pushCupInOrder(int number) {
         boolean isItemEmpty = stackingItems.size() == 0 || stackingItems == null;
         Cup newCup = null;
         int newHeight = 2 * number - 1;
@@ -262,8 +262,10 @@ public class Tower {
         boolean areStackingItemsEmpty = stackingItems.isEmpty();;
         if(!areStackingItemsEmpty){
             for(int i = stackingItems.size() -1; i >= 0; i--){
-                if(!stackingItems.get(i).hasInterior()){
-                    stackingItems.remove(i).erase();
+                StackingItem currentItem = stackingItems.get(i);
+                if(!currentItem.hasInterior()){
+                    StackingItem itemRemoved = stackingItems.remove(i);
+                    itemRemoved.erase();
                     lastOK = true;
                     return;
                 }
@@ -502,7 +504,7 @@ public class Tower {
         for (StackingItem item : items) {
             itemsWithPosY.put(item.getYPosition() + (item.getHeight() * Cup.PIXELS_PER_CM), item);
         }
-        System.out.println(itemsWithPosY.size());
+        
         Set<Integer> itemsWithPosYKey = itemsWithPosY.descendingKeySet();
         for (Integer itemPosY : itemsWithPosYKey) {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
@@ -928,6 +930,9 @@ public class Tower {
     private boolean isPosible(int[] numberAndHeight) {
         int number = numberAndHeight[0], heightWillBeOcupped = numberAndHeight[1];
         int CONDITION = (2*number) - 1;
+        
+        if ((number*number - 2) == heightWillBeOcupped) return false;
+        
         for (int i = 1; i <= numberAndHeight[0]; i++) {
             
             if (number >= 3) {
