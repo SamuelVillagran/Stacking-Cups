@@ -2,7 +2,7 @@ package tower;
 
  
 import java.util.ArrayList;
-import presentation.Rectangle;
+import shapes.Rectangle;
 
 
 /**

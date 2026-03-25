@@ -1,6 +1,6 @@
 package tower;
 
-import presentation.Rectangle;
+import shapes.Rectangle;
 import java.util.TreeMap;
 import java.util.Collection;
 import java.util.Set;

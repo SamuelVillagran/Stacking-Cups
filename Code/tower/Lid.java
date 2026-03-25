@@ -1,8 +1,8 @@
-package domain;
+package tower;
 
  
 import java.util.ArrayList;
-import presentation.Rectangle;
+import shapes.Rectangle;
 
 /**
  * It represents the lid of the cup
