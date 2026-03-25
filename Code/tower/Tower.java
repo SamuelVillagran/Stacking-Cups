@@ -1,6 +1,6 @@
-package domain;
+package tower;
 
-import presentation.Rectangle;
+import shapes.Rectangle;
 import java.util.TreeMap;
 import java.util.Collection;
 import java.util.Set;
@@ -251,7 +251,7 @@ public class Tower {
         checkAssociatedCup(i, newLid);
     }
     
-    public ArrayList<StackingItem> getStackItems(){
+    public ArrayList<StackingItem> getStackingItems(){
         return stackingItems;
     }
     
@@ -969,3 +969,4 @@ public class Tower {
     }
 }
 
+}

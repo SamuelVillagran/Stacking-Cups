@@ -1,4 +1,4 @@
-package domain;
+package tower;
 
 
 
@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The test class TowerTest.
@@ -153,7 +154,7 @@ public class TowerC1Test {
     public void shouldLidedCupsCorrectly() {
         Tower proofTower = new Tower(50, 50);
         assertNull(proofTower.lidedCups());
-        /*
+        
         proofTower.pushCup(1);
         proofTower.pushCup(2);
         proofTower.pushCup(5);
@@ -167,17 +168,17 @@ public class TowerC1Test {
         proofTower.pushLid(3); // indice 3
         proofTower.pushLid(9); // indice 4
         proofTower.pushLid(7); // indice 4
-        */
+        
         int[] lidsSorted = proofTower.lidedCups();
-        /*
-        List<Lid> lids = proofTower.getLids();
+        
+        ArrayList<StackingItem> lids = proofTower.getStackingItems();
         assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
         assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
         assertEquals(lids.get(3).getWidth(), lidsSorted[2]); // Se alternan, va primero el indice 3
         assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
         assertEquals(lids.get(5).getWidth(), lidsSorted[4]); // Se alternan, va primero el indice 5
         assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
-        */
+        
     } //  Incluir el caso en el que este la taza pero no la tapa (id - 1)
     
     // =========================================================

@@ -1,4 +1,4 @@
-package presentation;
+package shapes;
 
 /**
  * A rectangle that can be manipulated and that draws itself on a canvas.
