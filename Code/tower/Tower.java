@@ -251,7 +251,7 @@ public class Tower {
         checkAssociatedCup(i, newLid);
     }
     
-    public ArrayList<StackingItem> getStackItems(){
+    public ArrayList<StackingItem> getStackingItems(){
         return stackingItems;
     }
     
