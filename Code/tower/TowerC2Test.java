@@ -44,13 +44,34 @@ public class TowerC2Test
         */
     }
     
-    /**
-     * Tears down the test fixture.
-     *
-     * Called after every test case method.
-     */
-    @AfterEach
-    public void tearDown()
-    {
+    @Test
+    //Testing new Constructor.
+    public void shouldCreateTowersIncrementally(){
+        Tower proofTower = new Tower(4);
+        String[][] result = proofTower.stackingItems();
+        
+        assertArrayEquals(new String[]{"cup", "1"}, result[0]);
+        assertArrayEquals(new String[]{"cup", "2"}, result[1]);
+        assertArrayEquals(new String[]{"cup", "3"}, result[2]);
+        assertArrayEquals(new String[]{"cup", "4"}, result[3]);
+    }
+    
+    @Test
+    public void shouldSwapLidWithHisCup(){
+        Tower proofTower = new Tower(13, 13);        
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        
+        //Verificamos el primer swap
+        proofTower.swap(new String[]{"cup", "3"}, new String[]{"cup", "2"});
+        String[][] result = proofTower.stackingItems();
+        assertArrayEquals(new String[]{"cup", "3"}, result[0]);
+        assertArrayEquals(new String[]{"cup", "2"}, result[1]);
+        
+        //verificamos el segundo swap con los mismo elelmentos
+        proofTower.swap(new String[]{"cup", "3"}, new String[]{"cup", "2"});
+        result = proofTower.stackingItems();
+        assertArrayEquals(new String[]{"cup", "2"}, result[0]);
+        assertArrayEquals(new String[]{"cup", "3"}, result[1]);
     }
 }
