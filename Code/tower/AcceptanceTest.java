@@ -1,4 +1,4 @@
-package domain;
+package tower;
 
 
 
@@ -8,17 +8,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * The test class TowerC2Test.
+ * The test class AcceptanceTest.
  *
  * @author  (your name)
  * @version (a version number or a date)
  */
-public class TowerC2Test
+public class AcceptanceTest
 {
     /**
-     * Default constructor for test class TowerC2Test
+     * Default constructor for test class AcceptanceTest
      */
-    public TowerC2Test()
+    public AcceptanceTest()
     {
     }
 
@@ -32,17 +32,11 @@ public class TowerC2Test
     {
     }
 
-    //======================================================
-    // Caso 1: Se crea el constructor correctamente
-    //======================================================
     @Test
-    public void shouldCreateTowerWiTthNumCups() {
-        /*
-        Tower proof = new Tower(3);
-        int numCupsInTower = proof.getCups().size();
-        assertEquals(3, numCupsInTower);
-        */
-    }
+    public void shouldFuctionSecondConstructor() {
+        Tower proofTower = new Tower(5);
+        
+    }    
     
     /**
      * Tears down the test fixture.
