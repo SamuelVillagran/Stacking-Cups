@@ -113,7 +113,30 @@ public class Tower {
         if(isVisible) newCup.makeVisible();
     }
     
-    
+    /**
+     * Put in the tower diferent type of cups 
+     * @param type type of cup that it's going to put at the tower
+     * @param i i is the id of tower that it's going to put at the tower
+     */
+    public void pushCup(String type, int i) {
+        List<String> types = List.of("normal", "opener", "hierarchical");
+        boolean isTypeAllowed = types.contains(type);
+         // Si no es el tipo permitido se lanza una excepcion
+        
+        if (isTypeAllowed) {
+            if (type.equals("normal")) pushCup(i);
+            
+            if (type.equals("opener")) {
+                Opener newCup = new Opener(i, getRandColor());
+                stackingItems.add(newCup);
+            }
+            
+            if (type.equals("hierarchical")) {
+                Hierarchical newCup = new Hierarchical(i, getRandColor());
+                stackingItems.add(newCup);
+            }
+        }
+    }
     
     /**
      * Delete the last cup at the stackingItems list.
