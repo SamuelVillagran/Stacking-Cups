@@ -1,4 +1,20 @@
 #BlueJ package file
+<<<<<<< HEAD
+editor.fx.0.height=1033
+editor.fx.0.width=1721
+editor.fx.0.x=-1714
+editor.fx.0.y=-156
+objectbench.height=145
+objectbench.width=833
+package.divider.horizontal=0.6240713224368499
+package.divider.vertical=0.7610062893081762
+package.editor.height=477
+package.editor.width=1226
+package.editor.x=0
+package.editor.y=0
+package.frame.height=736
+package.frame.width=1382
+=======
 editor.fx.0.height=737
 editor.fx.0.width=1037
 editor.fx.0.x=1532
@@ -13,6 +29,7 @@ package.editor.x=1264
 package.editor.y=32
 package.frame.height=881
 package.frame.width=1721
+>>>>>>> development
 package.numDependencies=0
 package.numTargets=1
 package.showExtends=true
@@ -27,5 +44,16 @@ target1.height=82
 target1.name=domain
 target1.type=PackageTarget
 target1.width=120
+<<<<<<< HEAD
+target1.x=130
+target1.y=10
+target2.height=82
+target2.name=tower
+target2.type=PackageTarget
+target2.width=120
+target2.x=430
+target2.y=140
+=======
 target1.x=570
 target1.y=170
+>>>>>>> development
