@@ -16,7 +16,6 @@ public class Opener extends Cup {
      */
     public Opener(int id, String color) {
         super(id, color);
-        this.lid = null;
     }
     
     /**
