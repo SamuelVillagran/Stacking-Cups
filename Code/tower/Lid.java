@@ -103,6 +103,7 @@ public class Lid extends StackingItem {
     
     public void removeLid() {
         shape.erase();
+        shape = null;
     }
     
     /*

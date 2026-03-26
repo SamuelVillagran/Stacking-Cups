@@ -124,12 +124,12 @@ public class TowerC1Test {
     @Test
     public void shouldRemoveLid() {
         Tower proofTower = new Tower(2, 15);
-        //proofTower.pushCup(0);
+        proofTower.pushCup(0);
         proofTower.pushLid(0);
         proofTower.removeLid(0);
         
-        //Lid lidOfCup = proofTower.getCups().get(0).getLid();
-        //assertNull(lidOfCup);
+        StackingItem lidOfCup = proofTower.getStackingItems().get(0).getLid();
+        assertNull(lidOfCup);
     }
     
     @Test

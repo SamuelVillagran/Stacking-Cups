@@ -16,5 +16,5 @@ public class Fearful extends Lid {
         super(id, xPos, yPos, color);
     }
     
-    
+    // id : int, xPos : int, yPos : int, color : String
 }
