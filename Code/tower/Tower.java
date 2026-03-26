@@ -968,5 +968,3 @@ public class Tower {
         return false;
     }
 }
-
-}
