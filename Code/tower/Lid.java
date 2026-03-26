@@ -14,7 +14,7 @@ import shapes.Rectangle;
  */
 public class Lid extends StackingItem {
     public static final int PIXELS_PER_CM = 10;
-    private Rectangle shape;
+    protected Rectangle shape;
 
     /**
      * Constructor for objects of class Lid
