@@ -118,7 +118,7 @@ public class Tower {
      * @param type type of cup that it's going to put at the tower
      * @param i i is the id of tower that it's going to put at the tower
      */
-    public void pushCup(String type, int i) throws TowerException {
+    public void pushCup(String type, int i) {
         int newHeight = 2 * i - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
@@ -159,7 +159,7 @@ public class Tower {
                     return;
                 }
                 
-                int yPosLastCup = Integer.MIN_VALUE, sizeLastCup = 0;
+                int yPosLastCup = Integer.MIN_VALUE, sizeLastCup = 0; // Está parte de la lógica fue mejorada por Claude Sonnet 4.6 IA 2026
                 int yPosTopCup = Integer.MIN_VALUE, sizeTopCup = 0;
                 List<StackingItem> lidsToRemove = new ArrayList<>(); // ← acumula
                 
@@ -482,7 +482,7 @@ public class Tower {
 
     }
 
-    private void pushCup(int number, String color ){
+    private void pushCup(int number, String color) {
         int newHeight = 2 * number - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;

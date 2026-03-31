@@ -17,4 +17,10 @@ public class TowerContest {
         return proof.icpcProblem(input);
     }
     
+    public void simulate(int n, int h) {
+        Tower proof = new Tower(200, 200);
+        String input = n + " " + h;
+        
+        proof.icpcProblem(input);
+    }
 }
