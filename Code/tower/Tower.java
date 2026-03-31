@@ -118,7 +118,7 @@ public class Tower {
      * @param type type of cup that it's going to put at the tower
      * @param i i is the id of tower that it's going to put at the tower
      */
-    public void pushCup(String type, int i) {
+    public void pushCup(String type, int i) throws tower.TowerException {
         int newHeight = 2 * i - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
@@ -159,19 +159,24 @@ public class Tower {
                     return;
                 }
                 
-                int yPosLastCup = Integer.MIN_VALUE;
+                int yPosLastCup = Integer.MIN_VALUE, sizeLastCup = 0;
                 for (Integer yPosCups : cupsOrderByPosY.descendingKeySet()) { // Se ordena las posiciones de menor a mayor y se itera reversamente
                     Cup currentCup = cupsOrderByPosY.get(yPosCups);
                     Lid lidOfCup = currentCup.getLid();
                     if (currentCup.getId() > i && lidOfCup != null) currentCup.removeLid(); // Quita las tazas por la propiedad de opener 
                     if (currentCup. getId() <= i) { // Cuando llega a un id que no puede caber entonces ese es su posicion en y de la última copa 
                         yPosLastCup = yPosCups;
+                        sizeLastCup = currentCup.getSize();
                         break;
                     }
                 }
-                
-                
-                
+                if (yPosLastCup == Integer.MIN_VALUE) {
+                    errorMessage();
+                    throw new TowerException(TowerException.DONT_EXISTS_CUP);
+                }
+                    
+                yPos = yPosLastCup + sizeLastCup; // Put the new yPos cup at (0,0) where should be stay
+                Opener newCup = new Opener(i, xPos, yPos, getRandColor());
             }
             
             if (type.equals("hierarchical")) {
