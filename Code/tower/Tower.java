@@ -132,12 +132,12 @@ public class Tower {
         List<String> types = List.of("normal", "opener", "hierarchical");
         boolean isTypeAllowed = types.contains(type);
          // Si no es el tipo permitido se lanza una excepcion
-        TreeMap<Integer, Cup> cups = null;
+        TreeMap<Integer, Cup> cups = new TreeMap<>();
         for (StackingItem s : stackingItems) {
             if (s.hasInterior()) cups.put(s.getId(), (Cup) s);
         }
         
-        TreeMap<Integer, Cup> cupsOrderByPosY = null;
+        TreeMap<Integer, Cup> cupsOrderByPosY = new TreeMap<>();
         for (Cup c : cups.values()) {
             cupsOrderByPosY.put(c.getYPos(), c); 
         } 
@@ -177,12 +177,15 @@ public class Tower {
                     
                 yPos = yPosLastCup + sizeLastCup; // Put the new yPos cup at (0,0) where should be stay
                 Opener newCup = new Opener(i, xPos, yPos, getRandColor());
+                stackingItems.add(newCup);    
             }
             
             if (type.equals("hierarchical")) {
                 Hierarchical newCup = new Hierarchical(i, getRandColor());
                 stackingItems.add(newCup);
             }
+            
+            
         }
     }
     

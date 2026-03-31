@@ -15,7 +15,35 @@ import org.junit.jupiter.api.Test;
  */
 public class TowerC4Test {
     
+    @Test
+    public void shouldBeCreateCupOpener() {
+        Tower t = new Tower(100, 100);
+        
+        try {
+            t.pushCup("opener", 3);
+            
+            assertEquals( Opener.class, t.getStackingItems().get(0).getClass());
+        } 
+        catch (tower.TowerException te) {
+            te.printStackTrace();
+        }
+        
+    }
     
-    
+    @Test
+    public void shouldBePutCorretlyCupOpener() {
+        Tower t = new Tower(100, 100);
+        
+        try {
+            t.pushCup(6);
+            t.pushLid(6);
+            t.pushCup("opener", 3); // Should destroy the cup to entry
+            
+            assertEquals(2, t.getStackingItems().size());
+        } 
+        catch (tower.TowerException te) {
+            te.printStackTrace();
+        }
+    }
     
 }
