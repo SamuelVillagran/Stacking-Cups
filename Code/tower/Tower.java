@@ -118,7 +118,7 @@ public class Tower {
      * @param type type of cup that it's going to put at the tower
      * @param i i is the id of tower that it's going to put at the tower
      */
-    public void pushCup(String type, int i) throws tower.TowerException {
+    public void pushCup(String type, int i) throws TowerException {
         int newHeight = 2 * i - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
@@ -272,6 +272,13 @@ public class Tower {
         
         checkAssociatedCup(i, newLid);
     }
+    
+    /**
+     * Put at the tower diferents lid's types 
+     * @param type type es the type of lid that want to put at tower ("normal", "fearful", "crazy")
+     * @param i i it's the id of lid that wants to insert at the tower 
+     */
+    
     
     public ArrayList<StackingItem> getStackingItems(){
         return stackingItems;
