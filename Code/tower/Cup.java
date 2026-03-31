@@ -176,7 +176,13 @@ public class Cup extends StackingItem {
         return yPosition;
     }
     
-    
+     /**
+     * Give cup's type
+     * @return String "normal"
+     */
+    public String getType() {
+        return "normal";
+    }
     /*
      * Build the cup with Rectangles
      * To take way cup it makes three Rectangles

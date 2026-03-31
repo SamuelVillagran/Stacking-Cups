@@ -253,7 +253,7 @@ public class Tower {
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null){
+        if(landingItem == null) {
             if(isVisible){
                 lastOK = false;
                 errorMessage();
@@ -278,7 +278,50 @@ public class Tower {
      * @param type type es the type of lid that want to put at tower ("normal", "fearful", "crazy")
      * @param i i it's the id of lid that wants to insert at the tower 
      */
-    
+    public void pushLid(String type, int i) {
+        int lidWidth = 2 * i -1;
+        int lidHeight = 1;
+        int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
+        
+        if(stackingItems.isEmpty() || (stackItemNonInteriorExists(i) && stackItemInteriorExists(i))){
+            if(isVisible) errorMessage();
+            lastOK = false;
+            return;
+        }
+        
+        StackingItem landingItem = findLandingPiece(lidWidth);
+        int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        if (yPos < 0) {
+            lastOK = false;
+            if (isVisible) errorMessage();
+            return;
+        }
+        if(landingItem == null) {
+            if(isVisible){
+                lastOK = false;
+                errorMessage();
+                return;
+            }else{
+                lastOK = false;
+                return;
+            }
+        }
+        String color = landingItem.getColor();
+        if (type.equals("normal")) {
+            pushLid(i);
+        } else if (type.equals("crazy")) {
+            yPos += lidWidth + landingItem.getSize();
+            Crazy newLid = new Crazy(i, xPos, yPos, color);
+            stackingItems.add(newLid);
+            if(isVisible) newLid.makeVisible();
+            lastOK = true;
+            checkAssociatedCup(i, newLid);
+        } else if (type.equals("fearful")) {
+            
+        }
+        
+        
+    }
     
     public ArrayList<StackingItem> getStackingItems(){
         return stackingItems;
@@ -897,7 +940,7 @@ public class Tower {
                 return landingContainer.getYPosition() + (landingContainer.getHeight() -fallingHeight -1) * Cup.PIXELS_PER_CM;
             }
         }
-        return landing.getYPosition() -fallingHeight * Cup.PIXELS_PER_CM;
+        return landing.getYPosition() - fallingHeight * Cup.PIXELS_PER_CM;
     }
     
     /*

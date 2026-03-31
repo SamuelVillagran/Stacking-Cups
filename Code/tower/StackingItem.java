@@ -72,4 +72,5 @@ public abstract class StackingItem {
     public abstract void makeInvisible();
     public abstract void erase();
     public abstract void move(int x, int y);
+    public abstract String getType();
 }
