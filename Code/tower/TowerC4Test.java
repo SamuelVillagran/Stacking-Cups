@@ -38,8 +38,9 @@ public class TowerC4Test {
             t.pushCup(6);
             t.pushLid(6);
             t.pushCup("opener", 3); // Should destroy the cup to entry
-            
+            Lid lidOfCup = t.getStackingItems().get(0).getLid();
             assertEquals(2, t.getStackingItems().size());
+            assertNull(lidOfCup);
         } 
         catch (tower.TowerException te) {
             te.printStackTrace();
