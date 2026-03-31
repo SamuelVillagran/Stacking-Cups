@@ -86,14 +86,14 @@ public class Tower {
 
         if(newHeight > maxHeight || stackItemInteriorExists(number)){
             lastOK = false;
-            if(isVisible) errorMessage();
+            if(isVisible) errorMessage(); // Aqui deberia retornar una excepcion
             return;
         }
         
         if(stackingItems.isEmpty()){
             yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
             heightCups = newHeight;
-        } else{
+        } else {
             StackingItem landingItem = findLandingPiece(newHeight);
             yPos = resolveYPos(landingItem, newHeight, newHeight);
             if(yPos < 0){
@@ -113,7 +113,73 @@ public class Tower {
         if(isVisible) newCup.makeVisible();
     }
     
-    
+    /**
+     * Put in the tower diferent type of cups 
+     * @param type type of cup that it's going to put at the tower
+     * @param i i is the id of tower that it's going to put at the tower
+     */
+    public void pushCup(String type, int i) {
+        int newHeight = 2 * i - 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
+        int yPos;
+        
+        if(newHeight > maxHeight || stackItemInteriorExists(i)){
+            lastOK = false;
+            if(isVisible) errorMessage(); // Aqui deberia retornar una excepcion
+            return;
+        }
+        
+        List<String> types = List.of("normal", "opener", "hierarchical");
+        boolean isTypeAllowed = types.contains(type);
+         // Si no es el tipo permitido se lanza una excepcion
+        TreeMap<Integer, Cup> cups = null;
+        for (StackingItem s : stackingItems) {
+            if (s.hasInterior()) cups.put(s.getId(), (Cup) s);
+        }
+        
+        TreeMap<Integer, Cup> cupsOrderByPosY = null;
+        for (Cup c : cups.values()) {
+            cupsOrderByPosY.put(c.getYPos(), c); 
+        } 
+        
+        if (isTypeAllowed) {
+            if (type.equals("normal")) pushCup(i);
+            
+            if (type.equals("opener")) {
+                
+                if(stackingItems.isEmpty()) {  // Cuando no hay stackingItems se pone de primeras
+                    yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
+                    heightCups = newHeight;
+                    Opener newCup = new Opener(i, xPos, yPos, getRandColor());
+                    lastCup = newCup;
+                    
+                    stackingItems.add(newCup);
+                    lastOK = true;
+                    if(isVisible) newCup.makeVisible();
+                    return;
+                }
+                
+                int yPosLastCup = Integer.MIN_VALUE;
+                for (Integer yPosCups : cupsOrderByPosY.descendingKeySet()) { // Se ordena las posiciones de menor a mayor y se itera reversamente
+                    Cup currentCup = cupsOrderByPosY.get(yPosCups);
+                    Lid lidOfCup = currentCup.getLid();
+                    if (currentCup.getId() > i && lidOfCup != null) currentCup.removeLid(); // Quita las tazas por la propiedad de opener 
+                    if (currentCup. getId() <= i) { // Cuando llega a un id que no puede caber entonces ese es su posicion en y de la última copa 
+                        yPosLastCup = yPosCups;
+                        break;
+                    }
+                }
+                
+                
+                
+            }
+            
+            if (type.equals("hierarchical")) {
+                Hierarchical newCup = new Hierarchical(i, getRandColor());
+                stackingItems.add(newCup);
+            }
+        }
+    }
     
     /**
      * Delete the last cup at the stackingItems list.
