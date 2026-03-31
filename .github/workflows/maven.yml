@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file Code/pom.xml
+      run: mvn -B package --file Code/tower/pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
@@ -39,4 +39,4 @@ jobs:
       if: always()  # Lo sube incluso si los tests fallan
       with:
         name: resultados-pruebas
-        path: Code/target/surefire-reports/ 
+        path: Code/tower/target/surefire-reports/ 
