@@ -13,27 +13,8 @@ import org.junit.jupiter.api.Test;
  * @author  (your name)
  * @version (a version number or a date)
  */
-public class TowerC3Test
-{
-    /**
-     * Default constructor for test class TowerC3Test
-     */
-    public TowerC3Test() {
-        
-    }
-
+public class TowerC3Test {
     
-    
-    
-    /**
-     * Sets up the test fixture.
-     *
-     * Called before every test case method.
-     */
-    @BeforeEach
-    public void setUp()
-    {
-    }
 
     @Test
     public void shouldBeImpossibleToSolve() {
@@ -43,14 +24,11 @@ public class TowerC3Test
         
     }
     
-    
-    /**
-     * Tears down the test fixture.
-     *
-     * Called after every test case method.
-     */
-    @AfterEach
-    public void tearDown()
-    {
+    @Test 
+    public void shouldBeGiveSolution() {
+        Tower t = new Tower(100, 100);
+        
+        assertEquals(t.icpcProblem("4 9"), "7 3 5 1");
+        
     }
 }
