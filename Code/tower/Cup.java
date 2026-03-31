@@ -15,9 +15,9 @@ import shapes.Rectangle;
  */
 public class Cup extends StackingItem {
     public static final int PIXELS_PER_CM = 10;
-    private ArrayList<Rectangle> shape;
-    private boolean visible;
-    private Lid lid;
+    protected ArrayList<Rectangle> shape;
+    protected boolean visible;
+    protected Lid lid;
     
     /**
      * Constructor for objects of class Cup
@@ -172,7 +172,9 @@ public class Cup extends StackingItem {
         yPosition = yPos;
     }
     
-    
+    public int getYPos() {
+        return yPosition;
+    }
     
     
     /*

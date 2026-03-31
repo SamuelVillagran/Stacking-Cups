@@ -273,4 +273,6 @@ Abre un [issue](../../issues) o contacta al equipo de desarrollo
 
 Hecho con ☕ y 💙 por estudiantes de la ECI
 
+Readme generado con Gemini IA 2026
+
 </div>
