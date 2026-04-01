@@ -25,7 +25,7 @@ public class TowerC4Test {
             
             assertEquals( Opener.class, t.getStackingItems().get(0).getClass());
         } 
-        catch (tower.TowerException te) {
+        catch (Exception te) {
             te.printStackTrace();
         }
         
@@ -55,7 +55,7 @@ public class TowerC4Test {
             assertNull(lidOfCup5);
             assertNull(lidOfCup4);
         } 
-        catch (tower.TowerException te) {
+        catch (Exception te) {
             te.printStackTrace();
         }
     }
