@@ -119,7 +119,7 @@ public class Cup extends StackingItem {
      * And erase the shape of lid from canvas
      */
     public void removeLid() {
-        if(lid != null && lid.getClass() != Fearful.class){
+        if(lid != null) {
             lid.erase();
             lid = null;
         } 
