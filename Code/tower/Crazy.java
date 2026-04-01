@@ -16,5 +16,11 @@ public class Crazy extends Lid {
         super(id, xPos, yPos, color);
     }
     
-    
+     /**
+     * Give lid's type
+     * @return String "crazy"
+     */
+    public String getType() {
+        return "crazy";
+    }
 }

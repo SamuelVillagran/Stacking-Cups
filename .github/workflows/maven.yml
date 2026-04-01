@@ -39,4 +39,8 @@ jobs:
       if: always()  # Lo sube incluso si los tests fallan
       with:
         name: resultados-pruebas
+<<<<<<< HEAD
         path: Code/tower/target/surefire-reports/ 
+=======
+        path: Code/target/surefire-reports/ 
+>>>>>>> development

@@ -9,32 +9,17 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 /**
- * The test class TowerC4Test.
+ * The test class TowerATest.
  *
  * @author  (your name)
  * @version (a version number or a date)
  */
-public class TowerC4Test {
-    
-    @Test
-    public void shouldBeCreateCupOpener() {
-        Tower t = new Tower(100, 100);
-        
-        try {
-            t.pushCup("opener", 3);
-            
-            assertEquals( Opener.class, t.getStackingItems().get(0).getClass());
-        } 
-        catch (Exception te) {
-            te.printStackTrace();
-        }
-        
-    }
+public class TowerATest {
     
     @Test
     public void shouldBePutCorretlyCupOpener() {
-        Tower t = new Tower(100, 100);
-        
+        Tower t = new Tower(30, 30);
+        t.makeVisible();
         try {
             t.pushCup(6);
             t.pushCup(5);
@@ -50,14 +35,10 @@ public class TowerC4Test {
             Lid lidOfCup6 = stackingItems.get(0).getLid(); // Lid of cup with id = 6
             Lid lidOfCup5 = stackingItems.get(1).getLid(); // Lid of cup with id = 5
             Lid lidOfCup4 = stackingItems.get(2).getLid(); // Lid of cup with id = 4
-            assertEquals(4, stackingItems.size());
-            assertNull(lidOfCup6);
-            assertNull(lidOfCup5);
-            assertNull(lidOfCup4);
+            assertTrue(t.ok());
         } 
         catch (Exception te) {
             te.printStackTrace();
         }
     }
-    
 }

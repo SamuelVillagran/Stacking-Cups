@@ -17,4 +17,12 @@ public class Fearful extends Lid {
     }
     
     // id : int, xPos : int, yPos : int, color : String
+     /**
+     * Give lid's type
+     * @return String "fearful"
+     */
+    @Override
+    public String getType() {
+        return "fearful";
+    }
 }

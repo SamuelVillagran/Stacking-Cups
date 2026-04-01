@@ -29,5 +29,13 @@ public class Opener extends Cup {
         super(id, xPos, yPos, color);
     }
     
+     /**
+     * Give lid's type
+     * @return String "opener"
+     */
+    @Override
+    public String getType() {
+        return "opener";
+    }
     
 }

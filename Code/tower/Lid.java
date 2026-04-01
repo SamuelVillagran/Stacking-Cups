@@ -106,6 +106,14 @@ public class Lid extends StackingItem {
         shape = null;
     }
     
+    /**
+     * Give lid's type
+     * @return String "normal"
+     */
+    public String getType() {
+        return "normal";
+    }
+    
     /*
      * Create a rectangle with 
      */

@@ -13,25 +13,7 @@ import org.junit.jupiter.api.Test;
  * @author  (your name)
  * @version (a version number or a date)
  */
-public class TowerC2Test
-{
-    /**
-     * Default constructor for test class TowerC2Test
-     */
-    public TowerC2Test()
-    {
-    }
-
-    /**
-     * Sets up the test fixture.
-     *
-     * Called before every test case method.
-     */
-    @BeforeEach
-    public void setUp()
-    {
-    }
-
+public class TowerC2Test {
     //======================================================
     // Caso 1: Se crea el constructor correctamente
     //======================================================
