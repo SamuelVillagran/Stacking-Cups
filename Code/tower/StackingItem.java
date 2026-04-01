@@ -16,6 +16,10 @@ public abstract class StackingItem {
     protected int xPosition;
     protected int yPosition;
     
+    public boolean isFixed(){
+        return false;
+    }
+    
     public int getId(){
         return id;
     }

@@ -201,7 +201,6 @@ public class Tower {
         }
     }
     
-    
     private void pushHerarchical(int i, int xPos, int newHeight){
         Cup container = null;
         int yPos;
@@ -229,6 +228,7 @@ public class Tower {
         heightCups += newHeight;
                 
         Hierarchical newCup = new Hierarchical(i, xPos, yPos, getRandColor());
+        if(container == null) newCup.setFixed(true);
         lastCup = newCup;
         stackingItems.add(newCup);
         lastOK = true;
@@ -435,8 +435,13 @@ public class Tower {
     public void orderTower() {
         TreeMap<Integer, String> cupsIds = new TreeMap<>();
         TreeMap<Integer, String> lidsIds= new TreeMap<>();
+        StackingItem fixedItem = null;
         
         for(StackingItem item : stackingItems){
+            if(item.isFixed()){
+                fixedItem = item;
+                continue;
+            }
             if(item.hasInterior()){
                 cupsIds.put(item.getId(), item.getColor());
             }else{
@@ -445,11 +450,16 @@ public class Tower {
         }
         
         for(StackingItem item : stackingItems){
-            item.erase();
+            if(!item.isFixed()) item.erase();
         }
-        heightCups = 0;
         stackingItems.clear();
         
+        if(fixedItem != null){
+            stackingItems.add(fixedItem);
+            heightCups = fixedItem.getHeight();
+        } else{
+            heightCups = 0;
+        }
         
         for(Integer id : cupsIds.descendingKeySet()){
             pushCup(id, cupsIds.get(id));
@@ -593,6 +603,12 @@ public class Tower {
         }
         
         if(item1 == null || item2 == null){
+            lastOK = false;
+            if(isVisible) errorMessage();
+            return;
+        }
+        
+        if(item1.isFixed() || item2.isFixed()){
             lastOK = false;
             if(isVisible) errorMessage();
             return;
