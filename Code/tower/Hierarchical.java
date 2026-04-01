@@ -29,5 +29,12 @@ public class Hierarchical extends Cup {
         super(id, xPos, yPos, color);
     }
     
-    
+     /**
+     * Give lid's type
+     * @return String "hierarchical"
+     */
+    @Override
+    public String getType() {
+        return "hierarchical";
+    }
 }
