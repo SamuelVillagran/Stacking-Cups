@@ -1,4 +1,5 @@
 #BlueJ package file
+<<<<<<< HEAD
 editor.fx.0.height=737
 editor.fx.0.width=814
 editor.fx.0.x=1724
@@ -13,6 +14,22 @@ package.editor.x=1679
 package.editor.y=40
 package.frame.height=564
 package.frame.width=1260
+=======
+editor.fx.0.height=736
+editor.fx.0.width=1382
+editor.fx.0.x=-8
+editor.fx.0.y=-8
+objectbench.height=162
+objectbench.width=788
+package.divider.horizontal=0.5906389301634473
+package.divider.vertical=0.7342767295597484
+package.editor.height=460
+package.editor.width=1226
+package.editor.x=0
+package.editor.y=0
+package.frame.height=736
+package.frame.width=1382
+>>>>>>> Samuel
 package.numDependencies=0
 package.numTargets=2
 package.showExtends=true
@@ -27,7 +44,11 @@ target1.height=82
 target1.name=shapes
 target1.type=PackageTarget
 target1.width=120
+<<<<<<< HEAD
 target1.x=10
+=======
+target1.x=330
+>>>>>>> Samuel
 target1.y=110
 target2.height=82
 target2.name=tower
