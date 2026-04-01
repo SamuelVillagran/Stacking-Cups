@@ -25,4 +25,9 @@ public class Fearful extends Lid {
     public String getType() {
         return "fearful";
     }
+    
+    @Override 
+    public void removeLid() {
+        return;
+    }
 }
