@@ -67,7 +67,7 @@ public class Cup extends StackingItem {
         if(lid != null){
             lid.makeVisible();
         }
-    }
+    } 
     
     /**
      * Hide the cup

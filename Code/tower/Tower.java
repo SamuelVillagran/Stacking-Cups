@@ -195,13 +195,46 @@ public class Tower {
             }
             
             if (type.equals("hierarchical")) {
-                Hierarchical newCup = new Hierarchical(i, getRandColor());
-                stackingItems.add(newCup);
+                pushHerarchical(i, xPos, newHeight);
             }
-            
             
         }
     }
+    
+    
+    private void pushHerarchical(int i, int xPos, int newHeight){
+        Cup container = null;
+        int yPos;
+        for(StackingItem item : stackingItems){
+            if(item.hasInterior() && item.getId() > i){
+                if(container == null || item.getId() < container.getId()){
+                    container = (Cup)item;  
+                }
+            }
+        }
+        
+        for(StackingItem item : stackingItems){
+            if(item.hasInterior() && item.getId() < i){
+                Cup cup = (Cup) item;
+                cup.move(cup.getXPosition(), cup.getYPosition()- Cup.PIXELS_PER_CM);
+            }
+        }
+                
+        if(container != null) {
+            yPos = container.getYPosition() + (container.getHeight() - newHeight -1) * Cup.PIXELS_PER_CM;
+        } else{
+            yPos = (maxHeight - newHeight) * Cup.PIXELS_PER_CM;
+        }
+                
+        heightCups += newHeight;
+                
+        Hierarchical newCup = new Hierarchical(i, xPos, yPos, getRandColor());
+        lastCup = newCup;
+        stackingItems.add(newCup);
+        lastOK = true;
+        if (isVisible) newCup.makeVisible();
+    }
+
     
     /**
      * Delete the last cup at the stackingItems list.
