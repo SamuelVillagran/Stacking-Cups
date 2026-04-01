@@ -8,6 +8,7 @@ package tower;
  * @version (a version number or a date)
  */
 public class Hierarchical extends Cup {
+    private boolean fixed;
     
     /**
      * Constructor for objects of class Cup Hierarchical
@@ -16,6 +17,7 @@ public class Hierarchical extends Cup {
      */
     public Hierarchical(int id, String color) {
         super(id, color);
+        this.fixed = false;
     }
     
     /**
@@ -27,6 +29,20 @@ public class Hierarchical extends Cup {
      */
     public Hierarchical(int id, int xPos, int yPos, String color) {
         super(id, xPos, yPos, color);
+        this.fixed = false;
+    }
+    
+    public void setFixed(boolean fixed){
+        this.fixed = fixed;
+    }
+    
+    /**
+     * Check if the element es fixed.
+     * return true if it is in bottom tower, otherwise returns false.
+     */
+    @Override
+    public boolean isFixed(){
+        return fixed;
     }
     
      /**
