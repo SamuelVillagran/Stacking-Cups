@@ -15,11 +15,15 @@ import java.util.ArrayList;
  * @version (a version number or a date)
  */
 public class TowerC4Test {
+    Tower t;
+    
+    @BeforeEach
+    public void setUp(){
+        t = new Tower(100, 100);
+    }
     
     @Test
     public void shouldBeCreateCupOpener() {
-        Tower t = new Tower(100, 100);
-        
         try {
             t.pushCup("opener", 3);
             
@@ -33,8 +37,6 @@ public class TowerC4Test {
     
     @Test
     public void shouldBePutCorretlyCupOpener() {
-        Tower t = new Tower(100, 100);
-        
         try {
             t.pushCup(6);
             t.pushCup(5);
@@ -60,4 +62,49 @@ public class TowerC4Test {
         }
     }
     
+    @Test
+    public void shouldPushAHierarchichalCup() throws tower.TowerException{
+        t.pushCup("Hierarchical", 6);
+        assertEquals(Hierarchical.class, t.getStackingItems().get(0).getClass());
+    }
+    
+    @Test
+    public void shouldInsertHierarchical() throws tower.TowerException{
+        t.pushCup(6);
+        t.pushCup(4);
+        t.pushCup(3);
+        t.pushCup(2);
+        t.pushCup(1);
+            
+        t.pushCup("hierarchical", 5);
+            
+        String[][] stackingItems = t.stackingItems();
+        assertArrayEquals(new String[]{"cup", "6"}, stackingItems[0]);
+        assertArrayEquals(new String[]{"cup", "5"}, stackingItems[1]);
+        assertArrayEquals(new String[]{"cup", "4"}, stackingItems[2]);
+        assertArrayEquals(new String[]{"cup", "3"}, stackingItems[3]);
+        assertArrayEquals(new String[]{"cup", "2"}, stackingItems[4]);
+        assertArrayEquals(new String[]{"cup", "1"}, stackingItems[5]);
+    }
+    
+    @Test
+    public void shouldntMoveHierarchicalOnceBottom() throws tower.TowerException{
+        t.pushCup(4);
+        t.pushCup(3);
+        t.pushCup(2);
+        t.pushCup(1);
+        t.pushCup("hierarchical", 5);
+            
+        t.swap(new String[]{"cup", "4"}, new String[]{"cup", "1"});
+            
+        String[][] stackingItems = t.stackingItems();
+        String[][] expected = {
+        {"cup", "5"},
+        {"cup", "4"},
+        {"cup", "3"},
+        {"cup", "2"},
+        {"cup", "1"}};
+            
+        assertArrayEquals(expected, stackingItems);
+    }
 }
