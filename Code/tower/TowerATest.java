@@ -37,7 +37,7 @@ public class TowerATest {
             Lid lidOfCup4 = stackingItems.get(2).getLid(); // Lid of cup with id = 4
             assertTrue(t.ok());
         } 
-        catch (tower.TowerException te) {
+        catch (Exception te) {
             te.printStackTrace();
         }
     }

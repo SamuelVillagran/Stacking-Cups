@@ -255,7 +255,7 @@ public class Tower {
         int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
         
         if(stackingItems.isEmpty() || (stackItemNonInteriorExists(i) && stackItemInteriorExists(i))){
-            //if(isVisible) errorMessage();
+            if(isVisible) errorMessage();
             lastOK = false;
             return;
         }
@@ -321,9 +321,7 @@ public class Tower {
             }
         }
         String color = landingItem.getColor();
-        if (type.equals("normal")) {
-            pushLid(i);
-        }  
+        if (type.equals("normal")) pushLid(i);
         
         if (type.equals("crazy")) {
             yPos += lidWidth + landingItem.getSize();
