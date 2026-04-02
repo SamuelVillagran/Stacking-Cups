@@ -25,8 +25,9 @@ public class TowerC4Test {
     @Test
     public void shouldBeCreateCupOpener() {
         t.pushCup("opener", 3);
-            
         assertEquals( Opener.class, t.getStackingItems().get(0).getClass());
+            assertEquals( Opener.class, t.getStackingItems().get(0).getClass());
+        
         
     }
     

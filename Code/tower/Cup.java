@@ -119,7 +119,7 @@ public class Cup extends StackingItem {
      * And erase the shape of lid from canvas
      */
     public void removeLid() {
-        if(lid != null){
+        if(lid != null) {
             lid.erase();
             lid = null;
         } 
@@ -183,6 +183,9 @@ public class Cup extends StackingItem {
     public String getType() {
         return "normal";
     }
+    
+
+    
     /*
      * Build the cup with Rectangles
      * To take way cup it makes three Rectangles
