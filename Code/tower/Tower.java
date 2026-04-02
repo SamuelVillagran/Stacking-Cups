@@ -563,8 +563,13 @@ public class Tower {
     public void reverseTower() {
         TreeMap<Integer, String> cupsIds = new TreeMap<>();
         TreeMap<Integer, String> lidsIds= new TreeMap<>();
+        StackingItem fixedItem = null;
         
         for(StackingItem item : stackingItems){
+            if(item.isFixed()){
+                fixedItem = item;
+                continue;
+            }
             if(item.hasInterior()){
                 cupsIds.put(item.getId(), item.getColor());
             }else{
@@ -573,10 +578,16 @@ public class Tower {
         }
         
         for(StackingItem item : stackingItems){
-            item.erase();
+            if(!item.isFixed())item.erase();
         }
-        heightCups = 0;
         stackingItems.clear();
+        
+        if(fixedItem != null){
+            stackingItems.add(fixedItem);
+            heightCups = fixedItem.getHeight();
+        } else{
+            heightCups = 0;
+        }
         
         for(Integer id : cupsIds.keySet()){
             pushCup(id, cupsIds.get(id));

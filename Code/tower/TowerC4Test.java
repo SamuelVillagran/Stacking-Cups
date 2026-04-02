@@ -41,16 +41,16 @@ public class TowerC4Test {
             
             
         t.pushCup("opener", 3); // Should destroy the cup to entry
-            
-        ArrayList<StackingItem> stackingItems = t.getStackingItems();
-        Lid lidOfCup6 = stackingItems.get(0).getLid(); // Lid of cup with id = 6
-        Lid lidOfCup5 = stackingItems.get(1).getLid(); // Lid of cup with id = 5
-        Lid lidOfCup4 = stackingItems.get(2).getLid(); // Lid of cup with id = 4
-        assertEquals(4, stackingItems.size());
-        assertNull(lidOfCup6);
-        assertNull(lidOfCup5);
-        assertNull(lidOfCup4);
         
+        String[][] expected = {
+        {"cup", "6"},
+        {"cup", "5"},
+        {"cup", "4"},
+        {"cup", "3"}};
+        
+        String[][] stackingItems = t.stackingItems();
+        assertEquals(4, stackingItems.length);
+        assertArrayEquals(expected, stackingItems);
     }
     
     @Test
@@ -79,7 +79,7 @@ public class TowerC4Test {
     }
     
     @Test
-    public void shouldntMoveHierarchicalOnceBottom() throws tower.TowerException{
+    public void shouldntMoveHierarchicalOnceBottomAfterSwap() throws tower.TowerException{
         t.pushCup(4);
         t.pushCup(3);
         t.pushCup(2);
@@ -97,5 +97,43 @@ public class TowerC4Test {
         {"cup", "1"}};
             
         assertArrayEquals(expected, stackingItems);
+    }
+    
+    @Test
+    public void shouldntMoveHierarchichalOnceBottomAfterReverseTower(){
+        t.pushCup(4);
+        t.pushCup(3);
+        t.pushCup(2);
+        t.pushCup(1);
+        t.pushCup("hierarchical", 5);
+        t.reverseTower();
+        
+        String[][] expected = {
+        {"cup", "5"},
+        {"cup", "1"},
+        {"cup", "2"},
+        {"cup", "3"},
+        {"cup", "4"}};
+        
+        assertArrayEquals(expected, t.stackingItems());
+    }
+    
+    @Test
+    public void shouldntMoveHierarchichalOnceBottomAfterOrder(){
+        t.pushCup(1);
+        t.pushCup(2);
+        t.pushCup(3);
+        t.pushCup(4);
+        t.pushCup("hierarchical", 5);
+        t.orderTower();
+        
+        String[][] expected = {
+        {"cup", "5"},
+        {"cup", "4"},
+        {"cup", "3"},
+        {"cup", "2"},
+        {"cup", "1"}};
+
+        assertArrayEquals(expected, t.stackingItems());
     }
 }
