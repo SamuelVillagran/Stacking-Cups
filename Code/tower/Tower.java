@@ -295,12 +295,13 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        String color = findCup(i).getColor();
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null) {
+        if(landingItem == null || color == null) {
             if(isVisible){
                 lastOK = false;
                 errorMessage();
@@ -310,7 +311,7 @@ public class Tower {
                 return;
             }
         }
-        String color = landingItem.getColor();
+        
         Lid newLid = new Lid(i, xPos, yPos, color);
         stackingItems.add(newLid);
         if(isVisible) newLid.makeVisible();
@@ -338,12 +339,13 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        String color = findCup(i).getColor();
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null) {
+        if(landingItem == null || color == null) {
             if(isVisible){
                 lastOK = false;
                 errorMessage();
@@ -353,7 +355,6 @@ public class Tower {
                 return;
             }
         }
-        String color = landingItem.getColor();
         if (type.equals("normal")) pushLid(i);
         
         if (type.equals("crazy")) {
@@ -822,14 +823,28 @@ public class Tower {
     }
     
     /*
-     * Finds cup with id cup
-     * @param idCup idCup is the id that going to search at staking items
+     * Finds cup with id cup.
+     * @param idCup idCup is the id that going to search at staking items.
      */
-    private Cup findCup(int idCup) {
+    public Cup findCup(int idCup) {
         
         for (StackingItem s : stackingItems) {
-            if (s.getId() == idCup) {
+            if (s.getId() == idCup && s.hasInterior()) {
                 return (Cup) s;
+            }
+        }
+        return null;
+    }
+    
+    /*
+     * Finds lid with id cup.
+     * @param idCup idCup is the id that going to search at staking items.
+     */
+    public Lid findLid(int idLid) {
+        
+        for (StackingItem s : stackingItems) {
+            if (s.getId() == idLid && !s.hasInterior()) {
+                return (Lid) s;
             }
         }
         return null;
@@ -839,7 +854,7 @@ public class Tower {
      * Generate a random color of list COLORS
      * 
      */
-    private String getRandColor(){
+    public String getRandColor(){
         Random random = new Random();
         int randIndexColor = random.nextInt(COLORS.size());
         String color = COLORS.get(randIndexColor);

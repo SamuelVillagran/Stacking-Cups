@@ -280,4 +280,22 @@ public class TowerC1Test {
         
     }
     
+    @Test
+    public void cupAndLidShouldHaveSameColor(){
+        Tower tower = new Tower(30, 30);
+        tower.pushCup(7);
+        tower.pushCup(2);
+        tower.pushCup(3);
+        tower.pushLid(7);
+        tower.pushLid(2);
+        tower.pushLid(3);
+        
+        Cup cupBottom = tower.findCup(2);
+        Lid lidBottom = tower.findLid(2);
+        Cup cupUpper = tower.findCup(3);
+        Lid lidUpper = tower.findLid(3);
+        
+        assertEquals(cupBottom.getColor(), lidBottom.getColor(), "La lid debe tener el mismo color que su Cup");
+        assertEquals(cupUpper.getColor(), lidUpper.getColor(), "La lid debe tener el mismo color que su Cup");
+    }
 }
