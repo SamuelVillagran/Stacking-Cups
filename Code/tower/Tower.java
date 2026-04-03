@@ -24,8 +24,8 @@ import javax.swing.JOptionPane;
  */
 public class Tower {
     
-    private static ArrayList<String> COLORS = new ArrayList<>();
     private static ArrayList<Rectangle> ruler;
+    private ArrayList<String> COLORS = new ArrayList<>();
     private int width;
     private int maxHeight;
     private boolean lastOK;
@@ -36,11 +36,6 @@ public class Tower {
     private boolean isCreatedRuler;
     private ArrayList<StackingItem> stackingItems;
     
-    static {
-        for (FigureColor fc : FigureColor.values()) {
-            COLORS.add(fc.name()); // ayudado con IA
-        }
-    }
 
     /**
      * Constructor for objects of class Tower
@@ -48,6 +43,7 @@ public class Tower {
     public Tower(int width, int maxHeight) {
         if (invariant(width, maxHeight)) {
             inicializate(width, maxHeight);
+            initializeColors();
             generateRuler();
             lastOK = true;
         } else if (!invariant(width, maxHeight) && isVisible) {
@@ -156,6 +152,15 @@ public class Tower {
     }
     
     /*
+     * Add the array colors.
+     */
+    private void initializeColors(){
+        for (FigureColor fc : FigureColor.values()) {
+            COLORS.add(fc.name()); // ayudado con IA
+        }
+    }
+    
+    /*
      * Inserts an Opener cup into the tower.
      * The Opener cup removes every lid that blocks iths way.
      * @param i Id of the cup.
@@ -224,7 +229,6 @@ public class Tower {
         lastOK = true;
         if(isVisible) newCup.makeVisible();
     }
-    
     
     /**
      * Delete the last cup at the stackingItems list.
