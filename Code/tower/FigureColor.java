@@ -1,4 +1,5 @@
 package tower;
+import java.util.ArrayList;
 
 
 /**
@@ -13,5 +14,13 @@ public enum FigureColor {
     DARKYELLOW, GREENTINT, SALMON, DARKRED, HARDGRAY, 
     SOFTGRAY, VIOLET, NAVY, OLIVE, PURPLE, 
     SILVER, LIME, TEAL, AQUA, SKYBLUE, 
-    CHOCOLATE, BEIGE // Some colors are generated with IA
+    CHOCOLATE, BEIGE; // Some colors are generated with IA
+    
+    public static ArrayList<String> getStringColor() {
+        ArrayList<String> colorsInString = new ArrayList<>();
+        for (FigureColor fc : FigureColor.values()) {
+            colorsInString.add(fc.name()); // ayudado con IA
+        }
+        return colorsInString;
+    }
 }

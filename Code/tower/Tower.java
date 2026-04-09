@@ -154,10 +154,8 @@ public class Tower {
     /*
      * Add the array colors.
      */
-    private void initializeColors(){
-        for (FigureColor fc : FigureColor.values()) {
-            COLORS.add(fc.name()); // ayudado con IA
-        }
+    private void initializeColors() {
+        COLORS = FigureColor.getStringColor();
     }
     
     /*

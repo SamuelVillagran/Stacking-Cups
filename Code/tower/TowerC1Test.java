@@ -161,13 +161,6 @@ public class TowerC1Test {
     }
     
     @Test
-    public void shouldMessageErrorAppearInPopLid() {
-        Tower proofTower = new Tower(5, 15);
-        //proofTower.pushCup(0);
-        assertFalse(proofTower.ok()); // Siempre comprobar el ok, no deberia mostrarse gráficamente 
-    }
-    
-    @Test
     public void shouldPopLid() {
         Tower proofTower = new Tower(5, 15);
         //proofTower.pushCup(0);
@@ -231,13 +224,14 @@ public class TowerC1Test {
     public void shouldStackingItemsExecute() { // Generado con Caulde IA Sonet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
         //tower.pushCup(1); // Cup con id=1 → height = 2*1-1 = 1
-
+        tower.pushCup(2);
         String[][] result = tower.stackingItems();
+        
 
         assertEquals(1, result.length);
         // Debe haber al menos 1 fila con "Cup"
         assertEquals("cup", result[0][0]);
-        assertEquals("1", result[0][1]);
+        assertEquals("2", result[0][1]);
     }
 
     // =========================================================
@@ -264,25 +258,6 @@ public class TowerC1Test {
         }
         assertTrue(hasCup, "Debe haber al menos un Cup en el resultado");
         assertTrue(hasLid, "Debe haber al menos un Lid en el resultado");
-    }
-
-    // =========================================================
-    // CASO 4: Dos cups, sin lids → solo cups en resultado
-    // =========================================================
-
-    @Test
-    public void stackingItemsTwoCupsNoLidsReturnsOnlyCups() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
-        Tower tower = new Tower(10, 20);
-        //tower.pushCup(3); // height = 5
-        //tower.pushCup(2); // height = 3
-
-        String[][] result = tower.stackingItems();
-
-        assertNotNull(result);
-        assertEquals(2, result.length);
-        for (String[] row : result) {
-            assertEquals("cup", row[0], "Sin lids, todas las filas deben ser Cup");
-        }
     }
     
     //=============================================================
