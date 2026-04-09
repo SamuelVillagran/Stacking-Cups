@@ -27,7 +27,7 @@ public class TowerC1Test {
     }
     
     @Test
-    public void shouldPushCupsNormally(){
+    public void shouldPushCupsInOrder(){
         Tower proofTower = new Tower(13,13);
         proofTower.pushCup(4); //Cup grande, va primero
         proofTower.pushCup(3); //Cup va sobre Cup4
@@ -43,6 +43,22 @@ public class TowerC1Test {
     }
     
     @Test
+    public void shouldPushCupInDisorder(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = {
+        {"cup", "1"},
+        {"cup", "2"},
+        {"cup", "3"}};
+        
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
     public void shouldIgnoreDuplicatedCup(){
         Tower proofTower = new Tower(13,13);
         proofTower.pushCup(4);
@@ -51,6 +67,18 @@ public class TowerC1Test {
         String[][] result = proofTower.stackingItems();
         
         assertEquals(1, result.length);
+        assertFalse(proofTower.ok());
+    }
+    
+    @Test
+    public void shouldIgnoreDuplicatedLid(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(3);
+        proofTower.pushLid(3);
+        proofTower.pushLid(3);
+        
+        String[][] result = proofTower.stackingItems();
+        assertEquals(2, result.length);
         assertFalse(proofTower.ok());
     }
     
