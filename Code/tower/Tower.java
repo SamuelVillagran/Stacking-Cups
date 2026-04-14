@@ -62,6 +62,7 @@ public class Tower {
         }
         if (invariant(height, height)) {
             inicializate(height, height);
+            initializeColors();
             generateCupsInTower(numberCups);
             generateRuler();
         } else if (!invariant(width, maxHeight) && isVisible) {
@@ -646,10 +647,72 @@ public class Tower {
     }
     
     /**
-     * 
+     * Rebuild the tower according to the insertion of elements.
+     * Save the cups and lids like looks in StackingItems.
+     * It deletes the StakcingItems (but not fixed pieces) and reassembled by 
+     * executing pushCup for each cup in that order with its lid, if this exists.
      */
     public void cover() {
+        if(stackingItems.isEmpty()){
+            lastOK = false;
+            if(isVisible) errorMessage();
+            return;
+        }
         
+        ArrayList<Integer> cupIdsInsert = new ArrayList<>();
+        ArrayList<String> colorsInsert = new ArrayList<>();
+        ArrayList<Integer> lidIdsPresent = new ArrayList<>();
+        StackingItem fixedItem = null;
+        
+        for (StackingItem item : stackingItems) {
+            if (item.isFixed()) {
+                fixedItem = item;
+                continue;
+            }
+            if (item.hasInterior()) {
+                cupIdsInsert.add(item.getId());
+                colorsInsert.add(item.getColor());
+            } else {
+                lidIdsPresent.add(item.getId());
+            }
+        }
+        
+        if (cupIdsInsert.isEmpty()) {
+            lastOK = false;
+            if (isVisible) errorMessage();
+            return;
+        }
+        
+        for (StackingItem item : stackingItems) {
+            if (!item.isFixed()) {
+                item.erase();
+            }
+        }
+        stackingItems.clear();
+        
+        if (fixedItem != null) {
+            stackingItems.add(fixedItem);
+            heightCups = fixedItem.getHeight();
+        } else {
+            heightCups = 0;
+        }
+        
+        for (int i = 0; i < cupIdsInsert.size(); i++) {
+            int id = cupIdsInsert.get(i);
+            String color = colorsInsert.get(i);
+            pushCup(id, color);
+            if (!lastOK) {
+                if (isVisible) errorMessage();
+                return;
+            }
+            if (lidIdsPresent.contains(id)) {
+                pushLid(id);
+                if (!lastOK) {
+                    if (isVisible) errorMessage();
+                    return;
+                }
+            }
+        }
     }
     
     /**
@@ -777,10 +840,6 @@ public class Tower {
         heightCup = lastCup.getHeight();
         return invariant2(heightCup) && lastOK;
     }
-
-    public int getHeightCups(){
-        return heightCups;
-    }
     
     public String icpcProblem(String numberAndHeight) {
         String result = "";
@@ -845,7 +904,7 @@ public class Tower {
      * Generate a random color of list COLORS
      * 
      */
-    public String getRandColor(){
+    private String getRandColor(){
         Random random = new Random();
         int randIndexColor = random.nextInt(COLORS.size());
         System.out.println(COLORS.size());
