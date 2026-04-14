@@ -13,3 +13,8 @@ out/
 
 # Ignorar archivos temporales de astah
 *.asta.lock
+
+# Ignorar archivos de eclipse
+*.classpath
+*.project
+*.settings

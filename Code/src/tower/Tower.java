@@ -24,8 +24,8 @@ import javax.swing.JOptionPane;
  */
 public class Tower {
     
-    private static ArrayList<String> COLORS = new ArrayList<>();
     private static ArrayList<Rectangle> ruler;
+    private ArrayList<String> COLORS = new ArrayList<>();
     private int width;
     private int maxHeight;
     private boolean lastOK;
@@ -36,11 +36,6 @@ public class Tower {
     private boolean isCreatedRuler;
     private ArrayList<StackingItem> stackingItems;
     
-    static {
-        for (FigureColor fc : FigureColor.values()) {
-            COLORS.add(fc.name()); // ayudado con IA
-        }
-    }
 
     /**
      * Constructor for objects of class Tower
@@ -48,6 +43,7 @@ public class Tower {
     public Tower(int width, int maxHeight) {
         if (invariant(width, maxHeight)) {
             inicializate(width, maxHeight);
+            initializeColors();
             generateRuler();
             lastOK = true;
         } else if (!invariant(width, maxHeight) && isVisible) {
@@ -142,99 +138,95 @@ public class Tower {
             cupsOrderByPosY.put(c.getYPos(), c); 
         } 
         
-        if (isTypeAllowed) {
-            if (type.equals("normal")) pushCup(i);
-            
-            if (type.equals("opener")) {
-                
-                if(stackingItems.isEmpty()) {  // Cuando no hay stackingItems se pone de primeras
-                    yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
-                    heightCups = newHeight;
-                    Opener newCup = new Opener(i, xPos, yPos, getRandColor());
-                    lastCup = newCup;
-                    
-                    stackingItems.add(newCup);
-                    lastOK = true;
-                    if(isVisible) newCup.makeVisible();
-                    return;
-                }
-                
-                int yPosLastCup = Integer.MIN_VALUE, sizeLastCup = 0; // Está parte de la lógica fue mejorada por Claude Sonnet 4.6 IA 2026
-                int yPosTopCup = Integer.MIN_VALUE, sizeTopCup = 0;
-                List<StackingItem> lidsToRemove = new ArrayList<>(); // ← acumula
-                
-                for (Integer yPosCups : cupsOrderByPosY.descendingKeySet()) {
-                    Cup currentCup = cupsOrderByPosY.get(yPosCups);
-                    Lid lidOfCup = currentCup.getLid();
-                    if (currentCup.getId() > i && lidOfCup != null) {
-                        lidsToRemove.add(lidOfCup); // ← guarda referencia antes de borrarla
-                        currentCup.removeLid();
-                    }
-                    if (yPosTopCup == Integer.MIN_VALUE) {
-                        yPosTopCup = yPosCups;
-                        sizeTopCup = currentCup.getSize();
-                    }
-                    if (currentCup.getId() <= i) {
-                        yPosLastCup = yPosCups;
-                        sizeLastCup = currentCup.getSize();
-                        break;
-                    }
-                }
-                
-                stackingItems.removeAll(lidsToRemove); // ← elimínalas de la lista
-                
-                if (yPosLastCup == Integer.MIN_VALUE) {
-                    yPosLastCup = yPosTopCup;
-                    sizeLastCup = sizeTopCup;
-                }
-                    
-                yPos = yPosLastCup + sizeLastCup; // Put the new yPos cup at (0,0) where should be stay
-                Opener newCup = new Opener(i, xPos, yPos, getRandColor());
-                stackingItems.add(newCup);    
-                if(isVisible) newCup.makeVisible();
-            }
-            
-            if (type.equals("hierarchical")) {
-                pushHerarchical(i, xPos, newHeight);
-            }
-            
+        switch (type) {
+            case "normal":
+                pushCup(i);
+                break;
+            case "opener":
+                pushOpener(i, xPos, newHeight);
+                break;
+            case "hierarchical": 
+                pushHierarchical(i, xPos, newHeight);
+                break;
         }
     }
     
-    private void pushHerarchical(int i, int xPos, int newHeight){
-        Cup container = null;
+    /*
+     * Add the array colors.
+     */
+    private void initializeColors() {
+        COLORS = FigureColor.getStringColor();
+    }
+    
+    /*
+     * Inserts an Opener cup into the tower.
+     * The Opener cup removes every lid that blocks iths way.
+     * @param i Id of the cup.
+     * @param xPos Position on x of the cup.
+     * @param newHeight Height of the cup.
+     */
+    private void pushOpener(int i, int xPos, int newHeight){
         int yPos;
-        for(StackingItem item : stackingItems){
-            if(item.hasInterior() && item.getId() > i){
-                if(container == null || item.getId() < container.getId()){
-                    container = (Cup)item;  
+        if(stackingItems.isEmpty()) {  // Cuando no hay stackingItems se pone de primeras
+            yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
+            heightCups = newHeight;
+            Opener newCup = new Opener(i, xPos, yPos, getRandColor());
+            lastCup = newCup;
+                    
+            stackingItems.add(newCup);
+            lastOK = true;
+            if(isVisible) newCup.makeVisible();
+            return;
+        }
+                
+        Cup currentContainer = null;
+        while (true) { // Elimina las lids que encuentra  a su paso
+            StackingItem blocker = findLandingPiece(newHeight); // Busca el obstaculo más alto
+            if (blocker == null || blocker.hasInterior()) break; 
+                    
+            if (currentContainer != null) {
+                int interiorEnd = currentContainer.getYPosition()
+                        + (currentContainer.getHeight() - 1) * Cup.PIXELS_PER_CM;
+                if (blocker.getYPosition() >= interiorEnd) break;
+            }
+            Cup parentCup = findCupWithId(blocker.getId());
+            if (parentCup != null) parentCup.removeLid();
+            blocker.erase();
+            stackingItems.remove(blocker);
+            if (parentCup != null && parentCup.canContain(newHeight)) {
+                currentContainer = parentCup;
+            }
+        }
+                
+        if (currentContainer != null) { //Aterrizaje de la pieza.
+            StackingItem blockerInside = findBlockerInContainer(newHeight, currentContainer);
+            if (blockerInside != null) { 
+                yPos = resolveYPos(blockerInside, newHeight, newHeight);
+            } else {
+                StackingItem deepest = findDeepestContainer(newHeight);
+                if (deepest != null) {
+                    yPos = deepest.getYPosition()
+                             + (deepest.getHeight() - newHeight - 1) * Cup.PIXELS_PER_CM;
+                } else {
+                    yPos = (maxHeight - newHeight) * Cup.PIXELS_PER_CM;
                 }
             }
+        } else {
+            StackingItem landingItem = findLandingPiece(newHeight);
+            yPos = resolveYPos(landingItem, newHeight, newHeight);
         }
-        
-        for(StackingItem item : stackingItems){
-            if(item.hasInterior() && item.getId() < i){
-                Cup cup = (Cup) item;
-                cup.move(cup.getXPosition(), cup.getYPosition()- Cup.PIXELS_PER_CM);
-            }
+        if(yPos < 0){
+            if(isVisible) errorMessage();
+            lastOK = false;
+            return;
         }
-                
-        if(container != null) {
-            yPos = container.getYPosition() + (container.getHeight() - newHeight -1) * Cup.PIXELS_PER_CM;
-        } else{
-            yPos = (maxHeight - newHeight) * Cup.PIXELS_PER_CM;
-        }
-                
         heightCups += newHeight;
-                
-        Hierarchical newCup = new Hierarchical(i, xPos, yPos, getRandColor());
-        if(container == null) newCup.setFixed(true);
+        Opener newCup = new Opener(i, xPos, yPos, getRandColor());
         lastCup = newCup;
         stackingItems.add(newCup);
         lastOK = true;
-        if (isVisible) newCup.makeVisible();
+        if(isVisible) newCup.makeVisible();
     }
-
     
     /**
      * Delete the last cup at the stackingItems list.
@@ -295,12 +287,13 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        String color = findCup(i).getColor();
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null) {
+        if(landingItem == null || color == null) {
             if(isVisible){
                 lastOK = false;
                 errorMessage();
@@ -310,7 +303,7 @@ public class Tower {
                 return;
             }
         }
-        String color = landingItem.getColor();
+        
         Lid newLid = new Lid(i, xPos, yPos, color);
         stackingItems.add(newLid);
         if(isVisible) newLid.makeVisible();
@@ -338,12 +331,13 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        String color = findCup(i).getColor();
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null) {
+        if(landingItem == null || color == null) {
             if(isVisible){
                 lastOK = false;
                 errorMessage();
@@ -353,7 +347,6 @@ public class Tower {
                 return;
             }
         }
-        String color = landingItem.getColor();
         if (type.equals("normal")) pushLid(i);
         
         if (type.equals("crazy")) {
@@ -714,7 +707,6 @@ public class Tower {
         lenItems = stackingItems.size();
         String[][] result =  new String[lenItems][2];
         Collection<StackingItem> items = stackingItems; // A+Esta linea fue ayudada a extraer con Gemini IA
-        System.out.println(items.size());
         TreeMap<Integer, StackingItem> itemsWithPosY = new TreeMap<>();
         
         for (StackingItem item : items) {
@@ -822,14 +814,28 @@ public class Tower {
     }
     
     /*
-     * Finds cup with id cup
-     * @param idCup idCup is the id that going to search at staking items
+     * Finds cup with id cup.
+     * @param idCup idCup is the id that going to search at staking items.
      */
-    private Cup findCup(int idCup) {
+    public Cup findCup(int idCup) {
         
         for (StackingItem s : stackingItems) {
-            if (s.getId() == idCup) {
+            if (s.getId() == idCup && s.hasInterior()) {
                 return (Cup) s;
+            }
+        }
+        return null;
+    }
+    
+    /*
+     * Finds lid with id cup.
+     * @param idCup idCup is the id that going to search at staking items.
+     */
+    public Lid findLid(int idLid) {
+        
+        for (StackingItem s : stackingItems) {
+            if (s.getId() == idLid && !s.hasInterior()) {
+                return (Lid) s;
             }
         }
         return null;
@@ -839,9 +845,10 @@ public class Tower {
      * Generate a random color of list COLORS
      * 
      */
-    private String getRandColor(){
+    public String getRandColor(){
         Random random = new Random();
         int randIndexColor = random.nextInt(COLORS.size());
+        System.out.println(COLORS.size());
         String color = COLORS.get(randIndexColor);
         COLORS.remove(color);
         return color;
@@ -1197,4 +1204,66 @@ public class Tower {
         }
         return false;
     }
+
+    /*
+     * Find items inside a Cup that blocks the way of a opener Cup.
+     * GENERATED BY IA - GEMINI.
+     */
+    private StackingItem findBlockerInContainer(int fallingWidth, Cup container) {
+        StackingItem blocker = null;
+        int minY = Integer.MAX_VALUE;
+        int containerTop = container.getYPosition();
+        int containerBottom = containerTop + container.getHeight() * Cup.PIXELS_PER_CM;
+        for (StackingItem s : stackingItems) {
+            if (s == container) continue;
+            int sBottom = s.getYPosition() + s.getHeight() * Cup.PIXELS_PER_CM;
+            if (s.getYPosition() >= containerTop && sBottom <= containerBottom
+                && s.blocksPassage(fallingWidth) && s.getYPosition() < minY) {
+                blocker = s;
+                minY = s.getYPosition();
+            }
+        }
+        return blocker;
+    }
+    
+    /*
+     * Push a heriarichal cup in the Tower.
+     * @param i Id of the cup.
+     * @param xPos Horizontal position.
+     * @param newHeight Height of the cup.
+     */
+    private void pushHierarchical(int i, int xPos, int newHeight){
+        Cup container = null;
+        int yPos;
+        for(StackingItem item : stackingItems){
+            if(item.hasInterior() && item.getId() > i){
+                if(container == null || item.getId() < container.getId()){
+                    container = (Cup)item;  
+                }
+            }
+        }
+        
+        for(StackingItem item : stackingItems){
+            if(item.hasInterior() && item.getId() < i){
+                Cup cup = (Cup) item;
+                cup.move(cup.getXPosition(), cup.getYPosition()- Cup.PIXELS_PER_CM);
+            }
+        }
+                
+        if(container != null) {
+            yPos = container.getYPosition() + (container.getHeight() - newHeight -1) * Cup.PIXELS_PER_CM;
+        } else{
+            yPos = (maxHeight - newHeight) * Cup.PIXELS_PER_CM;
+        }
+                
+        heightCups += newHeight;
+                
+        Hierarchical newCup = new Hierarchical(i, xPos, yPos, getRandColor());
+        if(container == null) newCup.setFixed(true);
+        lastCup = newCup;
+        stackingItems.add(newCup);
+        lastOK = true;
+        if (isVisible) newCup.makeVisible();
+    }
+
 }

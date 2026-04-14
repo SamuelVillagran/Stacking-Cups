@@ -55,6 +55,48 @@ public class TowerC4Test {
     }
     
     @Test
+    public void shouldBePutCorretlyCupOpenerWithCupsInDesorder() throws tower.TowerException {
+        t.pushCup(3);
+        t.pushLid(3);
+        t.pushCup(4);
+        t.pushLid(4);
+            
+            
+        t.pushCup("opener", 2); // Should destroy the cup to entry
+        
+        String[][] expected = {
+        {"cup", "3"},
+        {"lid", "3"},
+        {"cup", "4"},
+        {"cup", "2"}};
+        
+        String[][] stackingItems = t.stackingItems();
+        assertEquals(4, stackingItems.length);
+        assertArrayEquals(expected, stackingItems);
+    }
+    
+    @Test
+    public void shouldBePutCorretlyCupOpenerWithCupsInDesorder2() throws tower.TowerException{
+        t.pushCup(7);
+        t.pushCup(1);
+        t.pushCup(2);
+        t.pushCup(3);
+        t.pushLid(7);
+        t.pushLid(2);
+        t.pushLid(3);
+        t.pushCup("opener", 5);
+        
+        String[][] expected = {
+        {"cup", "7"},
+        {"cup", "1"},
+        {"cup", "2"},
+        {"cup", "3"},
+        {"cup", "5"}};
+        String[][] stackingItems = t.stackingItems();
+        assertArrayEquals(expected, stackingItems);
+    }
+    
+    @Test
     public void shouldPushAHierarchichalCup() throws tower.TowerException{
         t.pushCup("hierarchical", 6);
         assertEquals(Hierarchical.class, t.getStackingItems().get(0).getClass());
@@ -137,4 +179,6 @@ public class TowerC4Test {
 
         assertArrayEquals(expected, t.stackingItems());
     }
+    
+    
 }

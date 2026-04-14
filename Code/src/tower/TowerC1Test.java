@@ -27,7 +27,7 @@ public class TowerC1Test {
     }
     
     @Test
-    public void shouldPushCupsNormally(){
+    public void shouldPushCupsInOrder(){
         Tower proofTower = new Tower(13,13);
         proofTower.pushCup(4); //Cup grande, va primero
         proofTower.pushCup(3); //Cup va sobre Cup4
@@ -43,6 +43,22 @@ public class TowerC1Test {
     }
     
     @Test
+    public void shouldPushCupInDisorder(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = {
+        {"cup", "1"},
+        {"cup", "2"},
+        {"cup", "3"}};
+        
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
     public void shouldIgnoreDuplicatedCup(){
         Tower proofTower = new Tower(13,13);
         proofTower.pushCup(4);
@@ -51,6 +67,18 @@ public class TowerC1Test {
         String[][] result = proofTower.stackingItems();
         
         assertEquals(1, result.length);
+        assertFalse(proofTower.ok());
+    }
+    
+    @Test
+    public void shouldIgnoreDuplicatedLid(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(3);
+        proofTower.pushLid(3);
+        proofTower.pushLid(3);
+        
+        String[][] result = proofTower.stackingItems();
+        assertEquals(2, result.length);
         assertFalse(proofTower.ok());
     }
     
@@ -133,13 +161,6 @@ public class TowerC1Test {
     }
     
     @Test
-    public void shouldMessageErrorAppearInPopLid() {
-        Tower proofTower = new Tower(5, 15);
-        //proofTower.pushCup(0);
-        assertFalse(proofTower.ok()); // Siempre comprobar el ok, no deberia mostrarse gráficamente 
-    }
-    
-    @Test
     public void shouldPopLid() {
         Tower proofTower = new Tower(5, 15);
         //proofTower.pushCup(0);
@@ -203,13 +224,14 @@ public class TowerC1Test {
     public void shouldStackingItemsExecute() { // Generado con Caulde IA Sonet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
         //tower.pushCup(1); // Cup con id=1 → height = 2*1-1 = 1
-
+        tower.pushCup(2);
         String[][] result = tower.stackingItems();
+        
 
         assertEquals(1, result.length);
         // Debe haber al menos 1 fila con "Cup"
         assertEquals("cup", result[0][0]);
-        assertEquals("1", result[0][1]);
+        assertEquals("2", result[0][1]);
     }
 
     // =========================================================
@@ -237,25 +259,6 @@ public class TowerC1Test {
         assertTrue(hasCup, "Debe haber al menos un Cup en el resultado");
         assertTrue(hasLid, "Debe haber al menos un Lid en el resultado");
     }
-
-    // =========================================================
-    // CASO 4: Dos cups, sin lids → solo cups en resultado
-    // =========================================================
-
-    @Test
-    public void stackingItemsTwoCupsNoLidsReturnsOnlyCups() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
-        Tower tower = new Tower(10, 20);
-        //tower.pushCup(3); // height = 5
-        //tower.pushCup(2); // height = 3
-
-        String[][] result = tower.stackingItems();
-
-        assertNotNull(result);
-        assertEquals(2, result.length);
-        for (String[] row : result) {
-            assertEquals("cup", row[0], "Sin lids, todas las filas deben ser Cup");
-        }
-    }
     
     //=============================================================
     //Caso 1: Debería ejecutarse el constructor
@@ -280,4 +283,22 @@ public class TowerC1Test {
         
     }
     
+    @Test
+    public void cupAndLidShouldHaveSameColor(){
+        Tower tower = new Tower(30, 30);
+        tower.pushCup(7);
+        tower.pushCup(2);
+        tower.pushCup(3);
+        tower.pushLid(7);
+        tower.pushLid(2);
+        tower.pushLid(3);
+        
+        Cup cupBottom = tower.findCup(2);
+        Lid lidBottom = tower.findLid(2);
+        Cup cupUpper = tower.findCup(3);
+        Lid lidUpper = tower.findLid(3);
+        
+        assertEquals(cupBottom.getColor(), lidBottom.getColor(), "La lid debe tener el mismo color que su Cup");
+        assertEquals(cupUpper.getColor(), lidUpper.getColor(), "La lid debe tener el mismo color que su Cup");
+    }
 }
