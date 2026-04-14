@@ -102,4 +102,24 @@ public class TowerC2Test {
         proofTower.pushCup(3);
         proofTower.pushLid(2);
     }
+    
+    @Test
+    public void shouldSuggestASwapToReduceHeight(){
+        Tower proofTower = new Tower(15, 15);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        proofTower.pushCup(4);
+        
+        int initialHeight = proofTower.heightUsed();
+        String[][] resultSwap = proofTower.swapToReduce();
+        
+        assertEquals(2, resultSwap.length);
+        assertEquals("cup", resultSwap[0][0]);
+        assertEquals("cup", resultSwap[1][0]);
+        
+        proofTower.swap(resultSwap[0], resultSwap[1]);
+        int reduceHeight = proofTower.heightUsed();
+        assertTrue(reduceHeight < initialHeight);
+    }
 }
