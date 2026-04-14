@@ -27,6 +27,14 @@ public class TowerC1Test {
     }
     
     @Test
+    public void shouldCreateAnEmptyTower(){
+        Tower proofTower = new Tower(13, 13);
+        
+        int totalElements = proofTower.stackingItems().length;
+        assertEquals(0, totalElements);
+    }
+    
+    @Test
     public void shouldPushCupsInOrder(){
         Tower proofTower = new Tower(13,13);
         proofTower.pushCup(4); //Cup grande, va primero
@@ -55,6 +63,21 @@ public class TowerC1Test {
         {"cup", "2"},
         {"cup", "3"}};
         
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
+    public void shouldStoreACupInsideAnother(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        proofTower.pushCup(1);
+        
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = {
+        {"cup", "2"},
+        {"cup", "3"},
+        {"cup", "1"}};
         assertArrayEquals(expected, result);
     }
     
@@ -158,6 +181,24 @@ public class TowerC1Test {
         
         StackingItem lidOfCup = proofTower.getStackingItems().get(0).getLid();
         assertNull(lidOfCup);
+    }
+    
+    @Test
+    public void shouldPopCup(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(4);
+        proofTower.pushCup(3);
+        proofTower.pushCup(2);
+        proofTower.pushCup(1);
+        
+        proofTower.popCup();
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = {
+        {"cup", "4"},
+        {"cup", "3"},
+        {"cup", "2"}};
+        assertTrue(proofTower.ok());
+        assertArrayEquals(expected, result);
     }
     
     @Test
@@ -272,15 +313,17 @@ public class TowerC1Test {
         */
     }
     
-    /**
-     * Tears down the test fixture.
-     *
-     * Called after every test case method.
-     */
-    @AfterEach
-    public void tearDown()
-    {
+    public void shouldGiveCorrectlyHeight(){
+        Tower tower = new Tower(30, 30);
+        tower.pushCup(4);
+        tower.pushCup(1);
+        tower.pushCup(2);
+        tower.pushCup(3);
+        tower.pushCup(6);
         
+        int expectedHeight = 21;
+        int resultHeight = tower.heightUsed();
+        assertEquals(expectedHeight, resultHeight);
     }
     
     @Test

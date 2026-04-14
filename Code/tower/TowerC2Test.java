@@ -56,4 +56,50 @@ public class TowerC2Test {
         assertArrayEquals(new String[]{"cup", "2"}, result[0]);
         assertArrayEquals(new String[]{"cup", "3"}, result[1]);
     }
+    
+    @Test
+    public void shouldSwapTwoCups(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(4);
+        proofTower.pushCup(3);
+        proofTower.pushCup(2);
+        proofTower.pushCup(1);
+        
+        proofTower.swap(new String[]{"cup", "1"}, new String[]{"cup", "4"});
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = new String[][]{
+            {"cup","1"},
+            {"cup","3"},
+            {"cup", "2"},
+            {"cup", "4"}};
+            
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
+    public void shouldCoverACup(){
+        Tower proofTower = new Tower(15, 15);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        proofTower.pushLid(2);
+        
+        proofTower.cover();
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = new String[][]{
+            {"cup", "1"},
+            {"cup", "2"},
+            {"lid", "2"},
+            {"cup", "3"}};
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
+    public void shouldCoverACupInALongStack(){
+        Tower proofTower = new Tower(15, 15);
+        proofTower.pushCup(1);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        proofTower.pushLid(2);
+    }
 }
