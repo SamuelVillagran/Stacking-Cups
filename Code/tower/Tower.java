@@ -797,7 +797,108 @@ public class Tower {
      * 
      */
     public String[][] swapToReduce() {
-        return new String[0][0];
+        if (stackingItems.isEmpty()) {
+            lastOK = false;
+            if(isVisible) errorMessage();
+            return new String[0][0];
+        }
+        
+        ArrayList<Integer> cupIds = new ArrayList<>();
+        ArrayList<String> colors = new ArrayList<>();
+        ArrayList<Integer> lidIds = new ArrayList<>();
+        StackingItem fixedItem = null;
+        
+        for (StackingItem item : stackingItems) {
+            if (item.isFixed()) {
+                fixedItem = item;
+                continue;
+            }
+            if (item.hasInterior()) {
+                cupIds.add(item.getId());
+                colors.add(item.getColor());
+            } else {
+                lidIds.add(item.getId());
+            }
+        }
+        
+        if (cupIds.size() < 2) {
+            lastOK = false;
+            if (isVisible) errorMessage();
+            return new String[0][0];
+        }
+        
+        int originalHeight = heightUsed();
+        int bestHeight = originalHeight;
+        String[][] bestMove = new String[0][0];
+        
+        for (int i = 0; i < cupIds.size(); i++) {
+            for (int j = i + 1; j < cupIds.size(); j++) {
+                int id1 = cupIds.get(i);
+                int id2 = cupIds.get(j);
+                if (id1 == id2) continue;
+                
+                resetTower(fixedItem);
+                for (int k = 0; k < cupIds.size(); k++) {
+                    int cupId = cupIds.get(k);
+                    String color = colors.get(k);
+                    pushCup(cupId, color);
+                    if (!lastOK) break;
+                    if (lidIds.contains(cupId)) {
+                        pushLid(cupId);
+                        if (!lastOK) break;
+                    }
+                }
+                if (!lastOK) continue;
+                
+                swap(new String[]{"cup", String.valueOf(id1)},
+                     new String[]{"cup", String.valueOf(id2)});
+                
+                if (!lastOK) continue;
+                
+                int currentHeight = heightUsed();
+                if (currentHeight < bestHeight) {
+                    bestHeight = currentHeight;
+                    bestMove = new String[][]{
+                        {"cup", String.valueOf(id1)},
+                        {"cup", String.valueOf(id2)}
+                    };
+                }
+            }
+        }
+        resetTower(fixedItem);
+        for (int i = 0; i < cupIds.size(); i++) {
+            int cupId = cupIds.get(i);
+            String color = colors.get(i);
+            pushCup(cupId, color);
+            if (!lastOK) break;
+            if (lidIds.contains(cupId)) {
+                pushLid(cupId);
+                if (!lastOK) break;
+            }
+        }
+        lastOK = bestHeight < originalHeight;
+        return bestMove;
+    }
+    
+    /*
+     * Restart the Tower before rebuild it again.
+     * Delete visually all elements tha are not fixed.
+     * Clears the StackingItems.
+     */
+    private void resetTower(StackingItem fixedItem){
+        for (StackingItem item : stackingItems) {
+            if (!item.isFixed()) {
+                item.erase();
+            }
+        }
+        stackingItems.clear();
+        
+        if (fixedItem != null) {
+            stackingItems.add(fixedItem);
+            heightCups = fixedItem.getHeight();
+        } else {
+            heightCups = 0;
+        }
     }
     
     /**
