@@ -103,7 +103,7 @@ public class Tower {
             }
         }
         
-        Cup newCup = new Cup(number, xPos, yPos, getRandColor());
+        Cup newCup = new Cup(number, xPos, yPos, getAssociatedColor(number, true));
         lastCup = newCup;
         stackingItems.add(newCup);
         lastOK = true;
@@ -171,7 +171,7 @@ public class Tower {
         if(stackingItems.isEmpty()) {  // Cuando no hay stackingItems se pone de primeras
             yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
             heightCups = newHeight;
-            Opener newCup = new Opener(i, xPos, yPos, getRandColor());
+            Opener newCup = new Opener(i, xPos, yPos, getAssociatedColor(i, true));
             lastCup = newCup;
                     
             stackingItems.add(newCup);
@@ -222,7 +222,7 @@ public class Tower {
             return;
         }
         heightCups += newHeight;
-        Opener newCup = new Opener(i, xPos, yPos, getRandColor());
+        Opener newCup = new Opener(i, xPos, yPos, getAssociatedColor(i, true));
         lastCup = newCup;
         stackingItems.add(newCup);
         lastOK = true;
@@ -280,7 +280,7 @@ public class Tower {
         int lidHeight = 1;
         int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
         
-        if(stackingItems.isEmpty() || (stackItemNonInteriorExists(i) && stackItemInteriorExists(i))){
+        if(lidWidth > maxHeight){
             if(isVisible) errorMessage();
             lastOK = false;
             return;
@@ -288,22 +288,13 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
-        String color = findCup(i).getColor();
+        String color = getAssociatedColor(i, false);
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null || color == null) {
-            if(isVisible){
-                lastOK = false;
-                errorMessage();
-                return;
-            }else{
-                lastOK = false;
-                return;
-            }
-        }
+        
         
         Lid newLid = new Lid(i, xPos, yPos, color);
         stackingItems.add(newLid);
@@ -338,16 +329,7 @@ public class Tower {
             if (isVisible) errorMessage();
             return;
         }
-        if(landingItem == null || color == null) {
-            if(isVisible){
-                lastOK = false;
-                errorMessage();
-                return;
-            }else{
-                lastOK = false;
-                return;
-            }
-        }
+        
         if (type.equals("normal")) pushLid(i);
         
         if (type.equals("crazy")) {
@@ -476,7 +458,7 @@ public class Tower {
         if (isItemEmpty) { // Si es la primera copa que se inserto
             isVisible = true;
             yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
-            newCup = new Cup(number, xPos, 30, getRandColor());
+            newCup = new Cup(number, xPos, 30, getAssociatedColor(number, true));
         }
         
         if (!isItemEmpty) {
@@ -492,12 +474,12 @@ public class Tower {
             int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
             if (nYPos > 0 && nXPos > 0) {
                 newCup = new Cup(number, nXPos,
-                nYPos, getRandColor());
+                nYPos, getAssociatedColor(number, true));
             } else {
                 nYPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
                 nXPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
                 newCup = new Cup(number, nXPos,
-                nYPos, getRandColor());
+                nYPos, getAssociatedColor(number, true));
             } 
 
             int cupHeight = newCup.getHeight();
@@ -1407,12 +1389,32 @@ public class Tower {
                 
         heightCups += newHeight;
                 
-        Hierarchical newCup = new Hierarchical(i, xPos, yPos, getRandColor());
+        Hierarchical newCup = new Hierarchical(i, xPos, yPos, getAssociatedColor(i, true));
         if(container == null) newCup.setFixed(true);
         lastCup = newCup;
         stackingItems.add(newCup);
         lastOK = true;
         if (isVisible) newCup.makeVisible();
+    }
+    
+    /*
+     * Get the color for insertion item.
+     * For Cup, check if there is a lid with same id.
+     * For Lid, check if there is a cup with same id.
+     * If has an element with same id get that color
+     * otherwise, take a random color.
+     */
+    private String getAssociatedColor(int number, boolean insertsCup) {
+    	for(StackingItem item : stackingItems) {
+    		if(item.getId() == number && item.hasInterior() != insertsCup){
+    			String color = item.getColor();
+    			if(color != null) {
+    				return color;
+    			}
+    			break;
+    		}
+    	}
+    	return getRandColor();
     }
 
 }
