@@ -6,6 +6,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import domain.Hierarchical;
+import domain.Opener;
+import domain.Tower;
+import domain.TowerException;
+
 import java.util.ArrayList;
 
 /**
@@ -55,7 +61,7 @@ public class TowerC4Test {
     }
     
     @Test
-    public void shouldBePutCorretlyCupOpenerWithCupsInDesorder() throws tower.TowerException {
+    public void shouldBePutCorretlyCupOpenerWithCupsInDesorder() throws TowerException {
         t.pushCup(3);
         t.pushLid(3);
         t.pushCup(4);
@@ -76,7 +82,7 @@ public class TowerC4Test {
     }
     
     @Test
-    public void shouldBePutCorretlyCupOpenerWithCupsInDesorder2() throws tower.TowerException{
+    public void shouldBePutCorretlyCupOpenerWithCupsInDesorder2() throws TowerException{
         t.pushCup(7);
         t.pushCup(1);
         t.pushCup(2);
@@ -97,13 +103,13 @@ public class TowerC4Test {
     }
     
     @Test
-    public void shouldPushAHierarchichalCup() throws tower.TowerException{
+    public void shouldPushAHierarchichalCup() throws TowerException{
         t.pushCup("hierarchical", 6);
         assertEquals(Hierarchical.class, t.getStackingItems().get(0).getClass());
     }
     
     @Test
-    public void shouldInsertHierarchical() throws tower.TowerException{
+    public void shouldInsertHierarchical() throws TowerException{
         t.pushCup(6);
         t.pushCup(4);
         t.pushCup(3);
@@ -122,7 +128,7 @@ public class TowerC4Test {
     }
     
     @Test
-    public void shouldntMoveHierarchicalOnceBottomAfterSwap() throws tower.TowerException{
+    public void shouldntMoveHierarchicalOnceBottomAfterSwap() throws TowerException{
         t.pushCup(4);
         t.pushCup(3);
         t.pushCup(2);
