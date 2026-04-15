@@ -111,7 +111,7 @@ public class Tower {
     }
     
     /**
-     * Put in the tower diferent type of cups 
+     * Put in the tower different type of cups 
      * @param type type of cup that it's going to put at the tower
      * @param i i is the id of tower that it's going to put at the tower
      */
@@ -1141,17 +1141,6 @@ public class Tower {
             } 
     }
 
-    /*
-     * Inicializate attributes of second constructor
-     */
-    private void inicializateAttributes() {
-        stackingItems = new ArrayList<>();
-        isVisible =  false;
-        width = 30;
-        maxHeight = 30;
-        isCreatedRuler = false;
-        xCenter = (int) Math.ceil((double) width / 2);
-    }
     
     private String getColorCup(int number){
         String result = null;
