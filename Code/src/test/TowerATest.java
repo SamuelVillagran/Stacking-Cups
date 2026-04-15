@@ -1,4 +1,4 @@
-package tower;
+package test;
 
 
 
@@ -6,6 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import domain.Lid;
+import domain.StackingItem;
+import domain.Tower;
+
 import java.util.ArrayList;
 
 /**
