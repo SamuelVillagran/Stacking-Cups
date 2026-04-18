@@ -186,5 +186,59 @@ public class TowerC4Test {
         assertArrayEquals(expected, t.stackingItems());
     }
     
+    @Test
+    public void shouldnIsertFearfulLidWithHisCup() {
+    	t.pushCup(2);
+    	t.pushLid("fearful", 3);
+    	
+    	int totalItems = t.stackingItems().length;
+    	int expectedItems = 1;
+    	boolean lastOperationOk = t.ok();
+    	
+    	assertFalse(lastOperationOk);
+    	assertEquals(expectedItems, totalItems);
+    }
     
+    @Test
+    public void shouldInsertFearfulLid() throws TowerException{
+        t.pushCup(6);
+        t.pushCup(4);
+        t.pushCup(3);
+            
+        t.pushLid("fearful", 4);
+            
+        String[][] stackingItems = t.stackingItems();
+        assertTrue(t.ok());
+        assertArrayEquals(new String[]{"cup", "6"}, stackingItems[0]);
+        assertArrayEquals(new String[]{"cup", "4"}, stackingItems[1]);
+        assertArrayEquals(new String[]{"cup", "3"}, stackingItems[2]);
+        assertArrayEquals(new String[]{"lid", "4"}, stackingItems[3]);
+    }
+    
+    @Test
+    public void shouldntRemoveFearfulLidIfItIsOnHisCup() {
+    	t.pushCup(2);
+    	t.pushCup(3);
+    	t.pushLid("fearful",3);
+    	
+    	t.removeLid(3);
+    	assertFalse(t.ok());
+    	
+    	int totalItems = t.stackingItems().length;
+    	int expectedItems = 3;
+    	assertEquals(expectedItems, totalItems);
+    }
+    
+    @Test
+    public void shouldPopFearuflLidIfItIsOnHisCup() {
+    	t.pushCup(2);
+    	t.pushCup(3);
+    	t.pushLid("fearful",3);
+    	
+    	t.popLid();
+    	assertFalse(t.ok());
+    	int totalItems = t.stackingItems().length;
+    	int expectedItems = 3;
+    	assertEquals(expectedItems, totalItems);
+    }
 }

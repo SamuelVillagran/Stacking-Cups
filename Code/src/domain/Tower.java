@@ -323,7 +323,7 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
-        String color = findCup(i).getColor();
+        String color = getAssociatedColor(i, false);
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();
@@ -340,11 +340,17 @@ public class Tower {
             lastOK = true;
             checkAssociatedCup(i, newLid);
         } else if (type.equals("fearful")) {
-            for (StackingItem s : stackingItems) {
-                if (s.getId() == i && s.hasInterior() && s.getLid() == null) {
-                    Fearful newLid = new Fearful(i, xPos, yPos, color);
-                }
+            if(!stackItemInteriorExists(i)) {
+            	if(isVisible) errorMessage();
+            	lastOK = false;
+            	return;
             }
+            Fearful newLid = new Fearful(i, xPos, yPos, color);
+            stackingItems.add(newLid);
+            heightCups += lidHeight;
+            lastOK = true;
+            if(isVisible) newLid.makeVisible();
+            checkAssociatedCup(i, newLid);
         }
         
         
@@ -358,15 +364,30 @@ public class Tower {
      * Delete the last lid put at this tower
      */
     public void popLid(){
-        boolean areStackingItemsEmpty = stackingItems.isEmpty();;
+        boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
             for(int i = stackingItems.size() -1; i >= 0; i--){
                 StackingItem currentItem = stackingItems.get(i);
                 if(!currentItem.hasInterior()){
-                    StackingItem itemRemoved = stackingItems.remove(i);
-                    itemRemoved.erase();
-                    lastOK = true;
-                    return;
+                	StackingItem lidToRemove = currentItem;
+	                if(lidToRemove.getType().equals("fearful")) {
+	                	Cup cup = findCup(lidToRemove.getId());
+	            		if(cup != null && cup.getLid() != null) {
+	            			lastOK = false;
+	            			if(isVisible) errorMessage();
+	            			return;
+	            		}
+	                }
+	                Cup associatedCup = findCup(lidToRemove.getId());
+	                if (associatedCup != null && associatedCup.getLid() != null) {
+	                    associatedCup.removeLid();
+	                    stackingItems.remove(associatedCup);
+	                    associatedCup.erase();
+	                }
+	                stackingItems.remove(lidToRemove);
+	                lidToRemove.erase();
+	                lastOK = true;
+	                return;
                 }
             }
         } else if (areStackingItemsEmpty && isVisible) {
@@ -385,17 +406,21 @@ public class Tower {
         
         for(StackingItem currentItem : stackingItems){
             if(currentItem.getId() == i && !currentItem.hasInterior()){
-                Lid lid = currentItem.getLid();
+            	if(currentItem.getType().equals("fearful")) {
+            		Cup associatedCup = findCup(i);
+            		if(associatedCup != null && associatedCup.getLid() != null) {
+            			lastOK = false;
+            			if(isVisible) errorMessage();
+            			return;
+            		}
+            	}
                 if(currentItem != null) {
-                    
-                    
                     Cup foundCup = findCup(i);
                     if (foundCup != null) {
                         foundCup.removeLid();
                     }
                     
                     stackingItems.remove(currentItem);
-                    
                     lastOK = true;
                     return;
                 }
