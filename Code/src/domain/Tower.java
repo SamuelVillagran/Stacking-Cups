@@ -761,7 +761,7 @@ public class Tower {
         Set<Integer> itemsWithPosYKey = itemsWithPosY.descendingKeySet();
         for (Integer itemPosY : itemsWithPosYKey) {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
-            boolean isCup = currentItem.hasInterior();
+            
             result[i][0] = currentItem.getType();
             result[i][1] = currentItem.getId()+"";
             
