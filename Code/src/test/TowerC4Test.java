@@ -186,5 +186,94 @@ public class TowerC4Test {
         assertArrayEquals(expected, t.stackingItems());
     }
     
+    @Test
+    public void shouldnIsertFearfulLidWithHisCup() {
+    	t.pushCup(2);
+    	t.pushLid("fearful", 3);
+    	
+    	int totalItems = t.stackingItems().length;
+    	int expectedItems = 1;
+    	boolean lastOperationOk = t.ok();
+    	
+    	assertFalse(lastOperationOk);
+    	assertEquals(expectedItems, totalItems);
+    }
     
+    @Test
+    public void shouldInsertFearfulLid() throws TowerException{
+        t.pushCup(6);
+        t.pushCup(4);
+        t.pushCup(3);
+            
+        t.pushLid("fearful", 4);
+            
+        String[][] stackingItems = t.stackingItems();
+        assertTrue(t.ok());
+        assertArrayEquals(new String[]{"cup", "6"}, stackingItems[0]);
+        assertArrayEquals(new String[]{"cup", "4"}, stackingItems[1]);
+        assertArrayEquals(new String[]{"cup", "3"}, stackingItems[2]);
+        assertArrayEquals(new String[]{"lid", "4"}, stackingItems[3]);
+    }
+    
+    @Test
+    public void shouldntRemoveFearfulLidIfItIsOnHisCup() {
+    	t.pushCup(2);
+    	t.pushCup(3);
+    	t.pushLid("fearful",3);
+    	
+    	t.removeLid(3);
+    	assertFalse(t.ok());
+    	
+    	int totalItems = t.stackingItems().length;
+    	int expectedItems = 3;
+    	assertEquals(expectedItems, totalItems);
+    }
+    
+    @Test
+    public void shouldPopFearuflLidIfItIsOnHisCup() {
+    	t.pushCup(2);
+    	t.pushCup(3);
+    	t.pushLid("fearful",3);
+    	
+    	t.popLid();
+    	assertFalse(t.ok());
+    	int totalItems = t.stackingItems().length;
+    	int expectedItems = 3;
+    	assertEquals(expectedItems, totalItems);
+    }
+    
+    @Test
+    public void shoudlSwapHierarchicalWithNormalCup() {
+    	t.pushCup(6);
+    	t.pushCup(5);
+    	t.pushCup("hierarchical", 4);
+    	// A este punto el orden seria 6, 5, 4
+    	t.swap(new String[] {"cup", "5"}, new String[]{"cup", "4"});
+    	// Orden despues de swap 6, 4, 5
+    	
+    	String[][] expected = {
+    	        {"cup", "6"},
+    	        {"cup", "4"},
+    	        {"cup", "5"}};
+    	assertTrue(t.ok());
+    	assertArrayEquals(expected, t.stackingItems());
+    	
+    }
+    
+    @Test
+    public void shouldSwapFearfulLidWithCup() {
+    	t.pushCup(3);
+    	t.pushCup(4);
+    	t.pushLid("fearful", 3);
+    	
+    	t.swap(new String[] {"cup", "4"}, new String[]{"lid", "3"});
+    	
+    	String[][] expected = {
+    	        {"cup", "3"},
+    	        {"lid", "3"},
+    	        {"cup", "4"}};
+    	
+    	assertTrue(t.ok());
+    	assertArrayEquals(expected, t.stackingItems());
+    }
 }
