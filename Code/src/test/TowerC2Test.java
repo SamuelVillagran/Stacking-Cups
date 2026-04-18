@@ -21,11 +21,11 @@ public class TowerC2Test {
     //======================================================
     @Test
     public void shouldCreateTowerWiTthNumCups() {
-        /*
+        
         Tower proof = new Tower(3);
-        int numCupsInTower = proof.getCups().size();
+        int numCupsInTower = proof.getStackingItems().size();
         assertEquals(3, numCupsInTower);
-        */
+        
     }
     
     @Test
