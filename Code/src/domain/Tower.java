@@ -137,7 +137,7 @@ public class Tower {
         TreeMap<Integer, Cup> cupsOrderByPosY = new TreeMap<>();
         for (Cup c : cups.values()) {
             cupsOrderByPosY.put(c.getYPos(), c); 
-        } 
+        }
         
         switch (type) {
             case "normal":
@@ -430,7 +430,7 @@ public class Tower {
         lastOK = false;
     }
     
-    /**f
+    /**
      * Order the stackin items from lowest to highest width.
      */
     public void orderTower() {
@@ -679,8 +679,9 @@ public class Tower {
         }
         
         ArrayList<Integer> cupIdsInsert = new ArrayList<>();
+        ArrayList<String> cupTypesInsert = new ArrayList<>();
         ArrayList<String> colorsInsert = new ArrayList<>();
-        ArrayList<Integer> lidIdsPresent = new ArrayList<>();
+        HashMap<Integer, String> lidTypesInsert = new HashMap<>();
         StackingItem fixedItem = null;
         
         for (StackingItem item : stackingItems) {
@@ -690,9 +691,10 @@ public class Tower {
             }
             if (item.hasInterior()) {
                 cupIdsInsert.add(item.getId());
+                cupTypesInsert.add(item.getType());
                 colorsInsert.add(item.getColor());
             } else {
-                lidIdsPresent.add(item.getId());
+                lidTypesInsert.put(item.getId(), item.getType());
             }
         }
         
@@ -718,14 +720,24 @@ public class Tower {
         
         for (int i = 0; i < cupIdsInsert.size(); i++) {
             int id = cupIdsInsert.get(i);
+            String cupType = cupTypesInsert.get(i);
             String color = colorsInsert.get(i);
-            pushCup(id, color);
+            if("normal".equals(cupType)){
+            	pushCup(id, color);
+            } else {
+            	pushCup(cupType, id);
+            }
             if (!lastOK) {
                 if (isVisible) errorMessage();
                 return;
             }
-            if (lidIdsPresent.contains(id)) {
-                pushLid(id);
+            if (lidTypesInsert.containsKey(id)) {
+            	String lidType = lidTypesInsert.get(i);
+            	if("normal".equals(lidType)) {
+            		pushLid(id);
+            	} else {
+            		pushLid(lidType, id);
+            	}
                 if (!lastOK) {
                     if (isVisible) errorMessage();
                     return;
