@@ -299,9 +299,8 @@ public class Tower {
             }
         }
 
-        
-
         for (StackingItem item : toReplace) {
+            System.out.println(item.getType() + " ; " + item.getId());
             item.erase();
             stackingItems.remove(item);
         }
@@ -370,7 +369,7 @@ public class Tower {
         
         StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
-        String color = findCup(i).getColor();
+        String color = getAssociatedColor(i, false);
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage();

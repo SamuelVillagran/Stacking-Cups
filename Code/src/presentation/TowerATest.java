@@ -26,17 +26,15 @@ public class TowerATest {
         Tower t = new Tower(30, 30);
         t.makeVisible();
         try {
-            //t.pushCup(6);
+            t.pushCup(6);
             t.pushCup(5);
             t.pushCup(4);
             t.pushLid(4);
             t.pushLid(5);
             t.pushLid(6);
             t.pushLid(3);
-            /*
-            t.removeCup(6);
-            t.removeCup(4);*/            
-            t.removeCup(4);
+                 
+            t.removeCup(5);
             assertTrue(t.ok());
         } 
         catch (Exception te) {
