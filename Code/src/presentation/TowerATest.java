@@ -1,4 +1,4 @@
-package test;
+package presentation;
 
 
 
@@ -40,6 +40,8 @@ public class TowerATest {
             Lid lidOfCup6 = stackingItems.get(0).getLid(); // Lid of cup with id = 6
             Lid lidOfCup5 = stackingItems.get(1).getLid(); // Lid of cup with id = 5
             Lid lidOfCup4 = stackingItems.get(2).getLid(); // Lid of cup with id = 4
+            
+            t.removeCup(5);
             assertTrue(t.ok());
         } 
         catch (Exception te) {

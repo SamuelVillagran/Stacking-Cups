@@ -51,6 +51,6 @@ public class Hierarchical extends Cup {
      */
     @Override
     public String getType() {
-        return "hierarchical";
+        return "cup/hierarchical";
     }
 }

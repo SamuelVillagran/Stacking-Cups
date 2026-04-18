@@ -35,7 +35,7 @@ public class Opener extends Cup {
      */
     @Override
     public String getType() {
-        return "opener";
+        return "cup/opener";
     }
     
 }

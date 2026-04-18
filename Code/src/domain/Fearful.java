@@ -23,7 +23,7 @@ public class Fearful extends Lid {
      */
     @Override
     public String getType() {
-        return "fearful";
+        return "lid/fearful";
     }
     
     @Override 

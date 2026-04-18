@@ -762,13 +762,9 @@ public class Tower {
         for (Integer itemPosY : itemsWithPosYKey) {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
             boolean isCup = currentItem.hasInterior();
-            if (isCup) {
-                result[i][0] = "cup";
-                result[i][1] = currentItem.getId()+"";
-            } else {
-                result[i][0] = "lid";
-                result[i][1] = currentItem.getId()+"";
-            }
+            result[i][0] = currentItem.getType();
+            result[i][1] = currentItem.getId()+"";
+            
             i++;
         }
         
@@ -1405,16 +1401,16 @@ public class Tower {
      * otherwise, take a random color.
      */
     private String getAssociatedColor(int number, boolean insertsCup) {
-    	for(StackingItem item : stackingItems) {
-    		if(item.getId() == number && item.hasInterior() != insertsCup){
-    			String color = item.getColor();
-    			if(color != null) {
-    				return color;
-    			}
-    			break;
-    		}
-    	}
-    	return getRandColor();
+        for(StackingItem item : stackingItems) {
+            if(item.getId() == number && item.hasInterior() != insertsCup){
+                String color = item.getColor();
+                if(color != null) {
+                    return color;
+                }
+                break;
+            }
+        }
+        return getRandColor();
     }
 
 }
