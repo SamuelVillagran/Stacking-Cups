@@ -293,13 +293,13 @@ public class Tower {
         TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
 
         List<StackingItem> toReplace = new ArrayList<>();
-        for (Integer posY : itemsInOrder.keySet()) {   // saca las que se deben reemplazar
+        for (Integer posY : itemsInOrder.descendingKeySet()) {   // saca las que se deben reemplazar
             if (posY < yPosCup) {
                 toReplace.add(itemsInOrder.get(posY));
             }
         }
 
-        toReplace.sort((a, b) -> Integer.compare(b.getYPosition(), a.getYPosition())); // ordena por pos y
+        
 
         for (StackingItem item : toReplace) {
             item.erase();
