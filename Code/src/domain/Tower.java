@@ -272,32 +272,13 @@ public class Tower {
         lenStack = stackingItems.size();
         for(int i = 0; i< lenStack; i++){
             currentCup = stackingItems.get(i);
+            
             idCurrentCup = currentCup.getId();
             if(idCurrentCup == j && currentCup.hasInterior()){
-                StackingItem removed = stackingItems.remove(i);
-                TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
-                Set<Integer> setPosY = itemsInOrder.keySet();
-                StackingItem currentRemoved;
-                int deltaMove, idRemoved;
-                boolean isCup;
-                for (Integer posY : setPosY) {
-                    if (posY < removed.getYPosition()) {
-                        currentRemoved = stackingItems.remove(itemsInOrder.get(posY).getId());
-                        idRemoved = currentRemoved.getId();
-                        isCup = currentRemoved.hasInterior();
-                        currentRemoved.erase();
-                        
-                        if (isCup) {
-                            pushCup(currentRemoved.getType(), idRemoved);
-                        } else {
-                            pushLid(currentRemoved.getType(), idRemoved);
-                        }
-                        currentRemoved = null;
-                    }
-                }
-                
+                StackingItem removed = stackingItems.remove(i);                
                 removed.erase();
                 currentCup = null;
+                simulateAFall(removed);
                 lastOK = true;
                 return;
             } 
@@ -305,6 +286,37 @@ public class Tower {
         if (isVisible) errorMessage();
         lastOK = false;
     }
+    
+    private void simulateAFall(StackingItem cup) {
+        int yPosCup = cup.getYPosition();
+
+        TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
+
+        List<StackingItem> toReplace = new ArrayList<>();
+        for (Integer posY : itemsInOrder.keySet()) {   // saca las que se deben reemplazar
+            if (posY < yPosCup) {
+                toReplace.add(itemsInOrder.get(posY));
+            }
+        }
+
+        toReplace.sort((a, b) -> Integer.compare(b.getYPosition(), a.getYPosition())); // ordena por pos y
+
+        for (StackingItem item : toReplace) {
+            item.erase();
+            stackingItems.remove(item);
+        }
+
+        for (StackingItem item : toReplace) {
+            
+            if (item.hasInterior()) {
+                pushCup(item.getType(), item.getId());
+            } else {
+                pushLid(item.getType(), item.getId());
+            }
+            makeVisible();
+        }
+    }
+
     
     /**
      * Put a lid of a specific cup, cup at the i index of cups list.
