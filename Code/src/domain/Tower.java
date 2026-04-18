@@ -635,11 +635,23 @@ public class Tower {
         
         for(StackingItem s : itemsCopy){
             if(s.hasInterior()){
-                pushCup(s.getId());
+            	String cupType = s.getType();
+            	if(cupType.equals("normal")) {
+            		pushCup(s.getId());
+            	} else {
+            		pushCup(cupType, s.getId());
+            	}
+                
             }else {
-               pushLid(s.getId()); 
+               String lidType = s.getType();
+               if(lidType.equals("normal")) {
+            	   pushLid(s.getId());
+               } else {
+            	   pushLid(lidType, s.getId());
+               }
             }
         }
+        lastOK = true;
     }
     
     /*

@@ -241,4 +241,39 @@ public class TowerC4Test {
     	int expectedItems = 3;
     	assertEquals(expectedItems, totalItems);
     }
+    
+    @Test
+    public void shoudlSwapHierarchicalWithNormalCup() {
+    	t.pushCup(6);
+    	t.pushCup(5);
+    	t.pushCup("hierarchical", 4);
+    	// A este punto el orden seria 6, 5, 4
+    	t.swap(new String[] {"cup", "5"}, new String[]{"cup", "4"});
+    	// Orden despues de swap 6, 4, 5
+    	
+    	String[][] expected = {
+    	        {"cup", "6"},
+    	        {"cup", "4"},
+    	        {"cup", "5"}};
+    	assertTrue(t.ok());
+    	assertArrayEquals(expected, t.stackingItems());
+    	
+    }
+    
+    @Test
+    public void shouldSwapFearfulLidWithCup() {
+    	t.pushCup(3);
+    	t.pushCup(4);
+    	t.pushLid("fearful", 3);
+    	
+    	t.swap(new String[] {"cup", "4"}, new String[]{"lid", "3"});
+    	
+    	String[][] expected = {
+    	        {"cup", "3"},
+    	        {"lid", "3"},
+    	        {"cup", "4"}};
+    	
+    	assertTrue(t.ok());
+    	assertArrayEquals(expected, t.stackingItems());
+    }
 }
