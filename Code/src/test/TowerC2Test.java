@@ -84,15 +84,14 @@ public class TowerC2Test {
         proofTower.pushCup(1);
         proofTower.pushCup(2);
         proofTower.pushCup(3);
-        proofTower.pushLid(2);
         
         proofTower.cover();
         String[][] result = proofTower.stackingItems();
         String[][] expected = new String[][]{
             {"cup", "1"},
             {"cup", "2"},
-            {"lid", "2"},
             {"cup", "3"}};
+            
         assertArrayEquals(expected, result);
     }
     

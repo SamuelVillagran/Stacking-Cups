@@ -138,7 +138,7 @@ public class Tower {
         TreeMap<Integer, Cup> cupsOrderByPosY = new TreeMap<>();
         for (Cup c : cups.values()) {
             cupsOrderByPosY.put(c.getYPos(), c); 
-        } 
+        }
         
         switch (type) {
             case "normal":
@@ -386,11 +386,17 @@ public class Tower {
             lastOK = true;
             checkAssociatedCup(i, newLid);
         } else if (type.equals("fearful")) {
-            for (StackingItem s : stackingItems) {
-                if (s.getId() == i && s.hasInterior() && s.getLid() == null) {
-                    Fearful newLid = new Fearful(i, xPos, yPos, color);
-                }
+            if(!stackItemInteriorExists(i)) {
+                if(isVisible) errorMessage();
+                lastOK = false;
+                return;
             }
+            Fearful newLid = new Fearful(i, xPos, yPos, color);
+            stackingItems.add(newLid);
+            heightCups += lidHeight;
+            lastOK = true;
+            if(isVisible) newLid.makeVisible();
+            checkAssociatedCup(i, newLid);
         }
         
         
@@ -404,13 +410,28 @@ public class Tower {
      * Delete the last lid put at this tower
      */
     public void popLid(){
-        boolean areStackingItemsEmpty = stackingItems.isEmpty();;
+        boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
             for(int i = stackingItems.size() -1; i >= 0; i--){
                 StackingItem currentItem = stackingItems.get(i);
                 if(!currentItem.hasInterior()){
-                    StackingItem itemRemoved = stackingItems.remove(i);
-                    itemRemoved.erase();
+                    StackingItem lidToRemove = currentItem;
+                    if(lidToRemove.getType().equals("fearful")) {
+                        Cup cup = findCup(lidToRemove.getId());
+                        if(cup != null && cup.getLid() != null) {
+                            lastOK = false;
+                            if(isVisible) errorMessage();
+                            return;
+                        }
+                    }
+                    Cup associatedCup = findCup(lidToRemove.getId());
+                    if (associatedCup != null && associatedCup.getLid() != null) {
+                        associatedCup.removeLid();
+                        stackingItems.remove(associatedCup);
+                        associatedCup.erase();
+                    }
+                    stackingItems.remove(lidToRemove);
+                    lidToRemove.erase();
                     lastOK = true;
                     return;
                 }
@@ -430,18 +451,22 @@ public class Tower {
     public void removeLid(int i) {
         
         for(StackingItem currentItem : stackingItems){
-            if(currentItem.getId() == i && !currentItem.hasInterior()) {
-                Lid lid = currentItem.getLid();
+            if(currentItem.getId() == i && !currentItem.hasInterior()){
+                if(currentItem.getType().equals("fearful")) {
+                    Cup associatedCup = findCup(i);
+                    if(associatedCup != null && associatedCup.getLid() != null) {
+                        lastOK = false;
+                        if(isVisible) errorMessage();
+                        return;
+                    }
+                }
                 if(currentItem != null) {
-                    
-            
                     Cup foundCup = findCup(i);
                     if (foundCup != null) {
                         foundCup.removeLid();
                     }
                     
                     stackingItems.remove(currentItem);
-                    
                     lastOK = true;
                     return;
                 }
@@ -451,7 +476,7 @@ public class Tower {
         lastOK = false;
     }
     
-    /**f
+    /**
      * Order the stackin items from lowest to highest width.
      */
     public void orderTower() {
@@ -656,11 +681,23 @@ public class Tower {
         
         for(StackingItem s : itemsCopy){
             if(s.hasInterior()){
-                pushCup(s.getId());
+                String cupType = s.getType();
+                if(cupType.equals("normal")) {
+                    pushCup(s.getId());
+                } else {
+                    pushCup(cupType, s.getId());
+                }
+                
             }else {
-               pushLid(s.getId()); 
+               String lidType = s.getType();
+               if(lidType.equals("normal")) {
+                   pushLid(s.getId());
+               } else {
+                   pushLid(lidType, s.getId());
+               }
             }
         }
+        lastOK = true;
     }
     
     /*
@@ -688,8 +725,9 @@ public class Tower {
         }
         
         ArrayList<Integer> cupIdsInsert = new ArrayList<>();
+        ArrayList<String> cupTypesInsert = new ArrayList<>();
         ArrayList<String> colorsInsert = new ArrayList<>();
-        ArrayList<Integer> lidIdsPresent = new ArrayList<>();
+        HashMap<Integer, String> lidTypesInsert = new HashMap<>();
         StackingItem fixedItem = null;
         
         for (StackingItem item : stackingItems) {
@@ -699,9 +737,10 @@ public class Tower {
             }
             if (item.hasInterior()) {
                 cupIdsInsert.add(item.getId());
+                cupTypesInsert.add(item.getType());
                 colorsInsert.add(item.getColor());
             } else {
-                lidIdsPresent.add(item.getId());
+                lidTypesInsert.put(item.getId(), item.getType());
             }
         }
         
@@ -727,14 +766,24 @@ public class Tower {
         
         for (int i = 0; i < cupIdsInsert.size(); i++) {
             int id = cupIdsInsert.get(i);
+            String cupType = cupTypesInsert.get(i);
             String color = colorsInsert.get(i);
-            pushCup(id, color);
+            if("normal".equals(cupType)){
+                pushCup(id, color);
+            } else {
+                pushCup(cupType, id);
+            }
             if (!lastOK) {
                 if (isVisible) errorMessage();
                 return;
             }
-            if (lidIdsPresent.contains(id)) {
-                pushLid(id);
+            if (lidTypesInsert.containsKey(id)) {
+                String lidType = lidTypesInsert.get(i);
+                if("normal".equals(lidType)) {
+                    pushLid(id);
+                } else {
+                    pushLid(lidType, id);
+                }
                 if (!lastOK) {
                     if (isVisible) errorMessage();
                     return;
@@ -809,10 +858,10 @@ public class Tower {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
             boolean isCup = currentItem.hasInterior();
             if (isCup) {
-                result[i][0] = "Cup - " + currentItem.getType();
+                result[i][0] = "cup";
                 result[i][1] = currentItem.getId()+"";
             } else {
-                result[i][0] = "Lid - " + currentItem.getType();
+                result[i][0] = "lid";
                 result[i][1] = currentItem.getId()+"";
             }
             
