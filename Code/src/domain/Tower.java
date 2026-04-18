@@ -430,11 +430,11 @@ public class Tower {
     public void removeLid(int i) {
         
         for(StackingItem currentItem : stackingItems){
-            if(currentItem.getId() == i && !currentItem.hasInterior()){
+            if(currentItem.getId() == i && !currentItem.hasInterior()) {
                 Lid lid = currentItem.getLid();
                 if(currentItem != null) {
                     
-                    
+            
                     Cup foundCup = findCup(i);
                     if (foundCup != null) {
                         foundCup.removeLid();
