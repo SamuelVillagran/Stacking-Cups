@@ -152,6 +152,15 @@ public class Tower {
         }
     }
     
+    private TreeMap<Integer, StackingItem> getInOrderItems() {
+        TreeMap<Integer, StackingItem> itemsOrderByPosY = new TreeMap<>();
+        
+        for (StackingItem c : stackingItems) {
+            itemsOrderByPosY.put(c.getYPosition(), c); 
+        } 
+        return itemsOrderByPosY;
+    }
+    
     /*
      * Add the array colors.
      */
