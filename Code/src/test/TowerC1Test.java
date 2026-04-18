@@ -274,7 +274,7 @@ public class TowerC1Test {
 
         assertEquals(1, result.length);
         // Debe haber al menos 1 fila con "Cup"
-        assertEquals("cup/normal", result[0][0]);
+        assertEquals("Cup - normal", result[0][0]);
         assertEquals("2", result[0][1]);
     }
 

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.NavigableSet;
 
 import java.util.Collections;
 import java.util.List;
@@ -152,6 +153,10 @@ public class Tower {
         }
     }
     
+    /*
+     * Give items in order y position of way ascendent
+     * @return A TreeMap with the item's position y and items
+     */
     private TreeMap<Integer, StackingItem> getInOrderItems() {
         TreeMap<Integer, StackingItem> itemsOrderByPosY = new TreeMap<>();
         
@@ -270,6 +275,27 @@ public class Tower {
             idCurrentCup = currentCup.getId();
             if(idCurrentCup == j && currentCup.hasInterior()){
                 StackingItem removed = stackingItems.remove(i);
+                TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
+                Set<Integer> setPosY = itemsInOrder.keySet();
+                StackingItem currentRemoved;
+                int deltaMove, idRemoved;
+                boolean isCup;
+                for (Integer posY : setPosY) {
+                    if (posY < removed.getYPosition()) {
+                        currentRemoved = stackingItems.remove(itemsInOrder.get(posY).getId());
+                        idRemoved = currentRemoved.getId();
+                        isCup = currentRemoved.hasInterior();
+                        currentRemoved.erase();
+                        
+                        if (isCup) {
+                            pushCup(currentRemoved.getType(), idRemoved);
+                        } else {
+                            pushLid(currentRemoved.getType(), idRemoved);
+                        }
+                        currentRemoved = null;
+                    }
+                }
+                
                 removed.erase();
                 currentCup = null;
                 lastOK = true;
@@ -770,9 +796,15 @@ public class Tower {
         Set<Integer> itemsWithPosYKey = itemsWithPosY.descendingKeySet();
         for (Integer itemPosY : itemsWithPosYKey) {
             StackingItem currentItem = itemsWithPosY.get(itemPosY);
+            boolean isCup = currentItem.hasInterior();
+            if (isCup) {
+                result[i][0] = "Cup - " + currentItem.getType();
+                result[i][1] = currentItem.getId()+"";
+            } else {
+                result[i][0] = "Lid - " + currentItem.getType();
+                result[i][1] = currentItem.getId()+"";
+            }
             
-            result[i][0] = currentItem.getType();
-            result[i][1] = currentItem.getId()+"";
             
             i++;
         }

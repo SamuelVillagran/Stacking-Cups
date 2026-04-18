@@ -182,10 +182,10 @@ public class Cup extends StackingItem {
      * @return String "normal"
      */
     public String getType() {
-        return "cup/normal";
+        return "normal";
     }
     
-
+    
     
     /*
      * Build the cup with Rectangles

@@ -21,6 +21,6 @@ public class Crazy extends Lid {
      * @return String "crazy"
      */
     public String getType() {
-        return "lid/crazy";
+        return "crazy";
     }
 }

@@ -112,7 +112,7 @@ public class Lid extends StackingItem {
      * @return String "normal"
      */
     public String getType() {
-        return "lid/normal";
+        return "normal";
     }
     
     /*
