@@ -818,9 +818,8 @@ public class Tower {
         for (StackingItem item : stackingItems) {
             if (item.hasInterior() && item.getLid() != null) {
                 currentWidthItem = item.getId();
-                ids.add(currentWidthItem);
+                widths.add(currentWidthItem);
             }
-            
         }
         
         Collections.sort(ids);
