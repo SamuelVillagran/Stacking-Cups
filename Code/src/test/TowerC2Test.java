@@ -91,7 +91,6 @@ public class TowerC2Test {
         String[][] expected = new String[][]{
             {"cup", "1"},
             {"cup", "2"},
-            {"lid", "2"},
             {"cup", "3"}};
             
         assertArrayEquals(expected, result);

@@ -312,7 +312,6 @@ public class Tower {
             } else {
                 pushLid(item.getType(), item.getId());
             }
-            makeVisible();
         }
     }
 
@@ -515,59 +514,6 @@ public class Tower {
         }
     }
     
-    /**
-     * Add a cup if is possible in order.
-     * @param int Integer is the id of cup where this going to push at the list cups.
-     */
-    private void pushCupInOrder(int number) {
-        boolean isItemEmpty = stackingItems.size() == 0 || stackingItems == null;
-        Cup newCup = null;
-        int newHeight = 2 * number - 1;
-        int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
-        int yPos;
-        if (isItemEmpty) { // Si es la primera copa que se inserto
-            isVisible = true;
-            yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
-            newCup = new Cup(number, xPos, 30, getAssociatedColor(number, true));
-        }
-        
-        if (!isItemEmpty) {
-            Integer lastIndex = stackingItems.size() - 1;
-            StackingItem lastCup = stackingItems.get(lastIndex).hasInterior() ? stackingItems.get(lastIndex) : null;
-            
-            StackingItem landingItem = findLandingPiece(newHeight);
-            yPos = resolveYPos(landingItem, newHeight, newHeight);
-            
-            
-            if (lastCup == null) return;
-            int nXPos = lastCup.getXPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
-            int nYPos = lastCup.getYPosition()-((lastCup.getWidth()*Cup.PIXELS_PER_CM)/2);
-            if (nYPos > 0 && nXPos > 0) {
-                newCup = new Cup(number, nXPos,
-                nYPos, getAssociatedColor(number, true));
-            } else {
-                nYPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
-                nXPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
-                newCup = new Cup(number, nXPos,
-                nYPos, getAssociatedColor(number, true));
-            } 
-
-            int cupHeight = newCup.getHeight();
-            if (!invariant2(cupHeight)) {
-                newCup.erase();
-                if (isVisible) errorMessage();
-
-                return;
-            }
-        }
-
-        stackingItems.add(newCup);
-
-        if (isVisible) {
-            makeVisibleRuler();
-        }
-
-    }
 
     private void pushCup(int number, String color) {
         int newHeight = 2 * number - 1;
@@ -819,7 +765,7 @@ public class Tower {
         for (StackingItem item : stackingItems) {
             if (item.hasInterior() && item.getLid() != null) {
                 currentWidthItem = item.getId();
-                widths.add(currentWidthItem);
+                ids.add(currentWidthItem);
             }
         }
         
@@ -1204,37 +1150,6 @@ public class Tower {
     }
     
     /*
-     * Put Cups in Tower
-     */
-    private void putCupInTower(int xPos, int yPos, int idCup, Cup newCup) {
-        if (yPos > 0 && xPos > 0) {
-                newCup = new Cup(idCup, xPos,
-                    yPos, getRandColor());
-            } else {
-                yPos = lastCup.getYPosition()-Cup.getPixelsPerCm();
-                xPos = lastCup.getXPosition()-Cup.getPixelsPerCm();
-                newCup = new Cup(idCup, xPos,
-                    yPos, getRandColor());
-            } 
-    }
-
-    
-    private String getColorCup(int number){
-        String result = null;
-        if(stackingItems.isEmpty()){
-            if(isVisible) errorMessage();
-        } else{
-            for(int i = 0; i< stackingItems.size(); i++){
-                if(stackingItems.get(i).getId() == number){
-                    result = stackingItems.get(i).getColor();
-                    return result;
-                }
-            }
-        }
-        return result;
-    }
-    
-    /*
      * Calculates the final yPosition of the falling piece.
      * If landing == null, landing piece falls through all and it nests in the deepest container.
      * If landing.hasInterior() search the effective container above the blocker.
@@ -1356,11 +1271,6 @@ public class Tower {
             if( element.getId() ==  number && !element.hasInterior()) return true;
         }
         return false;
-    }
-    
-    private int getEffectiveTop(Cup cup){
-        int lidExtra = cup.getLid() != null ? cup.getLid().getHeight() * Cup.PIXELS_PER_CM : 0;
-        return cup.getYPosition() - lidExtra;
     }
     
     /*
