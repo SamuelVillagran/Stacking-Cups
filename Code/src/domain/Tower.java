@@ -818,10 +818,9 @@ public class Tower {
         List<Integer> widths = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
         for (StackingItem item : stackingItems) {
             if (item.hasInterior() && item.getLid() != null) {
-                currentWidthItem = item.getWidth();
+                currentWidthItem = item.getId();
                 widths.add(currentWidthItem);
             }
-            
         }
         
         Collections.sort(widths);
