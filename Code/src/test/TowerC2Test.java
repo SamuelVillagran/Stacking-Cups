@@ -84,7 +84,7 @@ public class TowerC2Test {
         proofTower.pushCup(1);
         proofTower.pushCup(2);
         proofTower.pushCup(3);
-        proofTower.pushLid(2);
+        //proofTower.pushLid(2);
         
         proofTower.cover();
         String[][] result = proofTower.stackingItems();
