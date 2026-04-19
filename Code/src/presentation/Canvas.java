@@ -1,4 +1,4 @@
-package shapes;
+package presentation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ import java.util.*;
  *
  * @version: 1.6 (shapes)
  */
-public class Canvas{
+public final class Canvas{
     // Note: The implementation of this class (specifically the handling of
     // shape identity and colors) is slightly more complex than necessary. This
     // is done on purpose to keep the interface and instance fields of the
@@ -23,6 +23,10 @@ public class Canvas{
 
     private static Canvas canvasSingleton;
 
+    private Canvas() {
+    	
+    }
+    
     /**
      * Factory method to get the canvas singleton object.
      */
@@ -53,7 +57,7 @@ public class Canvas{
      * @param height  the desired height for the canvas
      * @param bgClour  the desired background colour of the canvas
      */
-    private Canvas(String title, int width, int height, Color bgColour){
+    private  Canvas(String title, int width, int height, Color bgColour) {
         frame = new JFrame();
         canvas = new CanvasPane();
         frame.setContentPane(canvas);
@@ -228,7 +232,7 @@ public class Canvas{
      * Canvas frame. This is essentially a JPanel with added capability to
      * refresh the image drawn on it.
      */
-    private class CanvasPane extends JPanel{
+    private final class CanvasPane extends JPanel{
         public void paint(Graphics g){
             g.drawImage(canvasImage, 0, 0, null);
         }

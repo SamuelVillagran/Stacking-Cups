@@ -1,4 +1,4 @@
-package tower;
+package domain;
 
 
 /**
@@ -44,7 +44,7 @@ public abstract class StackingItem {
         return color;
     }
     
-    public int getSize(){
+    public final int getSize(){
          return 2 * id - 1;
     }
     

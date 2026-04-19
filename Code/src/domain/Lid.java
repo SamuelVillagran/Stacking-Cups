@@ -1,8 +1,9 @@
-package tower;
+package domain;
 
  
 import java.util.ArrayList;
-import shapes.Rectangle;
+
+import presentation.Rectangle;
 
 /**
  * It represents the lid of the cup
@@ -64,13 +65,6 @@ public class Lid extends StackingItem {
     @Override
     public void erase() {
         shape.erase();
-    }
-    
-    /**
-     * Get size going to be this lid
-     */
-    public int getSize(){
-         return 2 * id - 1;
     }
     
     /**

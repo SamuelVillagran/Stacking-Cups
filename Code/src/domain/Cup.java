@@ -1,8 +1,9 @@
-package tower;
+package domain;
 
  
 import java.util.ArrayList;
-import shapes.Rectangle;
+
+import presentation.Rectangle;
 
 
 /**
@@ -28,7 +29,7 @@ public class Cup extends StackingItem {
         this.id = id;
         height = getSize();
         width = getSize();
-        color = color;
+        this.color = color;
         xPosition = 0;
         yPosition = 0;
         makeCup();
@@ -124,10 +125,6 @@ public class Cup extends StackingItem {
             lid = null;
         } 
     }
-
-    public int getSize(){
-         return (2 * id) -1;
-    }
     
     public Lid getLid() {
         return lid;
@@ -184,7 +181,7 @@ public class Cup extends StackingItem {
         return "normal";
     }
     
-
+    
     
     /*
      * Build the cup with Rectangles

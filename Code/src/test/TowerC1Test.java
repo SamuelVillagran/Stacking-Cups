@@ -1,12 +1,15 @@
-package tower;
+package test;
 
 
-
+import domain.Cup;
+import domain.Lid;
+import domain.StackingItem;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.List;
+
+import domain.Tower;
+
 import java.util.ArrayList;
 
 /**
@@ -24,6 +27,14 @@ public class TowerC1Test {
      */
     @BeforeEach
     public void setUp() {
+    }
+    
+    @Test
+    public void shouldCreateAnEmptyTower(){
+        Tower proofTower = new Tower(13, 13);
+        
+        int totalElements = proofTower.stackingItems().length;
+        assertEquals(0, totalElements);
     }
     
     @Test
@@ -55,6 +66,21 @@ public class TowerC1Test {
         {"cup", "2"},
         {"cup", "3"}};
         
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
+    public void shouldStoreACupInsideAnother(){
+        Tower proofTower = new Tower(13, 13);
+        proofTower.pushCup(2);
+        proofTower.pushCup(3);
+        proofTower.pushCup(1);
+        
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = {
+        {"cup", "2"},
+        {"cup", "3"},
+        {"cup", "1"}};
         assertArrayEquals(expected, result);
     }
     
@@ -92,17 +118,6 @@ public class TowerC1Test {
         
         assertArrayEquals(new String[]{"cup", "4"}, result[0]);
         assertArrayEquals(new String[]{"lid", "4"}, result[1]);
-    }
-    
-    @Test
-    public void shouldNotInsertALidWithoutCupAssociated(){
-        Tower proofTower = new Tower(13,13);
-        proofTower.pushCup(3);
-        proofTower.pushLid(2);
-        
-        String[][] result = proofTower.stackingItems();
-        
-        assertEquals(1, result.length);
     }
     
     @Test
@@ -161,44 +176,60 @@ public class TowerC1Test {
     }
     
     @Test
+    public void shouldPopCup(){
+        Tower proofTower = new Tower(13,13);
+        proofTower.pushCup(4);
+        proofTower.pushCup(3);
+        proofTower.pushCup(2);
+        proofTower.pushCup(1);
+        
+        proofTower.popCup();
+        String[][] result = proofTower.stackingItems();
+        String[][] expected = {
+        {"cup", "4"},
+        {"cup", "3"},
+        {"cup", "2"}};
+        assertTrue(proofTower.ok());
+        assertArrayEquals(expected, result);
+    }
+    
+    @Test
     public void shouldPopLid() {
         Tower proofTower = new Tower(5, 15);
-        //proofTower.pushCup(0);
-        proofTower.pushLid(0);
+        proofTower.pushLid(4);
+        proofTower.pushLid(5);
         proofTower.popLid();
         
-        //Lid lidOfCup = proofTower.getCups().get(0).getLid();
-        //assertNull(lidOfCup);
+        String[][] expected = {
+                {"lid", "4"}};
+        assertNotNull(proofTower.stackingItems());
+        assertArrayEquals(expected, proofTower.stackingItems());
     }
     
     @Test
     public void shouldLidedCupsCorrectly() {
         Tower proofTower = new Tower(50, 50);
         assertNull(proofTower.lidedCups());
-        
+      
         proofTower.pushCup(1);
         proofTower.pushCup(2);
+        proofTower.pushLid(2);
         proofTower.pushCup(5);
+        proofTower.pushLid(5);
         proofTower.pushCup(3);
+        proofTower.pushLid(3);
         proofTower.pushCup(9);
-        proofTower.pushCup(7);
+        proofTower.pushLid(9);
         
-        proofTower.pushLid(1); // indice 0
-        proofTower.pushLid(2); // indice 1
-        proofTower.pushLid(5); // indice 2
-        proofTower.pushLid(3); // indice 3
-        proofTower.pushLid(9); // indice 4
-        proofTower.pushLid(7); // indice 4
         
         int[] lidsSorted = proofTower.lidedCups();
         
-        ArrayList<StackingItem> lids = proofTower.getStackingItems();
-        assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
-        assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
-        assertEquals(lids.get(3).getWidth(), lidsSorted[2]); // Se alternan, va primero el indice 3
-        assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
-        assertEquals(lids.get(5).getWidth(), lidsSorted[4]); // Se alternan, va primero el indice 5
-        assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
+        assertEquals(2, lidsSorted[0]);
+        assertEquals(3, lidsSorted[1]);
+        assertEquals(5, lidsSorted[2]);
+        assertEquals(9, lidsSorted[3]);
+        
+        
         
     } //  Incluir el caso en el que este la taza pero no la tapa (id - 1)
     
@@ -241,7 +272,7 @@ public class TowerC1Test {
     @Test
     public void stackingItems_oneCupWithLid_returnsCupThenLid() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
-        //tower.pushCup(1); // Cup id=1, height=1
+        tower.pushCup(1); // Cup id=1, height=1
         tower.pushLid(1);       // Lid para cup id=1, height = 2*(1-1) = 0 → ajustar según Lid.getSize()
 
         String[][] result = tower.stackingItems();
@@ -265,22 +296,24 @@ public class TowerC1Test {
     //=============================================================
     @Test
     public void shouldGenerateATowerWithDeterminatedCups() {
-        /*
         Tower proofTower = new Tower(3);
-        assertNotNull(proofTower.getCups());
-        assertEquals(3, proofTower.getCups().size());
-        */
+        assertNotNull(proofTower.stackingItems());
+        assertEquals(3, proofTower.stackingItems().length);
+        
     }
     
-    /**
-     * Tears down the test fixture.
-     *
-     * Called after every test case method.
-     */
-    @AfterEach
-    public void tearDown()
-    {
+    @Test
+    public void shouldGiveCorrectlyHeight(){
+        Tower tower = new Tower(30, 30);
+        tower.pushCup(4);
+        tower.pushCup(1);
+        tower.pushCup(2);
+        tower.pushCup(3);
+        tower.pushCup(6);
         
+        int expectedHeight = 21;
+        int resultHeight = tower.heightUsed();
+        assertEquals(expectedHeight, resultHeight);
     }
     
     @Test
@@ -300,5 +333,22 @@ public class TowerC1Test {
         
         assertEquals(cupBottom.getColor(), lidBottom.getColor(), "La lid debe tener el mismo color que su Cup");
         assertEquals(cupUpper.getColor(), lidUpper.getColor(), "La lid debe tener el mismo color que su Cup");
+    }
+    
+    @Test
+    public void shouldSimulateAFallAfterRemovingACupInTheMiddle() {
+    	Tower tower = new Tower(15,15);
+    	tower.pushCup(1);
+    	tower.pushCup(2);
+    	tower.pushCup(3);
+    	
+    	tower.removeCup(2);
+    	String[][] result = tower.stackingItems();
+    	String[][] expected = new String[][] {
+    		{"cup", "1"},
+    		{"cup", "3"}};
+    	
+    	assertEquals(2, result.length);
+    	assertArrayEquals(expected, result);
     }
 }
