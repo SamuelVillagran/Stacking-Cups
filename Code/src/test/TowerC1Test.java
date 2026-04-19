@@ -196,41 +196,40 @@ public class TowerC1Test {
     @Test
     public void shouldPopLid() {
         Tower proofTower = new Tower(5, 15);
-        //proofTower.pushCup(0);
-        proofTower.pushLid(0);
+        proofTower.pushLid(4);
+        proofTower.pushLid(5);
         proofTower.popLid();
         
-        //Lid lidOfCup = proofTower.getCups().get(0).getLid();
-        //assertNull(lidOfCup);
+        String[][] expected = {
+                {"lid", "4"}};
+        assertNotNull(proofTower.stackingItems());
+        assertArrayEquals(expected, proofTower.stackingItems());
     }
     
     @Test
     public void shouldLidedCupsCorrectly() {
         Tower proofTower = new Tower(50, 50);
         assertNull(proofTower.lidedCups());
-        
+      
         proofTower.pushCup(1);
         proofTower.pushCup(2);
+        proofTower.pushLid(2);
         proofTower.pushCup(5);
+        proofTower.pushLid(5);
         proofTower.pushCup(3);
+        proofTower.pushLid(3);
         proofTower.pushCup(9);
-        proofTower.pushCup(7);
+        proofTower.pushLid(9);
         
-        proofTower.pushLid(2); // indice 0
-        proofTower.pushLid(5); // indice 1
-        proofTower.pushLid(3); // indice 2
-        proofTower.pushLid(9); // indice 3
-        proofTower.pushLid(7); // indice 4
         
         int[] lidsSorted = proofTower.lidedCups();
         
-        ArrayList<StackingItem> lids = proofTower.getStackingItems();
-        assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
-        assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
-        assertEquals(lids.get(3).getWidth(), lidsSorted[2]); // Se alternan, va primero el indice 3
-        assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
-        assertEquals(lids.get(5).getWidth(), lidsSorted[4]); // Se alternan, va primero el indice 5
-        assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
+        assertEquals(2, lidsSorted[0]);
+        assertEquals(3, lidsSorted[1]);
+        assertEquals(5, lidsSorted[2]);
+        assertEquals(9, lidsSorted[3]);
+        
+        
         
     } //  Incluir el caso en el que este la taza pero no la tapa (id - 1)
     
@@ -297,13 +296,13 @@ public class TowerC1Test {
     //=============================================================
     @Test
     public void shouldGenerateATowerWithDeterminatedCups() {
-        /*
         Tower proofTower = new Tower(3);
-        assertNotNull(proofTower.getCups());
-        assertEquals(3, proofTower.getCups().size());
-        */
+        assertNotNull(proofTower.stackingItems());
+        assertEquals(3, proofTower.stackingItems().length);
+        
     }
     
+    @Test
     public void shouldGiveCorrectlyHeight(){
         Tower tower = new Tower(30, 30);
         tower.pushCup(4);
@@ -334,5 +333,22 @@ public class TowerC1Test {
         
         assertEquals(cupBottom.getColor(), lidBottom.getColor(), "La lid debe tener el mismo color que su Cup");
         assertEquals(cupUpper.getColor(), lidUpper.getColor(), "La lid debe tener el mismo color que su Cup");
+    }
+    
+    @Test
+    public void shouldSimulateAFallAfterRemovingACupInTheMiddle() {
+    	Tower tower = new Tower(15,15);
+    	tower.pushCup(1);
+    	tower.pushCup(2);
+    	tower.pushCup(3);
+    	
+    	tower.removeCup(2);
+    	String[][] result = tower.stackingItems();
+    	String[][] expected = new String[][] {
+    		{"cup", "1"},
+    		{"cup", "3"}};
+    	
+    	assertEquals(2, result.length);
+    	assertArrayEquals(expected, result);
     }
 }
