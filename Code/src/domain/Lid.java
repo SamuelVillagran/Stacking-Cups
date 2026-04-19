@@ -68,13 +68,6 @@ public class Lid extends StackingItem {
     }
     
     /**
-     * Get size going to be this lid
-     */
-    public int getSize(){
-         return 2 * id - 1;
-    }
-    
-    /**
      * A lid doesn't hace interior, nothin can land inside it.
      */
     @Override

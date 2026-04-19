@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 public class Tower {
     
     private static ArrayList<Rectangle> ruler;
-    private ArrayList<String> COLORS = new ArrayList<>();
+    private ArrayList<String> colors = new ArrayList<>();
     private int width;
     private int maxHeight;
     private boolean lastOK;
@@ -77,7 +77,7 @@ public class Tower {
      * @param number Is the n value cup.
      * @param isWorking Indicates if the method has to work.
      */
-    public void pushCup(int number){
+    public final void pushCup(int number){
         int newHeight = 2 * number - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
@@ -169,8 +169,8 @@ public class Tower {
     /*
      * Add the array colors.
      */
-    private void initializeColors() {
-        COLORS = FigureColor.getStringColor();
+    private final void initializeColors() {
+        colors = FigureColor.getStringColor();
     }
     
     /*
@@ -810,10 +810,9 @@ public class Tower {
         if (isLidsEmpty && isVisible) {
             errorMessage();
             lastOK = false;
-            return null;
+            
         } 
         
-        if (isLidsEmpty) return null;
         
         List<Integer> ids = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
         for (StackingItem item : stackingItems) {
@@ -1085,10 +1084,10 @@ public class Tower {
      */
     private String getRandColor(){
         Random random = new Random();
-        int randIndexColor = random.nextInt(COLORS.size());
-        System.out.println(COLORS.size());
-        String color = COLORS.get(randIndexColor);
-        COLORS.remove(color);
+        int randIndexColor = random.nextInt(colors.size());
+        System.out.println(colors.size());
+        String color = colors.get(randIndexColor);
+        colors.remove(color);
         return color;
     }
     
@@ -1141,7 +1140,7 @@ public class Tower {
     /*
      * Generate the ruler of StackingCups
      */
-    private void generateRuler() { // Ayudado por Gemini IA 2026 pero revisado
+    private final void generateRuler() { // Ayudado por Gemini IA 2026 pero revisado
         
         if (isCreatedRuler) return;
         
@@ -1188,7 +1187,7 @@ public class Tower {
      * @param width width is the atribute of tower to inicializate
      * @param height height is the atribute of tower going to inicializate 
      */
-    private void inicializate(int width, int height) {
+    private final void inicializate(int width, int height) {
         this.width = width;
         this.maxHeight = height;
         stackingItems = new ArrayList<>();
@@ -1198,7 +1197,7 @@ public class Tower {
     /*
      * Set deterninated cups at the tower 
      */
-    private void generateCupsInTower(int cupsRequeried) {
+    private final void generateCupsInTower(int cupsRequeried) {
         for (int i = 1; i <= cupsRequeried; i++) {
             pushCup(i);
         }
