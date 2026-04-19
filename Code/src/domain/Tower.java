@@ -325,8 +325,7 @@ public class Tower {
         int lidWidth = 2 * i -1;
         int lidHeight = 1;
         int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
-        
-        if(lidWidth > maxHeight){
+        if(lidWidth > maxHeight || stackItemNonInteriorExists(i)){
             if(isVisible) errorMessage();
             lastOK = false;
             return;
@@ -361,7 +360,7 @@ public class Tower {
         int lidHeight = 1;
         int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
         
-        if(stackingItems.isEmpty() || (stackItemNonInteriorExists(i) && stackItemInteriorExists(i))){
+        if(stackItemNonInteriorExists(i)){
             if(isVisible) errorMessage();
             lastOK = false;
             return;
@@ -1312,10 +1311,8 @@ public class Tower {
             int containerBottom = container.getYPosition() + container.getHeight() * Cup.PIXELS_PER_CM;
             for(StackingItem s : stackingItems){
                 if(s.canContain(fallingWidth) && s.getYPosition() > container.getYPosition() 
-                    && s.getYPosition() > deepestInner.getYPosition()){
-                    if (deepestInner == null || s.getYPosition() > deepestInner.getYPosition()) {
-                        deepestInner = s;
-                    }
+                    && (deepestInner == null || s.getYPosition() > deepestInner.getYPosition())){
+                    deepestInner = s;
                 }
             } if(deepestInner != null){
                 container = deepestInner;

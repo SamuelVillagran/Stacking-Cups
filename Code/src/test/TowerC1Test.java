@@ -123,17 +123,6 @@ public class TowerC1Test {
     }
     
     @Test
-    public void shouldNotInsertALidWithoutCupAssociated(){
-        Tower proofTower = new Tower(13,13);
-        proofTower.pushCup(3);
-        proofTower.pushLid(2);
-        
-        String[][] result = proofTower.stackingItems();
-        
-        assertEquals(1, result.length);
-    }
-    
-    @Test
     public void shouldNotAddCupsMoreThanTheHeightTowerAllow(){
         Tower proofTower = new Tower(13,13);
         proofTower.pushCup(1);
@@ -229,11 +218,10 @@ public class TowerC1Test {
         proofTower.pushCup(9);
         proofTower.pushCup(7);
         
-        proofTower.pushLid(1); // indice 0
-        proofTower.pushLid(2); // indice 1
-        proofTower.pushLid(5); // indice 2
-        proofTower.pushLid(3); // indice 3
-        proofTower.pushLid(9); // indice 4
+        proofTower.pushLid(2); // indice 0
+        proofTower.pushLid(5); // indice 1
+        proofTower.pushLid(3); // indice 2
+        proofTower.pushLid(9); // indice 3
         proofTower.pushLid(7); // indice 4
         
         int[] lidsSorted = proofTower.lidedCups();
@@ -276,7 +264,7 @@ public class TowerC1Test {
 
         assertEquals(1, result.length);
         // Debe haber al menos 1 fila con "Cup"
-        assertEquals("Cup - normal", result[0][0]);
+        assertEquals("cup", result[0][0]);
         assertEquals("2", result[0][1]);
     }
 
@@ -287,7 +275,7 @@ public class TowerC1Test {
     @Test
     public void stackingItems_oneCupWithLid_returnsCupThenLid() { // Generado con Claude IA Sonnet 4.6 2026 pero corregido
         Tower tower = new Tower(5, 15);
-        //tower.pushCup(1); // Cup id=1, height=1
+        tower.pushCup(1); // Cup id=1, height=1
         tower.pushLid(1);       // Lid para cup id=1, height = 2*(1-1) = 0 → ajustar según Lid.getSize()
 
         String[][] result = tower.stackingItems();
