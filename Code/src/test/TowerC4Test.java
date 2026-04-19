@@ -1,5 +1,7 @@
 package test;
 
+ 
+
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -174,14 +176,15 @@ public class TowerC4Test {
         t.pushCup(3);
         t.pushCup(4);
         t.pushCup("hierarchical", 5);
+        
         t.orderTower();
         
         String[][] expected = {
         {"cup", "5"},
         {"cup", "4"},
-        {"normal", "3"},
-        {"normal", "2"},
-        {"normal", "1"}};
+        {"cup", "3"},
+        {"cup", "2"},
+        {"cup", "1"}};
 
         assertArrayEquals(expected, t.stackingItems());
     }
