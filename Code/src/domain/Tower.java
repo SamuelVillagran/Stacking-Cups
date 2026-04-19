@@ -815,19 +815,19 @@ public class Tower {
         
         if (isLidsEmpty) return null;
         
-        List<Integer> widths = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
+        List<Integer> ids = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
         for (StackingItem item : stackingItems) {
             if (item.hasInterior() && item.getLid() != null) {
-                currentWidthItem = item.getWidth();
-                widths.add(currentWidthItem);
+                currentWidthItem = item.getId();
+                ids.add(currentWidthItem);
             }
             
         }
         
-        Collections.sort(widths);
+        Collections.sort(ids);
         
-        int [] result = new int[widths.size()]; 
-        for (int widthLid : widths) {
+        int [] result = new int[ids.size()]; 
+        for (int widthLid : ids) {
             result[i] = widthLid;
             i++;
         }

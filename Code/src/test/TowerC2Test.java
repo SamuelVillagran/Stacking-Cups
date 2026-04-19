@@ -125,4 +125,5 @@ public class TowerC2Test {
         int reduceHeight = proofTower.heightUsed();
         assertTrue(reduceHeight < initialHeight);
     }
+    
 }
