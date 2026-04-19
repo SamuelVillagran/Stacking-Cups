@@ -9,6 +9,7 @@ import domain.StackingItem;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.TreeMap;
 
 import domain.Tower;
 
@@ -211,29 +212,29 @@ public class TowerC1Test {
         Tower proofTower = new Tower(50, 50);
         assertNull(proofTower.lidedCups());
         
-        proofTower.pushCup(1);
+        proofTower.pushCup(1); //Agrega copas
         proofTower.pushCup(2);
         proofTower.pushCup(5);
         proofTower.pushCup(3);
         proofTower.pushCup(9);
         proofTower.pushCup(7);
         
-        proofTower.pushLid(2); // indice 0
-        proofTower.pushLid(5); // indice 1
-        proofTower.pushLid(3); // indice 2
-        proofTower.pushLid(9); // indice 3
-        proofTower.pushLid(7); // indice 4
+        proofTower.pushLid(2); //Agregas las tapas de las copas
+        proofTower.pushLid(5); 
+        proofTower.pushLid(3); 
+        proofTower.pushLid(9); 
+        proofTower.pushLid(7); 
         
         int[] lidsSorted = proofTower.lidedCups();
         
-        ArrayList<StackingItem> lids = proofTower.getStackingItems();
-        assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
-        assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
-        assertEquals(lids.get(3).getWidth(), lidsSorted[2]); // Se alternan, va primero el indice 3
-        assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
-        assertEquals(lids.get(5).getWidth(), lidsSorted[4]); // Se alternan, va primero el indice 5
-        assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
-        
+        TreeMap<Integer, StackingItem> items = proofTower.getInOrderItems(); 
+        int index = 0;
+        for (StackingItem si : items.values()) {
+            if (si.hasInterior()) {
+                assertEquals(si.getId(), lidsSorted[index]);
+                index++;
+            }
+        }
     } //  Incluir el caso en el que este la taza pero no la tapa (id - 1)
     
     // =========================================================
@@ -336,5 +337,37 @@ public class TowerC1Test {
         
         assertEquals(cupBottom.getColor(), lidBottom.getColor(), "La lid debe tener el mismo color que su Cup");
         assertEquals(cupUpper.getColor(), lidUpper.getColor(), "La lid debe tener el mismo color que su Cup");
+    }
+    
+    
+    @Test
+    public void shouldBeRemovedCorrectlyCup() {
+        Tower t = new Tower(30, 30);
+        t.makeInvisible();
+        try {
+            t.pushCup(6);
+            t.pushCup(5);
+            t.pushCup(4);
+            t.pushLid(4);
+            t.pushLid(5);
+            t.pushLid(6);
+            t.pushLid(3);
+                 
+            t.removeCup(5);
+            
+            ArrayList<StackingItem> items = t.getStackingItems();
+            TreeMap<Integer, StackingItem> itemsInOrder = t.getInOrderItems();
+            assertTrue(items.size() == 6);
+            items.sort((a, b) -> Integer.compare(a.getYPosition(), b.getYPosition())); //Organiza items
+            int index=0;
+            for (StackingItem itemOrder : itemsInOrder.values()) {
+                assertEquals(itemOrder.getYPosition(), items.get(index).getYPosition());
+                index++;
+            }
+            assertTrue(t.ok());
+        } 
+        catch (Exception te) {
+            te.printStackTrace();
+        }
     }
 }

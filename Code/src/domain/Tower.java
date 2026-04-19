@@ -153,11 +153,11 @@ public class Tower {
         }
     }
     
-    /*
+    /**
      * Give items in order y position of way ascendent
      * @return A TreeMap with the item's position y and items
      */
-    private TreeMap<Integer, StackingItem> getInOrderItems() {
+    public TreeMap<Integer, StackingItem> getInOrderItems() {
         TreeMap<Integer, StackingItem> itemsOrderByPosY = new TreeMap<>();
         
         for (StackingItem c : stackingItems) {
@@ -815,7 +815,7 @@ public class Tower {
         
         if (isLidsEmpty) return null;
         
-        List<Integer> widths = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
+        List<Integer> ids = new ArrayList<>(); // Se crea una List para organizar las anchuras de las lids
         for (StackingItem item : stackingItems) {
             if (item.hasInterior() && item.getLid() != null) {
                 currentWidthItem = item.getId();
@@ -823,10 +823,10 @@ public class Tower {
             }
         }
         
-        Collections.sort(widths);
+        Collections.sort(ids);
         
-        int [] result = new int[widths.size()]; 
-        for (int widthLid : widths) {
+        int [] result = new int[ids.size()]; 
+        for (int widthLid : ids) {
             result[i] = widthLid;
             i++;
         }
