@@ -24,7 +24,7 @@ public class TowerATest {
     @Test
     public void shouldBeRemovedCorrectlyCup() {
         Tower t = new Tower(30, 30);
-        t.makeVisible();
+        //t.makeVisible();
         try {
             t.pushCup(6);
             t.pushCup(5);
@@ -45,7 +45,7 @@ public class TowerATest {
     @Test
     public void shouldBePutCorretlyCupOpener() {
         Tower t = new Tower(30, 30);
-        t.makeVisible();
+        //t.makeVisible();
         try {
             t.pushCup(6);
             t.pushCup(5);
