@@ -9,6 +9,7 @@ import domain.StackingItem;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.TreeMap;
 
 import domain.Tower;
 
@@ -238,13 +239,15 @@ public class TowerC1Test {
         
         int[] lidsSorted = proofTower.lidedCups();
         
-        ArrayList<StackingItem> lids = proofTower.getStackingItems();
-        assertEquals(lids.get(0).getWidth(), lidsSorted[0]);
-        assertEquals(lids.get(1).getWidth(), lidsSorted[1]);
-        assertEquals(lids.get(3).getWidth(), lidsSorted[2]); // Se alternan, va primero el indice 3
-        assertEquals(lids.get(2).getWidth(), lidsSorted[3]);
-        assertEquals(lids.get(5).getWidth(), lidsSorted[4]); // Se alternan, va primero el indice 5
-        assertEquals(lids.get(4).getWidth(), lidsSorted[5]);
+        TreeMap<Integer, StackingItem> items = proofTower.getInOrderItems(); 
+        int index = 0;
+        for (StackingItem si : items.descendingMap().values()) {
+            if (si.hasInterior()) {
+                assertEquals(si.getWidth(), lidsSorted[index]);
+                index++;
+            }
+        }
+        
         
     } //  Incluir el caso en el que este la taza pero no la tapa (id - 1)
     

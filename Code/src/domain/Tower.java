@@ -153,11 +153,11 @@ public class Tower {
         }
     }
     
-    /*
+    /**
      * Give items in order y position of way ascendent
      * @return A TreeMap with the item's position y and items
      */
-    private TreeMap<Integer, StackingItem> getInOrderItems() {
+    public TreeMap<Integer, StackingItem> getInOrderItems() {
         TreeMap<Integer, StackingItem> itemsOrderByPosY = new TreeMap<>();
         
         for (StackingItem c : stackingItems) {

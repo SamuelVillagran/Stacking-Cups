@@ -83,6 +83,7 @@ public class TowerC2Test {
         Tower proofTower = new Tower(15, 15);
         proofTower.pushCup(1);
         proofTower.pushCup(2);
+        proofTower.pushLid(2);
         proofTower.pushCup(3);
         
         proofTower.cover();
@@ -90,6 +91,7 @@ public class TowerC2Test {
         String[][] expected = new String[][]{
             {"cup", "1"},
             {"cup", "2"},
+            {"lid", "2"},
             {"cup", "3"}};
             
         assertArrayEquals(expected, result);
