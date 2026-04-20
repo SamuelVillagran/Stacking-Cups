@@ -255,10 +255,15 @@ public class Tower {
                 simulateAFall(removed);
                 lastCup.erase();
                 if (stackingItems.size() > 0) {
+                    boolean isLastRegister = false;
                     for (int i = stackingItems.size()-1; 0 < i ; i-- ) {
                         StackingItem currentItem = stackingItems.get(stackingItems.size()-1);
-                        if (currentItem.hasInterior()) {
+                        if (currentItem.hasInterior() && !isLastRegister) {
                             lastCup = (Cup) stackingItems.get(i);
+                            isLastRegister = true;
+                        }
+                        if (isLastRegister) {
+                            break;
                         }
                     }
                 }
@@ -296,9 +301,11 @@ public class Tower {
         if (isVisible) errorMessage();
         lastOK = false;
     }
-    
-    private void simulateAFall(StackingItem cup) { // Ayudado con Claude Sonnet 4.6 IA
-        int yPosCup = cup.getYPosition();
+    /*
+     * Simulate the fall of a item when this is removed of tower
+     */
+    private void simulateAFall(StackingItem item) { // Ayudado con Claude Sonnet 4.6 IA
+        int yPosCup = item.getYPosition();
         TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
         List<StackingItem> toReplace = new ArrayList<>();
 
@@ -310,18 +317,18 @@ public class Tower {
         }
 
         // FASE 1: borrar visual y quitar de la lista TODOS antes de re-pushear
-        for (StackingItem item : toReplace) {
-            item.erase();
-            stackingItems.remove(item);
+        for (StackingItem itm : toReplace) {
+            itm.erase();
+            stackingItems.remove(itm);
         }
 
         // FASE 2: re-pushear de abajo hacia arriba
         // descendingKeySet ya los dejó ordenados de mayor Y a menor Y (base → cima)
-        for (StackingItem item : toReplace) {
-            if (item.hasInterior()) {
-                pushCup(item.getType(), item.getId());
+        for (StackingItem itm : toReplace) {
+            if (itm.hasInterior()) {
+                pushCup(itm.getType(), itm.getId());
             } else {
-                pushLid(item.getType(), item.getId());
+                pushLid(itm.getType(), itm.getId());
             }
         }
     }
@@ -439,6 +446,7 @@ public class Tower {
                         stackingItems.remove(associatedCup);
                         associatedCup.erase();
                     }
+                    simulateAFall(lidToRemove);
                     stackingItems.remove(lidToRemove);
                     lidToRemove.erase();
                     lastOK = true;
@@ -474,8 +482,8 @@ public class Tower {
                     if (foundCup != null) {
                         foundCup.removeLid();
                     }
-                    
                     stackingItems.remove(currentItem);
+                    simulateAFall(currentItem);
                     lastOK = true;
                     return;
                 }
