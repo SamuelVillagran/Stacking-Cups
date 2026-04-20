@@ -249,13 +249,23 @@ public class Tower {
     public void popCup(){
         boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
-            for(int i = stackingItems.size() -1; i >= 0; i--){
-                if(stackingItems.get(i).hasInterior()){
-                    stackingItems.remove(i).erase();
-                    lastOK = true;
-                    return;
+            
+            if (lastCup != null) {
+                StackingItem removed = stackingItems.remove(stackingItems.indexOf(lastCup));
+                simulateAFall(removed);
+                lastCup.erase();
+                if (stackingItems.size() > 0) {
+                    for (int i = stackingItems.size()-1; 0 < i ; i-- ) {
+                        StackingItem currentItem = stackingItems.get(stackingItems.size()-1);
+                        if (currentItem.hasInterior()) {
+                            lastCup = (Cup) stackingItems.get(i);
+                        }
+                    }
                 }
+            } else if (lastCup == null && isVisible) {
+                errorMessage();
             }
+            
         } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
         }
@@ -287,26 +297,27 @@ public class Tower {
         lastOK = false;
     }
     
-    private void simulateAFall(StackingItem cup) {
+    private void simulateAFall(StackingItem cup) { // Ayudado con Claude Sonnet 4.6 IA
         int yPosCup = cup.getYPosition();
-
         TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
-
         List<StackingItem> toReplace = new ArrayList<>();
-        for (Integer posY : itemsInOrder.descendingKeySet()) {   // saca las que se deben reemplazar
+
+        // Recoger ítems por encima de la copa removida (Y menor = más arriba visualmente)
+        for (Integer posY : itemsInOrder.descendingKeySet()) {
             if (posY < yPosCup) {
                 toReplace.add(itemsInOrder.get(posY));
             }
         }
 
+        // FASE 1: borrar visual y quitar de la lista TODOS antes de re-pushear
         for (StackingItem item : toReplace) {
-            System.out.println(item.getType() + " ; " + item.getId());
             item.erase();
             stackingItems.remove(item);
         }
 
+        // FASE 2: re-pushear de abajo hacia arriba
+        // descendingKeySet ya los dejó ordenados de mayor Y a menor Y (base → cima)
         for (StackingItem item : toReplace) {
-            
             if (item.hasInterior()) {
                 pushCup(item.getType(), item.getId());
             } else {
@@ -1408,7 +1419,7 @@ public class Tower {
      */
     private String getAssociatedColor(int number, boolean insertsCup) {
         for(StackingItem item : stackingItems) {
-            if(item.getId() == number && item.hasInterior() != insertsCup){
+            if(item.getId() == number && item.hasInterior() != insertsCup) {
                 String color = item.getColor();
                 if(color != null) {
                     return color;
