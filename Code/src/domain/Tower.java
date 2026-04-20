@@ -249,13 +249,26 @@ public class Tower {
     public void popCup(){
         boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
-            for(int i = stackingItems.size() -1; i >= 0; i--){
-                if(stackingItems.get(i).hasInterior()){
-                    stackingItems.remove(i).erase();
-                    lastOK = true;
-                    return;
+            
+            if (lastCup != null) {
+                
+                StackingItem removed = stackingItems.remove(stackingItems.indexOf(lastCup));
+                simulateAFall(removed);
+                lastCup.erase();
+                if (stackingItems.size() > 0) {
+                    for (int i = stackingItems.size()-1; 0 < i ; i-- ) {
+                        StackingItem currentItem = stackingItems.get(stackingItems.size()-1);
+                        if (currentItem.hasInterior()) {
+                            lastCup = (Cup) stackingItems.get(i);
+                        }
+                    }
+                    
                 }
+                
+            } else if (lastCup == null && isVisible) {
+                errorMessage();
             }
+            
         } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
         }
@@ -281,7 +294,7 @@ public class Tower {
                 simulateAFall(removed);
                 lastOK = true;
                 return;
-            } 
+                            } 
         }
         if (isVisible) errorMessage();
         lastOK = false;
@@ -289,18 +302,18 @@ public class Tower {
     
     private void simulateAFall(StackingItem cup) {
         int yPosCup = cup.getYPosition();
-
         TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
-
         List<StackingItem> toReplace = new ArrayList<>();
-        for (Integer posY : itemsInOrder.descendingKeySet()) {   // saca las que se deben reemplazar
+
+        // Recoger ítems por encima de la copa removida (Y menor = más arriba visualmente)
+        for (Integer posY : itemsInOrder.descendingKeySet()) {
             if (posY < yPosCup) {
                 toReplace.add(itemsInOrder.get(posY));
             }
         }
 
+        // FASE 1: borrar visual y quitar de la lista TODOS antes de re-pushear
         for (StackingItem item : toReplace) {
-            System.out.println(item.getType() + " ; " + item.getId());
             item.erase();
             stackingItems.remove(item);
         }
