@@ -748,7 +748,7 @@ public class Tower {
                 return;
             }
             if (lidTypesInsert.containsKey(id)) {
-                String lidType = lidTypesInsert.get(i);
+                String lidType = lidTypesInsert.get(id);
                 if("normal".equals(lidType)) {
                     pushLid(id);
                 } else {
