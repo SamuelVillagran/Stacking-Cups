@@ -446,15 +446,14 @@ public class Tower {
                             return;
                         }
                     }
+                    stackingItems.remove(lidToRemove);
                     Cup associatedCup = findCup(lidToRemove.getId());
                     if (associatedCup != null && associatedCup.getLid() != null) {
                         associatedCup.removeLid();
-                        stackingItems.remove(associatedCup);
-                        associatedCup.erase();
+                    }else{
+                        lidToRemove.erase();
                     }
                     simulateAFall(lidToRemove);
-                    stackingItems.remove(lidToRemove);
-                    lidToRemove.erase();
                     lastOK = true;
                     return;
                 }
