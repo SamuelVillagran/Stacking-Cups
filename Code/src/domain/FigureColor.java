@@ -14,7 +14,7 @@ public enum FigureColor {
     DARKYELLOW, GREENTINT, SALMON, DARKRED, HARDGRAY, 
     SOFTGRAY, VIOLET, NAVY, OLIVE, PURPLE, 
     SILVER, LIME, TEAL, AQUA, SKYBLUE, 
-    CHOCOLATE, BEIGE; // Some colors are generated with IA
+    CHOCOLATE, BEIGE; // Some colors are consulted with IA
     
     public static ArrayList<String> getStringColor() {
         ArrayList<String> colorsInString = new ArrayList<>();

@@ -143,7 +143,7 @@ public class Tower {
         
         TreeMap<Integer, Cup> cupsOrderByPosY = new TreeMap<>();
         for (Cup c : cups.values()) {
-            cupsOrderByPosY.put(c.getYPos(), c); 
+            cupsOrderByPosY.put(c.getYPosition(), c); 
         }
         
         if (!isTypeAllowed) throw new TowerException(TowerException.NOT_ALLOWED_TYPE);
@@ -1207,7 +1207,7 @@ public class Tower {
     /*
      * Set deterninated cups at the tower 
      */
-    private final void generateCupsInTower(int cupsRequeried) {
+    private final void generateCupsInTower(int cupsRequeried) throws TowerException {
         for (int i = 1; i <= cupsRequeried; i++) {
             pushCup(i);
         }
