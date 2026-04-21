@@ -519,9 +519,11 @@ public class Tower {
                 	errorMessage(TowerException.DONT_EXISTS_LID);
                 	throw new TowerException(TowerException.DONT_EXISTS_LID);
                 }
+                
+                }
+        
             }
         }
-        lastOK = false;
     }
     
     /**
