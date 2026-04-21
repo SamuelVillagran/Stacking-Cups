@@ -115,8 +115,9 @@ public class Tower {
      * Put in the tower different type of cups 
      * @param type type of cup that it's going to put at the tower
      * @param i i is the id of tower that it's going to put at the tower
+     * @throws TowerException NOT_ALLOWED_TYPE - When string type not is allowed throws this exception
      */
-    public void pushCup(String type, int i) {
+    public void pushCup(String type, int i) throws TowerException {
         int newHeight = 2 * i - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
@@ -139,6 +140,8 @@ public class Tower {
         for (Cup c : cups.values()) {
             cupsOrderByPosY.put(c.getYPos(), c); 
         }
+        
+        if (!isTypeAllowed) throw new TowerException(TowerException.NOT_ALLOWED_TYPE);
         
         switch (type) {
             case "normal":
