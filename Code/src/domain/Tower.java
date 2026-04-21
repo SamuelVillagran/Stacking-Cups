@@ -251,24 +251,23 @@ public class Tower {
         boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
             
-            if (lastCup != null) {
+            int lastCupIdx = lastCup != null ? stackingItems.indexOf(lastCup) : -1;
+            if (lastCupIdx >= 0) {
+                if(lastCup.getLid() != null){
+                    stackingItems.remove(lastCup.getLid());
+                    lastCup.removeLid();
+                }
                 StackingItem removed = stackingItems.remove(stackingItems.indexOf(lastCup));
                 simulateAFall(removed);
                 lastCup.erase();
-                if (stackingItems.size() > 0) {
-                    boolean isLastRegister = false;
-                    for (int i = stackingItems.size()-1; 0 < i ; i-- ) {
-                        StackingItem currentItem = stackingItems.get(stackingItems.size()-1);
-                        if (currentItem.hasInterior() && !isLastRegister) {
-                            lastCup = (Cup) stackingItems.get(i);
-                            isLastRegister = true;
-                        }
-                        if (isLastRegister) {
-                            break;
-                        }
+                lastCup = null;
+                for (int i = stackingItems.size() - 1; i >= 0; i--) {
+                    if (stackingItems.get(i).hasInterior()) {
+                        lastCup = (Cup) stackingItems.get(i);
+                        break;
                     }
                 }
-            } else if (lastCup == null && isVisible) {
+            } else if (isVisible) {
                 errorMessage();
             }
             
@@ -291,7 +290,12 @@ public class Tower {
             
             idCurrentCup = currentCup.getId();
             if(idCurrentCup == j && currentCup.hasInterior()){
-                StackingItem removed = stackingItems.remove(i);                
+                Cup cup = (Cup) currentCup;
+                if (cup.getLid() != null) {
+                    stackingItems.remove(cup.getLid());
+                    cup.removeLid();
+                }
+                StackingItem removed =stackingItems.remove(stackingItems.indexOf(currentCup));                
                 removed.erase();
                 currentCup = null;
                 simulateAFall(removed);
@@ -471,7 +475,6 @@ public class Tower {
      * @param i i is index of cup that going to remove lid
      */
     public void removeLid(int i) {
-        
         for(StackingItem currentItem : stackingItems){
             if(currentItem.getId() == i && !currentItem.hasInterior()){
                 if(currentItem.getType().equals("fearful")) {
@@ -482,17 +485,16 @@ public class Tower {
                         return;
                     }
                 }
-                if(currentItem != null) {
-                    Cup foundCup = findCup(i);
-                    if (foundCup != null) {
-                        foundCup.removeLid();
-                    }
-                    stackingItems.remove(currentItem);
-                    simulateAFall(currentItem);
-                    lastOK = true;
-                    return;
+                stackingItems.remove(currentItem);
+                Cup foundCup = findCup(i);
+                if (foundCup != null && foundCup.getLid() != null) {
+                    foundCup.removeLid();
+                } else {
+                    currentItem.erase();
                 }
-                if (isVisible) errorMessage();
+                simulateAFall(currentItem);
+                lastOK = true;
+                return;
             }
         }
         lastOK = false;
