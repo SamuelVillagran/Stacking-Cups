@@ -18,6 +18,8 @@ public class TowerException extends Exception {
 	public static final String INTERIOR_CUP_EXISTS = "This action can't be realized because there is a interior cup already";
 	public static final String INTERIOR_CUP_DONT_EXISTS = "This action can't be realized because there isn't a interior cup";
 	public static final String NO_ITEMS = "This actions can't be realized because there aren't items at the tower";
+	public static final String DONT_EXISTS_LID = "Don't exists lid";
+	public static final String DOESNT_HAVE_ASSOCIATED_CUP = "Don't exists their associated cup";
     
     public TowerException(String message) {
         super(message);
