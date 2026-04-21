@@ -14,6 +14,7 @@ public class TowerException extends Exception {
 	public static final String DONT_EXISTS_LASTCUP = "This action can't do it beacause don't have set a cup at the tower";
 	public static final String CANT_CREATE_TOWER = "Can't create tower because invalidates the invariant";
 	public static final String CANT_PUSH_CUP = "Can't push the cup because invalidates the invatiant";
+	public static final String CANT_PUSH_LID = "Can't push the lid because invalidates the invatiant";
 	public static final String IS_OUT_SCREEN = "This action makes out of screen";
 	public static final String INTERIOR_CUP_EXISTS = "This action can't be realized because there is a interior cup already";
 	public static final String INTERIOR_CUP_DONT_EXISTS = "This action can't be realized because there isn't a interior cup";

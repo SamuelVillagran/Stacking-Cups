@@ -135,6 +135,8 @@ public class Tower {
         
         List<String> types = List.of("normal", "opener", "hierarchical");
         boolean isTypeAllowed = types.contains(type);
+        
+        if (!isTypeAllowed) throw new TowerException(TowerException.NOT_ALLOWED_TYPE);
          // Si no es el tipo permitido se lanza una excepcion
         TreeMap<Integer, Cup> cups = new TreeMap<>();
         for (StackingItem s : stackingItems) {
@@ -146,7 +148,7 @@ public class Tower {
             cupsOrderByPosY.put(c.getYPosition(), c); 
         }
         
-        if (!isTypeAllowed) throw new TowerException(TowerException.NOT_ALLOWED_TYPE);
+       
         
         switch (type) {
             case "normal":
@@ -252,6 +254,39 @@ public class Tower {
         if(isVisible) newCup.makeVisible();
     }
     
+    
+    /*
+     * This Method push a lid of type Fearful
+     * @param id id integer of lid
+     */
+    private void pushFearful(int id) throws TowerException {
+    	int lidWidth = 2 * id -1;
+        int lidHeight = 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (lidWidth * Cup.getPixelsPerCm()) / 2;
+    	
+    	if(!stackItemInteriorExists(id)) {
+            if(isVisible) errorMessage(TowerException.INTERIOR_CUP_DONT_EXISTS);
+            lastOK = false;
+            throw new TowerException(TowerException.INTERIOR_CUP_DONT_EXISTS);
+        }
+    	StackingItem landingItem = findLandingPiece(lidWidth);
+        int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
+        
+        if (yPos < 0) {
+            lastOK = false;
+            if (isVisible) errorMessage(TowerException.IS_OUT_SCREEN);
+            throw new TowerException(TowerException.IS_OUT_SCREEN);
+        }
+        
+        String color = getAssociatedColor(id, false);
+        Fearful newLid = new Fearful(id, xPos, yPos, color);
+        stackingItems.add(newLid);
+        heightCups += lidHeight;
+        lastOK = true;
+        if(isVisible) newLid.makeVisible();
+        checkAssociatedCup(id, newLid);
+    }
+    
     /**
      * Delete the last cup at the stackingItems list.
      * @throws TowerException DONT_EXISTS_LASTCUP - This exception happend when there isn't last cup
@@ -282,8 +317,8 @@ public class Tower {
                 throw new TowerException(TowerException.DONT_EXISTS_LASTCUP);
             }
             
-        } else if (areStackingItemsEmpty && isVisible) {
-            errorMessage(TowerException.NO_ITEMS);
+        } else if (areStackingItemsEmpty) {
+            if (isVisible) errorMessage(TowerException.NO_ITEMS);
             throw new TowerException(TowerException.NO_ITEMS);
         }
         lastOK = false;
@@ -298,7 +333,7 @@ public class Tower {
         int idCurrentCup, lenStack;
         StackingItem currentCup;
         lenStack = stackingItems.size();
-        for(int i = 0; i< lenStack; i++){
+        for(int i = 0; i< lenStack; i++) {
             currentCup = stackingItems.get(i);
             
             idCurrentCup = currentCup.getId();
@@ -362,12 +397,9 @@ public class Tower {
         int lidHeight = 1;
         int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
         if(lidWidth > maxHeight || stackItemNonInteriorExists(i)){
-            if(isVisible) {
-            	errorMessage(TowerException.CANT_PUSH_CUP); // Aqui deberia retornar una excepcion
-                
-            }
+            if(isVisible) errorMessage(TowerException.CANT_PUSH_LID); 
             lastOK = false;
-            throw new TowerException(TowerException.CANT_PUSH_CUP);
+            throw new TowerException(TowerException.CANT_PUSH_LID);
         }
         
         StackingItem landingItem = findLandingPiece(lidWidth);
@@ -375,10 +407,8 @@ public class Tower {
         String color = getAssociatedColor(i, false);
         if (yPos < 0) {
             lastOK = false;
-            if (isVisible) {
+            if (isVisible) 
             	errorMessage(TowerException.IS_OUT_SCREEN);
-                
-            }
             throw new TowerException(TowerException.IS_OUT_SCREEN);
         }
         
@@ -399,52 +429,62 @@ public class Tower {
      * @throws TowerException 
      */
     public void pushLid(String type, int i) throws TowerException {
-        int lidWidth = 2 * i -1;
-        int lidHeight = 1;
-        int xPos = xCenter * Cup.getPixelsPerCm() - (lidWidth * Cup.getPixelsPerCm()) / 2;
-        
         if(stackItemNonInteriorExists(i)){
             if(isVisible) errorMessage(TowerException.INTERIOR_CUP_EXISTS);
             lastOK = false;
             throw new TowerException(TowerException.INTERIOR_CUP_EXISTS);
         }
         
-        StackingItem landingItem = findLandingPiece(lidWidth);
+        List<String> types = List.of("normal", "fearful", "crazy");
+        boolean isTypeAllowed = types.contains(type);
+        
+        if (!isTypeAllowed) throw new TowerException(TowerException.NOT_ALLOWED_TYPE);
+         // Si no es el tipo permitido se lanza una excepcion
+        
+        switch (type) {
+        
+	        case "normal":
+	        	pushLid(i);
+	        	break;
+	        case "fearful":
+	        	pushFearful(i);
+	        	break;
+	        case "crazy":
+	        	pushCrazy(i);
+	        	break;
+        }
+   
+    }
+    
+    private void pushCrazy(int id) throws TowerException {
+    	String color = getAssociatedColor(id, false);
+    	int lidWidth = 2 * id -1;
+        int lidHeight = 1;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (lidWidth * Cup.getPixelsPerCm()) / 2;
+    	
+    	if(!stackItemInteriorExists(id)) {
+            if(isVisible) errorMessage(TowerException.INTERIOR_CUP_DONT_EXISTS);
+            lastOK = false;
+            throw new TowerException(TowerException.INTERIOR_CUP_DONT_EXISTS);
+        }
+    	StackingItem landingItem = findLandingPiece(lidWidth);
         int yPos = resolveYPos(landingItem, lidWidth, lidHeight);
-        String color = getAssociatedColor(i, false);
+        
         if (yPos < 0) {
             lastOK = false;
             if (isVisible) errorMessage(TowerException.IS_OUT_SCREEN);
             throw new TowerException(TowerException.IS_OUT_SCREEN);
         }
-        
-        if (type.equals("normal")) pushLid(i);
-        
-        if (type.equals("crazy")) {
-            yPos += lidWidth + landingItem.getSize();
-            Crazy newLid = new Crazy(i, xPos, yPos, color);
-            stackingItems.add(newLid);
-            if(isVisible) newLid.makeVisible();
-            lastOK = true;
-            checkAssociatedCup(i, newLid);
-        } else if (type.equals("fearful")) {
-            if(!stackItemInteriorExists(i)) {
-                if(isVisible) errorMessage(TowerException.INTERIOR_CUP_DONT_EXISTS);
-                lastOK = false;
-                throw new TowerException(TowerException.INTERIOR_CUP_DONT_EXISTS);
-            }
-            Fearful newLid = new Fearful(i, xPos, yPos, color);
-            stackingItems.add(newLid);
-            heightCups += lidHeight;
-            lastOK = true;
-            if(isVisible) newLid.makeVisible();
-            checkAssociatedCup(i, newLid);
-        }
-        
-        
-    }
-    
-    public ArrayList<StackingItem> getStackingItems(){
+    	
+    	yPos += lidWidth + landingItem.getSize();
+        Crazy newLid = new Crazy(id, xPos, yPos, color);
+        stackingItems.add(newLid);
+        if(isVisible) newLid.makeVisible();
+        lastOK = true;
+        checkAssociatedCup(id, newLid);
+	}
+
+	public ArrayList<StackingItem> getStackingItems(){
         return stackingItems;
     }
     
