@@ -36,6 +36,7 @@ public class Tower {
     private int heightCups;
     private boolean isCreatedRuler;
     private ArrayList<StackingItem> stackingItems;
+    private HashMap<Integer, String> tempColors = null;
     
 
     /**
@@ -306,12 +307,13 @@ public class Tower {
      */
     private void simulateAFall(StackingItem item) { // Ayudado con Claude Sonnet 4.6 IA
         int yPosCup = item.getYPosition();
+        int removedBottom = yPosCup + item.getHeight() * Cup.PIXELS_PER_CM;
         TreeMap<Integer, StackingItem> itemsInOrder = getInOrderItems();
         List<StackingItem> toReplace = new ArrayList<>();
 
-        // Recoger ítems por encima de la copa removida (Y menor = más arriba visualmente)
-        for (Integer posY : itemsInOrder.descendingKeySet()) {
-            if (posY < yPosCup) {
+        // Recoger ítems por encima del borde inferior del item eliminado.
+        for (Integer posY : itemsInOrder.keySet()) {
+            if (posY < removedBottom) {
                 toReplace.add(itemsInOrder.get(posY));
             }
         }
@@ -322,8 +324,11 @@ public class Tower {
             stackingItems.remove(itm);
         }
 
-        // FASE 2: re-pushear de abajo hacia arriba
-        // descendingKeySet ya los dejó ordenados de mayor Y a menor Y (base → cima)
+        // FASE 2: re-pushear en orden ascendente de la posicion Y
+        tempColors = new HashMap<>();
+        for(StackingItem itm : toReplace){
+            tempColors.put(itm.getId(), itm.getColor());
+        }
         for (StackingItem itm : toReplace) {
             if (itm.hasInterior()) {
                 pushCup(itm.getType(), itm.getId());
@@ -331,6 +336,7 @@ public class Tower {
                 pushLid(itm.getType(), itm.getId());
             }
         }
+        tempColors = null;
     }
 
     
@@ -1426,6 +1432,9 @@ public class Tower {
      * otherwise, take a random color.
      */
     private String getAssociatedColor(int number, boolean insertsCup) {
+        if(tempColors != null && tempColors.containsKey(number)){
+            return tempColors.get(number);
+        }
         for(StackingItem item : stackingItems) {
             if(item.getId() == number && item.hasInterior() != insertsCup) {
                 String color = item.getColor();
