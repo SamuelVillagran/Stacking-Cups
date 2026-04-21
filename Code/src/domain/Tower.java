@@ -40,23 +40,26 @@ public class Tower {
 
     /**
      * Constructor for objects of class Tower
+     * @throws TowerException CANT_CREATE_TOWER - When violates the invariant this is throw
      */
-    public Tower(int width, int maxHeight) {
+    public Tower(int width, int maxHeight) throws TowerException {
         if (invariant(width, maxHeight)) {
             inicializate(width, maxHeight);
             initializeColors();
             generateRuler();
             lastOK = true;
-        } else if (!invariant(width, maxHeight) && isVisible) {
+        } else if (!invariant(width, maxHeight)) {
             lastOK = false;
-            errorMessage();
+            if (isVisible) errorMessage(TowerException.CANT_CREATE_TOWER);
+            throw new TowerException(TowerException.CANT_CREATE_TOWER);
         }
     }
     
     /**
      * Constructor 2 cicle
+     * @throws TowerException CANT_CREATE_TOWER - When violates the invariant this is throw
      */
-    public Tower(int numberCups) {
+    public Tower(int numberCups) throws TowerException {
         int height = 0;
         for(int i = 1; i<= numberCups; i++){
              height += 2 * i -1;
@@ -66,9 +69,10 @@ public class Tower {
             initializeColors();
             generateCupsInTower(numberCups);
             generateRuler();
-        } else if (!invariant(width, maxHeight) && isVisible) {
+        } else if (!invariant(width, maxHeight)) {
             lastOK = false;
-            errorMessage();
+            if (isVisible) errorMessage(TowerException.CANT_CREATE_TOWER);
+            throw new TowerException(TowerException.CANT_CREATE_TOWER);
         }
     }
     
@@ -76,16 +80,17 @@ public class Tower {
      * Add a cup if is possible.
      * @param number Is the n value cup.
      * @param isWorking Indicates if the method has to work.
+     * @throws TowerException IS_OUT_SCREEN - When some shape is put out of screen this is throw
      */
-    public final void pushCup(int number){
+    public final void pushCup(int number) throws TowerException{
         int newHeight = 2 * number - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
 
         if(newHeight > maxHeight || stackItemInteriorExists(number)){
             lastOK = false;
-            if(isVisible) errorMessage(); // Aqui deberia retornar una excepcion
-            return;
+            if(isVisible) errorMessage(TowerException.CANT_PUSH_CUP); // Aqui deberia retornar una excepcion
+            throw new TowerException(TowerException.CANT_PUSH_CUP);
         }
         
         if(stackingItems.isEmpty()){
@@ -95,9 +100,9 @@ public class Tower {
             StackingItem landingItem = findLandingPiece(newHeight);
             yPos = resolveYPos(landingItem, newHeight, newHeight);
             if(yPos < 0){
-                if(isVisible) errorMessage();
+                if(isVisible) errorMessage(TowerException.IS_OUT_SCREEN);
                 lastOK = false;
-                return;
+                throw new TowerException(TowerException.IS_OUT_SCREEN);
             }
             if(landingItem != null){
                 heightCups += newHeight;
@@ -248,8 +253,9 @@ public class Tower {
     
     /**
      * Delete the last cup at the stackingItems list.
+     * @throws TowerException DONT_EXISTS_LASTCUP - This exception happend when there isn't last cup
      */
-    public void popCup(){
+    public void popCup() throws TowerException{
         boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
             
@@ -270,8 +276,9 @@ public class Tower {
                         }
                     }
                 }
-            } else if (lastCup == null && isVisible) {
-                errorMessage();
+            } else if (lastCup == null) {
+                if (isVisible) errorMessage(TowerException.DONT_EXISTS_LASTCUP);
+                throw new TowerException(TowerException.DONT_EXISTS_LASTCUP);
             }
             
         } else if (areStackingItemsEmpty && isVisible) {
@@ -301,7 +308,9 @@ public class Tower {
                 return;
             } 
         }
-        if (isVisible) errorMessage();
+        if (isVisible) {
+        	errorMessage();
+        }
         lastOK = false;
     }
     /*
@@ -1093,11 +1102,11 @@ public class Tower {
      * Error message this going to apperear at the screen
      * This only apper if simulator is visible
      */
-    private void errorMessage() {
+    private void errorMessage(String messageError) {
         if (isVisible) {
             JOptionPane.showMessageDialog( 
             null, 
-            "Action not allowed",  // Mensaje de la ventana
+            messageError,  // Mensaje de la ventana
             "Invalid Action",  //Mensaje del titulo de la ventana
             JOptionPane.ERROR_MESSAGE
             );
