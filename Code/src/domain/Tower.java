@@ -1135,16 +1135,7 @@ public class Tower {
             r.makeVisible();
         }
     }
-    
-    /*
-     * Make invisible the ruler of Stacking Cups
-     */
-    private void makeInvisibleRuler() {
-        for (Rectangle r : ruler) {
-            r.makeInvisible();
-        }
-        
-    }
+  
     
     /*
      * Inicializate atributes needed to build a tower 
