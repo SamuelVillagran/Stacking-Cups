@@ -128,9 +128,9 @@ public class Tower {
         int yPos;
         
         if(newHeight > maxHeight || stackItemInteriorExists(i)){
-            lastOK = false;
-            if(isVisible) errorMessage(); // Aqui deberia retornar una excepcion
-            return;
+        	lastOK = false;
+            if(isVisible) errorMessage(TowerException.CANT_PUSH_CUP); // Aqui deberia retornar una excepcion
+            throw new TowerException(TowerException.CANT_PUSH_CUP);
         }
         
         List<String> types = List.of("normal", "opener", "hierarchical");
@@ -187,8 +187,9 @@ public class Tower {
      * @param i Id of the cup.
      * @param xPos Position on x of the cup.
      * @param newHeight Height of the cup.
+     * @throws TowerException IS_OUT_SCREEN - When some shape is put out of screen this is throw
      */
-    private void pushOpener(int i, int xPos, int newHeight){
+    private void pushOpener(int i, int xPos, int newHeight) throws TowerException {
         int yPos;
         if(stackingItems.isEmpty()) {  // Cuando no hay stackingItems se pone de primeras
             yPos = (maxHeight - newHeight) * Cup.getPixelsPerCm();
@@ -239,9 +240,9 @@ public class Tower {
             yPos = resolveYPos(landingItem, newHeight, newHeight);
         }
         if(yPos < 0){
-            if(isVisible) errorMessage();
-            lastOK = false;
-            return;
+        	lastOK = false;
+            if(isVisible) errorMessage(TowerException.CANT_PUSH_CUP); // Aqui deberia retornar una excepcion
+            throw new TowerException(TowerException.CANT_PUSH_CUP);
         }
         heightCups += newHeight;
         Opener newCup = new Opener(i, xPos, yPos, getAssociatedColor(i, true));
@@ -283,6 +284,7 @@ public class Tower {
             
         } else if (areStackingItemsEmpty && isVisible) {
             errorMessage();
+            throw new TowerException(TowerException.NO_ITEMS);
         }
         lastOK = false;
     }
@@ -290,8 +292,9 @@ public class Tower {
     /**
      * Remove a especific cup, the cup that is at the j index of list.
      * @param j j is the index of cup that going to removed
+     * @throws TowerException DONT_EXISTS_CUP - Throws when cup isn't founded
      */
-    public void removeCup(int j){
+    public void removeCup(int j) throws TowerException{
         int idCurrentCup, lenStack;
         StackingItem currentCup;
         lenStack = stackingItems.size();
@@ -309,9 +312,11 @@ public class Tower {
             } 
         }
         if (isVisible) {
-        	errorMessage();
+        	lastOK = false;
+        	errorMessage(TowerException.DONT_EXISTS_CUP);
+        	throw new TowerException(TowerException.DONT_EXISTS_CUP);
         }
-        lastOK = false;
+        
     }
     /*
      * Simulate the fall of a item when this is removed of tower
@@ -387,12 +392,12 @@ public class Tower {
     public void pushLid(String type, int i) {
         int lidWidth = 2 * i -1;
         int lidHeight = 1;
-        int xPos = xCenter * Cup.PIXELS_PER_CM - (lidWidth * Cup.getPixelsPerCm()) / 2;
+        int xPos = xCenter * Cup.getPixelsPerCm() - (lidWidth * Cup.getPixelsPerCm()) / 2;
         
         if(stackItemNonInteriorExists(i)){
-            if(isVisible) errorMessage();
+            if(isVisible) errorMessage(TowerException.INTERIOR_CUP_EXISTS);
             lastOK = false;
-            return;
+            throw new TowerException(TowerException.INTERIOR_CUP_EXISTS);
         }
         
         StackingItem landingItem = findLandingPiece(lidWidth);
@@ -415,9 +420,9 @@ public class Tower {
             checkAssociatedCup(i, newLid);
         } else if (type.equals("fearful")) {
             if(!stackItemInteriorExists(i)) {
-                if(isVisible) errorMessage();
+                if(isVisible) errorMessage(TowerException.INTERIOR_CUP_DONT_EXISTS);
                 lastOK = false;
-                return;
+                throw new TowerException(TowerException.INTERIOR_CUP_DONT_EXISTS);
             }
             Fearful newLid = new Fearful(i, xPos, yPos, color);
             stackingItems.add(newLid);
@@ -437,7 +442,7 @@ public class Tower {
     /**
      * Delete the last lid put at this tower
      */
-    public void popLid(){
+    public void popLid() throws TowerException {
         boolean areStackingItemsEmpty = stackingItems.isEmpty();
         if(!areStackingItemsEmpty){
             for(int i = stackingItems.size() -1; i >= 0; i--){
@@ -448,10 +453,11 @@ public class Tower {
                         Cup cup = findCup(lidToRemove.getId());
                         if(cup != null && cup.getLid() != null) {
                             lastOK = false;
-                            if(isVisible) errorMessage();
-                            return;
+                            if(isVisible) errorMessage(TowerException.DONT_EXISTS_CUP);
+                            throw new TowerException(TowerException.DONT_EXISTS_CUP); 
                         }
                     }
+                    
                     Cup associatedCup = findCup(lidToRemove.getId());
                     if (associatedCup != null && associatedCup.getLid() != null) {
                         associatedCup.removeLid();
