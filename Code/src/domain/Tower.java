@@ -554,6 +554,7 @@ public class Tower {
                     }
                     stackingItems.remove(currentItem);
                     simulateAFall(currentItem);
+                    currentItem = null;
                     lastOK = true;
                     return;
                 }
@@ -700,9 +701,11 @@ public class Tower {
         int idO2 = Integer.parseInt(o2[1]);
         
         StackingItem item1 = null,item2 = null;
+        int idItem;
         for(StackingItem s : stackingItems){
-            if(s.getId() == idO1) item1 = s;
-            if(s.getId() == idO2) item2 = s;
+        	idItem =  s.getId();
+            if(idItem == idO1) item1 = s;
+            if(idItem == idO2) item2 = s;
         }
         
         if(item1 == null || item2 == null){
