@@ -20,6 +20,12 @@ public class TowerException extends Exception {
 	public static final String NO_ITEMS = "This actions can't be realized because there aren't items at the tower";
 	public static final String DONT_EXISTS_LID = "Don't exists lid";
 	public static final String DOESNT_HAVE_ASSOCIATED_CUP = "Don't exists their associated cup";
+	public static final String DONT_EXISTS_OBJECTS_TO_SWAP = "Don't exists the objects selected at this method at the tower";
+	public static final String ITEM_IS_FIXED = "Item is fixed";
+	public static final String NO_ITEMS_TO_COVER = "Don't exists items to cover";
+	public static final String LAST_ISNT_OK = "Last movement isn't correct";
+	public static final String FEW_CUPS = "Few cups to do a swap";
+	public static final String RULER_DONT_EXISTS = "Ruler hasn't been created, This action can't do";
     
     public TowerException(String message) {
         super(message);

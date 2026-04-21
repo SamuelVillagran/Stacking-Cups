@@ -528,8 +528,9 @@ public class Tower {
     
     /**
      * Order the stackin items from lowest to highest width.
+     * @throws TowerException 
      */
-    public void orderTower() {
+    public void orderTower() throws TowerException {
         TreeMap<Integer, String> cupsIds = new TreeMap<>();
         TreeMap<Integer, String> lidsIds= new TreeMap<>();
         StackingItem fixedItem = null;
@@ -567,7 +568,7 @@ public class Tower {
     }
     
 
-    private void pushCup(int number, String color) {
+    private void pushCup(int number, String color) throws TowerException {
         int newHeight = 2 * number - 1;
         int xPos = xCenter * Cup.getPixelsPerCm() - (newHeight * Cup.getPixelsPerCm()) / 2;
         int yPos;
@@ -605,8 +606,9 @@ public class Tower {
     
     /**
      * Order the stackin items from highest to lowest width.
+     * @throws TowerException 
      */
-    public void reverseTower() {
+    public void reverseTower() throws TowerException {
         TreeMap<Integer, String> cupsIds = new TreeMap<>();
         TreeMap<Integer, String> lidsIds= new TreeMap<>();
         StackingItem fixedItem = null;
@@ -647,8 +649,9 @@ public class Tower {
      * Swap two objects of position
      * @param o1 o1 is the first object to swap positions with o2's position
      * @param o2 o2 is the second object to swap position with o1's position
+     * @throws TowerException 
      */
-    public void swap(String [] o1, String[] o2) {
+    public void swap(String [] o1, String[] o2) throws TowerException {
         ArrayList<StackingItem> itemsCopy = new ArrayList<>();
         int idO1 = Integer.parseInt(o1[1]);
         int idO2 = Integer.parseInt(o2[1]);
@@ -661,14 +664,15 @@ public class Tower {
         
         if(item1 == null || item2 == null){
             lastOK = false;
-            if(isVisible) errorMessage();
-            return;
+            if(isVisible) errorMessage(TowerException.DONT_EXISTS_OBJECTS_TO_SWAP);
+            throw new TowerException(TowerException.DONT_EXISTS_OBJECTS_TO_SWAP);
         }
         
         if(item1.isFixed() || item2.isFixed()){
             lastOK = false;
-            if(isVisible) errorMessage();
-            return;
+            if(isVisible) errorMessage(TowerException.ITEM_IS_FIXED);
+            throw new TowerException(TowerException.ITEM_IS_FIXED);
+
         }
         
         int indx1 = stackingItems.indexOf(item1);
@@ -715,12 +719,13 @@ public class Tower {
      * Save the cups and lids like looks in StackingItems.
      * It deletes the StakcingItems (but not fixed pieces) and reassembled by 
      * executing pushCup for each cup in that order with its lid, if this exists.
+     * @throws TowerException 
      */
-    public void cover() {
+    public void cover() throws TowerException {
         if(stackingItems.isEmpty()){
             lastOK = false;
-            if(isVisible) errorMessage();
-            return;
+            if(isVisible) errorMessage(TowerException.NO_ITEMS);
+            throw new TowerException(TowerException.NO_ITEMS);
         }
         
         ArrayList<Integer> cupIdsInsert = new ArrayList<>();
@@ -744,9 +749,9 @@ public class Tower {
         }
         
         if (cupIdsInsert.isEmpty()) {
-            lastOK = false;
-            if (isVisible) errorMessage();
-            return;
+        	lastOK = false;
+            if(isVisible) errorMessage(TowerException.NO_ITEMS_TO_COVER);
+            throw new TowerException(TowerException.NO_ITEMS_TO_COVER);
         }
         
         for (StackingItem item : stackingItems) {
@@ -773,8 +778,8 @@ public class Tower {
                 pushCup(cupType, id);
             }
             if (!lastOK) {
-                if (isVisible) errorMessage();
-                return;
+                if (isVisible) errorMessage(TowerException.LAST_ISNT_OK);
+                throw new TowerException(TowerException.LAST_ISNT_OK);
             }
             if (lidTypesInsert.containsKey(id)) {
                 String lidType = lidTypesInsert.get(i);
@@ -784,8 +789,8 @@ public class Tower {
                     pushLid(lidType, id);
                 }
                 if (!lastOK) {
-                    if (isVisible) errorMessage();
-                    return;
+                	if (isVisible) errorMessage(TowerException.LAST_ISNT_OK);
+                    throw new TowerException(TowerException.LAST_ISNT_OK);
                 }
             }
         }
@@ -802,15 +807,16 @@ public class Tower {
     /**
      * Get a list of lid widths in ascending order.
      * @return int[] Sorted lid widths.
+     * @throws TowerException 
      */
-    public int[] lidedCups() {
+    public int[] lidedCups() throws TowerException {
         int i = 0, lenItems = stackingItems.size(), currentWidthItem;
         boolean isLidsEmpty = stackingItems.isEmpty();
         
-        if (isLidsEmpty && isVisible) {
-            errorMessage();
-            lastOK = false;
-            
+        if (isLidsEmpty ) {
+        	lastOK = false;
+        	if (isVisible) errorMessage(TowerException.NO_ITEMS);
+            throw new TowerException(TowerException.NO_ITEMS);
         } 
         
         
@@ -870,12 +876,13 @@ public class Tower {
     }
     
     /**
+     * @throws TowerException 
      * 
      */
-    public String[][] swapToReduce() {
+    public String[][] swapToReduce() throws TowerException {
         if (stackingItems.isEmpty()) {
             lastOK = false;
-            if(isVisible) errorMessage();
+            if(isVisible) errorMessage(TowerException.NO_ITEMS);
             return new String[0][0];
         }
         
@@ -899,7 +906,7 @@ public class Tower {
         
         if (cupIds.size() < 2) {
             lastOK = false;
-            if (isVisible) errorMessage();
+            if (isVisible) errorMessage(TowerException.FEW_CUPS);
             return new String[0][0];
         }
         
@@ -991,8 +998,9 @@ public class Tower {
     
     /**
      * Make the stacking items invisible.
+     * @throws TowerException 
      */
-    public void makeInvisible() {
+    public void makeInvisible() throws TowerException {
         if (isVisible) isVisible = !isVisible;
         for (StackingItem s : stackingItems) {
             s.makeInvisible();
@@ -1000,7 +1008,19 @@ public class Tower {
         makeInvisibleRuler();
     }
     
-    /**
+    /*
+     * This method makes the ruler invisible
+     * @throws TowerException RULER_DONT_EXISTS - If ruler don´t exists it can't make invisible 
+     */
+    private void makeInvisibleRuler() throws TowerException {
+		if (!isCreatedRuler) throw new TowerException(TowerException.RULER_DONT_EXISTS);
+		for (Rectangle r : ruler) {
+			if (!isVisible) break;
+			r.makeInvisible();
+		}
+	}
+
+	/**
      * Close the game's window
      */
     public void exit() {
