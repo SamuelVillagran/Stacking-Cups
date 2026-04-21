@@ -148,7 +148,7 @@ public class Tower {
             cupsOrderByPosY.put(c.getYPosition(), c); 
         }
         
-       
+        
         
         switch (type) {
             case "normal":
@@ -241,11 +241,13 @@ public class Tower {
             StackingItem landingItem = findLandingPiece(newHeight);
             yPos = resolveYPos(landingItem, newHeight, newHeight);
         }
+        
         if(yPos < 0){
         	lastOK = false;
             if(isVisible) errorMessage(TowerException.CANT_PUSH_CUP); // Aqui deberia retornar una excepcion
             throw new TowerException(TowerException.CANT_PUSH_CUP);
         }
+        
         heightCups += newHeight;
         Opener newCup = new Opener(i, xPos, yPos, getAssociatedColor(i, true));
         lastCup = newCup;
@@ -520,7 +522,7 @@ public class Tower {
                     return;
                 }
             }
-        } else if (areStackingItemsEmpty && isVisible) {
+        } else if (areStackingItemsEmpty) {
             if (isVisible) errorMessage(TowerException.NO_ITEMS);
             throw new TowerException(TowerException.NO_ITEMS);
         }
@@ -555,14 +557,15 @@ public class Tower {
                     lastOK = true;
                     return;
                 }
-                if (isVisible) {
-                	errorMessage(TowerException.DONT_EXISTS_LID);
-                	throw new TowerException(TowerException.DONT_EXISTS_LID);
-                }
+                
                 
                 }
         
             }
+        }
+        if (isVisible) {
+        	errorMessage(TowerException.DONT_EXISTS_LID);
+        	throw new TowerException(TowerException.DONT_EXISTS_LID);
         }
     }
     
