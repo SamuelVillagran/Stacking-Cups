@@ -169,9 +169,7 @@ public class Cup extends StackingItem {
         yPosition = yPos;
     }
     
-    public int getYPos() {
-        return yPosition;
-    }
+    
     
      /**
      * Give cup's type
